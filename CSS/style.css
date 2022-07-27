@@ -1,0 +1,69 @@
+.top-container
+{
+    width:100%;
+    height:300px;
+    background-image: url('../ASSETS/background.png');
+    background-size: cover;
+    display: flex;
+}
+.city-based
+{
+   width:50%;;
+   display: flex; 
+}
+.time-based
+{
+   width:50%;
+}
+.city-info
+{
+    width:50%;
+    display: flex;
+}
+.temp-info
+{
+  width:50%;
+}
+.city-info > img{
+    width:50%;
+    height:50%;
+    padding-top:8%;
+}
+.dropdown
+{
+    height:15%;
+    width:70%;
+    color: grey;
+    padding-top:2%;
+    margin-top: 40%;
+}
+ .city-info > div > p
+{
+ color:yellow;
+}
+.city-info > div >span{
+  color:white;
+} 
+.city-info-flex
+{
+    display:flex;
+    flex-direction: column;
+    padding-left:2%;
+    align-content: flex-start;
+}
+
+#img-size
+{
+    height:50%;
+    width:30%;
+}
+.time-based > p
+{
+  color:white;
+}
+.line
+{
+    height:40%;
+    width:2%;
+    color:white;
+}
