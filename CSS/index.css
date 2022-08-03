@@ -296,3 +296,34 @@ select {
     } */
 }
 
+/* middle section */
+@media all and (max-width: 1000px) {
+  .middle-container {
+    overflow-x: auto;
+  }
+  #side-text {
+    font-size: 1em;
+  }
+  #sun-design {
+    height: 1.7em;
+    width: 1.7em;
+  }
+  .top-icon {
+    height: 1.7em;
+    width: 1.7em;
+  }
+  .top-content {
+    font-size: 1.2em;
+  }
+}
+@media all and (max-width: 820px) {
+  .top-content {
+    font-size: 1.1em;
+    text-align: center;
+  }
+}
+@media all and (max-width: 780px) {
+  .middle-heading-flex-1 {
+    flex-shrink: 0;
+  }
+}
