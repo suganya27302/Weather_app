@@ -21,7 +21,7 @@ body {
   width: 90%;
 }
 .card {
-  background-color: rgb(37,37,37);
+  background-color: rgb(37, 37, 37);
   border: 1px solid black;
   box-shadow: 2px 2px 2px 0px;
   color: white;
@@ -56,16 +56,14 @@ body {
   display: flex;
   flex-direction: column;
 }
-.city-name
-{
+.city-name {
   font-size: 1.3em;
   font-weight: bold;
   margin-top: 10px;
   margin-bottom: 0;
 }
-#cloud-img
-{
-  width:3em;
+#cloud-img {
+  width: 3em;
   height: 2.5em;
 }
 .date-style {
@@ -74,9 +72,8 @@ body {
   padding: 0%;
   margin: 0%;
 }
-.card-date
-{
-  font-size:0.9em;
+.card-date {
+  font-size: 0.9em;
 }
 .display-count {
   background-color: grey;
@@ -130,12 +127,11 @@ body {
   display: flex;
   justify-content: space-between;
 }
-.rainy-temp
-{
-  font-size:0.8em;
+.rainy-temp {
+  font-size: 0.8em;
 }
 select {
-  background-color: gray;
+  background-color: rgb(156, 156, 156);
   color: white;
   font-size: 0.8rem;
   margin-left: 20px;
@@ -147,11 +143,6 @@ select {
   font-size: 1.2em;
   vertical-align: top;
 }
-#sun-design {
-  border-bottom: 1px solid skyblue;
-  height: 2em;
-  width: 2em;
-}
 .temp-info {
   align-items: center;
   color: white;
@@ -160,8 +151,7 @@ select {
   font-size: 1.2rem;
   justify-content: space-evenly;
 }
-#temp-text
-{
+#temp-text {
   font-weight: bold;
 }
 #time-based-line {
@@ -208,6 +198,10 @@ select {
   height: 2em;
   width: 2em;
 }
+.top-icon:hover {
+  border-bottom: 2px solid skyblue;
+}
+
 
 @media all and (max-width: 1100px) {
   .temp-info {
@@ -327,3 +321,7 @@ select {
     flex-shrink: 0;
   }
 }
+
+.card:hover {
+  /* transform: scale(1.1,1.1); */
+  }
