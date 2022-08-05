@@ -104,18 +104,26 @@
     </section>
     <section class="middle-container">
       <div class="top-heading">
-        <h3 class="top-content">Top Cities around world</h3>
+        <h3 class="top-content">Top cities around world</h3>
         <figure class="top-icon-style">
           <input
             type="image"
             src="ASSETS\sunnyIcon.svg"
             alt="sunny icon"
             class="top-icon"
+            id="sun-design"
           />
           <input type="image" src="ASSETS\snowflakeIcon.svg" class="top-icon" />
           <input type="image" src="ASSETS\rainyIcon.svg" class="top-icon" />
           <label id="side-text" for="number">Display top</label>
-          <input type="number" id="number" class="display-count" value="4" />
+          <input
+            type="number"
+            id="number"
+            min="3"
+            max="10"
+            class="display-count"
+            value="4"
+          />
         </figure>
       </div>
       <div class="card-container">

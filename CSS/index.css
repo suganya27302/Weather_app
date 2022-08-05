@@ -16,28 +16,29 @@ body {
 .card-container {
   display: flex;
   height: 250px;
-  padding: 0em 2em 2em 2em;
-  width: 95%;
   gap: 5%;
-  overflow-x: auto;
-  overflow-y: hidden;
   margin: 0 auto;
+  padding: 2em;
+  overflow-y: hidden;
+  width: 90%;
 }
 .card {
   background-color: rgb(37, 37, 37);
-  border: 1px solid black;
-  box-shadow: 2px 2px 2px 0px;
+  border-radius: 5px;
+  box-shadow: 0px 2px 4px 4px #282828;
   color: white;
   display: flex;
   flex-direction: column;
   height: 240px;
-  min-width: 15.5rem;
+  min-width: 15rem;
   padding-left: 1%;
+  overflow-x: hidden;
   width: 20%;
   z-index: 1;
 }
 .card:hover {
   transform: scale(1.2);
+  transition: 0.2s;
 }
 .card-img {
   background-image: url("../ASSETS/london.svg");
@@ -84,8 +85,10 @@ body {
 }
 .display-count {
   background-color: grey;
+  color: white;
+  height: 12px;
+  width: 28px;
   vertical-align: top;
-  width: 15%;
 }
 
 .flex-ratio {
@@ -112,12 +115,13 @@ body {
 }
 .middle-container {
   background-color: black;
+  background-size: cover;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   color: white;
-  height: 350px;
-  background-size: cover;
-  overflow: hidden;
+  height: 380px;
+  min-width: 80%;
+  overflow-x: auto;
 }
 .place-flex-1 {
   align-items: flex-end;
@@ -137,8 +141,11 @@ select {
   width: 10em;
 }
 #side-text {
-  font-size: 1.2em;
+  font-size: 1em;
   vertical-align: top;
+}
+#sun-design {
+  border-bottom: 2px solid skyblue;
 }
 .temp-info {
   align-items: center;
@@ -185,6 +192,9 @@ select {
 }
 .top-heading {
   height: 15%;
+  position: sticky;
+  left: 0;
+  right: 0;
 }
 .top-container {
   align-items: center;
@@ -193,21 +203,24 @@ select {
   width: 100%;
 }
 .top-content {
-  font-size: 1.3em;
   display: inline;
-  position: relative;
+  font-size: 1.2em;
+  font-weight: normal;
   left: 35%;
-  top: 21%;
+  position: relative;
+  top: 30%;
 }
 .top-icon-style {
   align-items: center;
-  column-gap: 10px;
+  display: flex;
   float: right;
-  position: sticky;
+  gap: 12px;
+  padding: 0;
+  margin-right: 5%;
 }
 .top-icon {
   height: 2em;
-  width: 2em;
+  width: 3em;
 }
 .top-icon:hover {
   border-bottom: 2px solid skyblue;
@@ -319,5 +332,14 @@ select {
     font-size: 1.1em;
     left: 15%;
     right: 15%;
+  }
+  .card {
+    height: 230px;
+    gap: 3%;
+    width: 14%;
+  }
+  .card:hover {
+    transform: scale(1.1);
+    transition: 0.2s;
   }
 }
