@@ -12,9 +12,9 @@
       <div class="flex-ratio">
         <div class="city-info">
           <div class="city-info-flex-1">
-            <img src="../ASSETS/london.svg" id="icon" />
+            <img src="ASSETS\london.svg" id="icon" />
             <select name="cities">
-              <option value="newyork">NEWYORK</option>
+              <option value="london">LONDON</option>
               <option value="newdelhi">NEW DELHI</option>
               <option value="chennai">CHENNAI</option>
             </select>
@@ -31,10 +31,9 @@
         </div>
         <div class="temp-info">
           <div>
-            <p id="temp-color">Temp&#176;C</p>
-            <p></p>
+            <p>Temp&#176;C</p>
             <p id="temp-text">25 C</p>
-            <p id="temp-color">Temp F</p>
+            <p>Temp F</p>
             <p id="temp-text">78</p>
           </div>
           <div class="line-styling">
@@ -42,9 +41,9 @@
             <div class="line"></div>
           </div>
           <div>
-            <p id="temp-color">Humidity</p>
+            <p>Humidity</p>
             <p id="temp-text">26 %</p>
-            <p id="temp-color">Precipitation</p>
+            <p>Precipitation</p>
             <p id="temp-text">0 %</p>
           </div>
         </div>
@@ -104,90 +103,119 @@
       </div>
     </section>
     <section class="middle-container">
-      <div class="middle-heading-flex-1">
-        <h3 class="top-content">Top Cities around world</h3>
-        <div class="middle-heading-flex-2">
-          <img src="ASSETS\sunnyIcon.svg" alt="sunny icon" id="sun-design" />
-          <img src="ASSETS\snowflakeIcon.svg" class="top-icon" />
-          <img src="ASSETS\rainyIcon.svg" class="top-icon" />
-          <div>
-            <label id="side-text" for="number">Display top</label>
-            <input type="number" id="number" class="display-count" value="4" />
-          </div>
-        </div>
+      <div class="top-heading">
+        <h3 class="top-content">Top cities around world</h3>
+        <figure class="top-icon-style">
+          <input
+            type="image"
+            src="ASSETS\sunnyIcon.svg"
+            alt="sunny icon"
+            class="top-icon"
+            id="sun-design"
+          />
+          <input type="image" src="ASSETS\snowflakeIcon.svg" class="top-icon" />
+          <input type="image" src="ASSETS\rainyIcon.svg" class="top-icon" />
+          <label id="side-text" for="number">Display&nbsp;Top</label>
+          <input
+            type="number"
+            id="number"
+            min="3"
+            max="10"
+            class="display-count"
+            value="4"
+          />
+        </figure>
       </div>
       <div class="card-container">
-        <div class="card card-first">
+        <div class="card card-img">
           <div class="place-flex-1">
-            <p>London</p>
-            <div>
+            <p class="city-name">London</p>
+            <div class="temp-cardstyle">
               <img src="ASSETS\sunnyIcon.svg" width="25px" />
-              <span class="temp-align"> 25&#176;C </span>
+              <span class="temp-style"> 25&#176;C </span>
             </div>
           </div>
-          <p>10:00 AM</p>
-          <p>2-Mar-2002</p>
+          <p class="card-date">10:00 AM</p>
+          <p class="card-date">2-Mar-2002</p>
           <p>
             <img src="ASSETS\humidityIcon.svg" width="15px" /><span
               class="rainy-temp"
               >52%</span
             >
           </p>
-          <p><img src="ASSETS\precipitationIcon.svg" width="15px" />10%</p>
+          <p>
+            <img src="ASSETS\precipitationIcon.svg" width="15px" /><span
+              class="rainy-temp"
+              >10%</span
+            >
+          </p>
         </div>
-        <div class="card card-second">
+        <div class="card card-img">
           <div class="place-flex-1">
-            <p>London</p>
-            <div>
+            <p class="city-name">London</p>
+            <div class="temp-cardstyle">
               <img src="ASSETS\sunnyIcon.svg" width="25px" />
-              <span class="temp-align"> 25&#176;C </span>
+              <span class="temp-style">25&#176;C</span>
             </div>
           </div>
-          <p>10:00 AM</p>
-          <p>2-Mar-2002</p>
+          <p class="card-date">10:00 AM</p>
+          <p class="card-date">2-Mar-2002</p>
           <p>
             <img src="ASSETS\humidityIcon.svg" width="15px" /><span
               class="rainy-temp"
               >52%</span
             >
           </p>
-          <p><img src="ASSETS\precipitationIcon.svg" width="15px" />10%</p>
+          <p>
+            <img src="ASSETS\precipitationIcon.svg" width="15px" /><span
+              class="rainy-temp"
+              >10%</span
+            >
+          </p>
         </div>
-        <div class="card card-third">
+        <div class="card card-img">
           <div class="place-flex-1">
-            <p>London</p>
-            <div>
+            <p class="city-name">London</p>
+            <div class="temp-cardstyle">
               <img src="ASSETS\sunnyIcon.svg" width="25px" />
-              <span class="temp-align"> 25&#176;C </span>
+              <span class="temp-style"> 25&#176;C </span>
             </div>
           </div>
-          <p>10:00 AM</p>
-          <p>2-Mar-2002</p>
+          <p class="card-date">10:00 AM</p>
+          <p class="card-date">2-Mar-2002</p>
           <p>
             <img src="ASSETS\humidityIcon.svg" width="15px" /><span
               class="rainy-temp"
               >52%</span
             >
           </p>
-          <p><img src="ASSETS\precipitationIcon.svg" width="15px" />10%</p>
+          <p>
+            <img src="ASSETS\precipitationIcon.svg" width="15px" /><span
+              class="rainy-temp"
+              >10%</span
+            >
+          </p>
         </div>
-        <div class="card card-fourth">
+        <div class="card card-img">
           <div class="place-flex-1">
-            <p>London</p>
-            <div>
+            <p class="city-name">London</p>
+            <div class="temp-cardstyle">
               <img src="ASSETS\sunnyIcon.svg" width="25px" />
-              <span class="temp-align"> 25&#176;C </span>
+              <span class="temp-style"> 25&#176;C </span>
             </div>
           </div>
-          <p>10:00 AM</p>
-          <p>2-Mar-2002</p>
+          <p class="card-date">10:00 AM</p>
+          <p class="card-date">2-Mar-2002</p>
           <p>
-            <img src="ASSETS\humidityIcon.svg" width="15px" /><span
+            <img src="ASSETS\humidityIcon.svg" width="15px" />
+            <span class="rainy-temp">52%</span>
+          </p>
+          <p>
+            <img src="ASSETS\precipitationIcon.svg" width="15px" /><span
               class="rainy-temp"
-              >52%</span
+              >10%</span
             >
           </p>
-          <p><img src="ASSETS\precipitationIcon.svg" width="15px" />10%</p>
         </div>
       </div>
     </section>
