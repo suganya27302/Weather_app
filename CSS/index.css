@@ -11,21 +11,21 @@ body {
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   margin: 0%;
   padding: 0%;
-  /* overflow: hidden; */
+  overflow-x: hidden;
 }
 .card-container {
   display: flex;
   height: 250px;
   gap: 5%;
   margin: 0 auto;
-  padding: 2em;
+  padding: 1em;
   overflow-y: hidden;
   width: 90%;
 }
 .card {
   background-color: rgb(37, 37, 37);
   border-radius: 5px;
-  box-shadow: 0px 2px 4px 4px #282828;
+  box-shadow: 0px 2px 4px 4px #181818;
   color: white;
   display: flex;
   flex-direction: column;
@@ -44,7 +44,7 @@ body {
   background-image: url("../ASSETS/london.svg");
   background-repeat: no-repeat;
   background-position: bottom right;
-  background-size: 50%;
+  background-size: 65%;
 }
 .card > p {
   margin: 2%;
@@ -67,7 +67,7 @@ body {
 .city-name {
   font-size: 1.3em;
   font-weight: bold;
-  margin-top: 25px;
+  margin-top: 0.9em;
   margin-bottom: 0;
 }
 #cloud-img {
@@ -81,11 +81,13 @@ body {
   margin: 0%;
 }
 .card-date {
-  font-size: 0.9em;
+  font-size: 1em;
+  font-weight: bold;
+  letter-spacing: 1px;
 }
 .display-count {
-  background-color: grey;
-  color: white;
+  background-color: rgb(41, 40, 40);
+  color: rgb(216, 211, 211);
   height: 12px;
   width: 28px;
   vertical-align: top;
@@ -95,7 +97,7 @@ body {
   display: flex;
   justify-content: space-between;
   min-width: 680px;
-  overflow-x: auto;
+  /* overflow-x: auto; */
   width: 100%;
 }
 #icon {
@@ -121,7 +123,6 @@ body {
   color: white;
   height: 380px;
   min-width: 80%;
-  overflow-x: auto;
 }
 .place-flex-1 {
   align-items: flex-end;
@@ -143,9 +144,13 @@ select {
 #side-text {
   font-size: 1em;
   vertical-align: top;
+  font-weight: normal;
+  width: 6em;
+  text-align: center;
 }
 #sun-design {
   border-bottom: 2px solid skyblue;
+  padding-bottom: 3px;
 }
 .temp-info {
   align-items: center;
@@ -160,11 +165,13 @@ select {
   font-size: 1.2em;
 }
 .temp-style {
-  vertical-align: super;
   font-weight: bold;
+  font-size: 1.4em;
+  font-weight: normal;
+  vertical-align: top;
 }
 .temp-cardstyle {
-  margin-top: 13px;
+  padding-right: 1.3em;
 }
 #time-based-line {
   color: white;
@@ -191,11 +198,14 @@ select {
   font-size: 0.7em;
 }
 .top-heading {
+  align-items: center;
+  display: flex;
   height: 15%;
   position: sticky;
   left: 0;
   right: 0;
 }
+
 .top-container {
   align-items: center;
   display: flex;
@@ -203,20 +213,23 @@ select {
   width: 100%;
 }
 .top-content {
-  display: inline;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
   font-size: 1.2em;
   font-weight: normal;
-  left: 35%;
-  position: relative;
-  top: 30%;
+  width: 65%;
+}
+.top-content > h3 {
+  margin: 0;
 }
 .top-icon-style {
   align-items: center;
   display: flex;
-  float: right;
-  gap: 12px;
-  padding: 0;
-  margin-right: 5%;
+  margin: 0;
+  width: 40%;
+  justify-content: center;
+  gap: 15px;
 }
 .top-icon {
   height: 2em;
@@ -314,24 +327,13 @@ select {
 }
 
 /* middle section */
-@media all and (max-width: 1000px) {
-  #side-text {
-    font-size: 1em;
-  }
-  .top-icon {
-    height: 1.7em;
-    width: 1.7em;
-  }
-  .top-content {
-    font-size: 1.2em;
-    left: 20%;
-  }
-}
 @media all and (max-width: 800px) {
+  #side-text {
+    font-size: 0.9em;
+  }
   .top-content {
     font-size: 1.1em;
-    left: 15%;
-    right: 15%;
+    width: 55%;
   }
   .card {
     height: 230px;
