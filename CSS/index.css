@@ -110,7 +110,6 @@ body {
 
 .cities-with-temp-info {
   display: grid;
-  /* grid-template-columns: repeat(3, 1fr); */
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   grid-column-gap: 5em;
   grid-row-gap: 25px;
