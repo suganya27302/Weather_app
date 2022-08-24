@@ -146,12 +146,12 @@ body {
   vertical-align: top;
   width: 28px;
 }
-.dropdown{
+.dropdown {
   background-color: rgb(80, 77, 77);
   color: white;
   margin-left: 20px;
   padding: 10px;
-  width:9em;
+  width: 9em;
   text-align: center;
 }
 .flex-ratio {
