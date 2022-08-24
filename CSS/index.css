@@ -96,6 +96,8 @@ body {
   align-items: flex-end;
   display: flex;
   flex-direction: column;
+  flex-basis: 8em;
+  justify-content: center;
 }
 .city-name {
   font-size: 1.3em;
@@ -103,7 +105,7 @@ body {
   margin-top: 0.9em;
   margin-bottom: 0;
 }
-#cloud-img {
+.cloud-img {
   height: 2.5em;
   width: 3em;
 }
@@ -133,7 +135,7 @@ body {
 }
 .date-style {
   color: white;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   padding: 0%;
   margin: 0%;
 }
@@ -144,7 +146,14 @@ body {
   vertical-align: top;
   width: 28px;
 }
-
+.dropdown{
+  background-color: rgb(80, 77, 77);
+  color: white;
+  margin-left: 20px;
+  padding: 10px;
+  width:9em;
+  text-align: center;
+}
 .flex-ratio {
   display: flex;
   justify-content: space-between;
@@ -173,9 +182,7 @@ body {
   width: 70px;
 }
 .line {
-  background-color: white;
-  border: 1px solid white;
-  color: white;
+  border-left: 2px dotted white;
   height: 3.3em;
   margin-bottom: 1.3em;
   width: 2%;
@@ -194,14 +201,6 @@ body {
 }
 .rainy-temp {
   font-size: 0.8em;
-}
-select {
-  background-color: rgb(80, 77, 77);
-  color: white;
-  font-size: 0.8rem;
-  margin-left: 20px;
-  padding: 10px;
-  width:10em;
 }
 #side-text {
   font-size: 1em;
@@ -233,10 +232,10 @@ select {
   font-size: 1.2rem;
   justify-content: space-evenly;
 }
-#temp-color {
+.temp-color {
   color: rgb(218, 212, 212);
 }
-#temp-text {
+.temp-text {
   font-weight: bold;
   font-size: 1.2em;
   margin-top: 0;
@@ -267,7 +266,8 @@ select {
 }
 .time-color {
   color: yellow;
-  font-size: 1.2rem;
+  display: inline;
+  font-size: 1.4rem;
   margin: 0%;
   padding: 0%;
 }
@@ -344,6 +344,9 @@ select {
   #amimg {
     width: 2.2rem;
   }
+  .city-info-bottom {
+    flex-basis: 6em;
+  }
   .date-style {
     font-size: 1rem;
   }
@@ -351,11 +354,10 @@ select {
     height: 60px;
     width: 60px;
   }
-  select {
+  .dropdown {
     font-size: 0.6rem;
-    height: 4em;
+    height: 2em;
     width: 10em;
-    width: 11em;
   }
   .temp-info {
     font-size: 0.9rem;
@@ -389,7 +391,7 @@ select {
     height: 50px;
     width: 50px;
   }
-  select {
+  .dropdown {
     font-size: 0.56rem;
   }
   .temp-info {

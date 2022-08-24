@@ -9,100 +9,104 @@
   </head>
   <body>
     <div class="body-container">
-    <section class="top-container">
-      <div class="flex-ratio">
-        <div class="city-info">
-          <div class="city-info-top">
-            <img src="ASSETS\london.svg" id="icon" />
-            <select name="cities">
-              <option value="london">LONDON</option>
-              <option value="newdelhi">NEW DELHI</option>
-              <option value="chennai">CHENNAI</option>
-            </select>
+      <section class="top-container">
+        <div class="flex-ratio">
+          <div class="city-info">
+            <div class="city-info-top">
+              <img src="./ASSETS/london.svg" id="icon" />
+              <input
+                list="browsers"
+                name="browser"
+                id="browser"
+                value="London"
+                class="dropdown"
+                autocomplete="off" onchange="cityname_fetch()"
+              />
+              <datalist id="browsers"> </datalist>
+            </div>
+            <div class="city-info-bottom">
+              <div>
+                <div class="time-color">
+                  10: 10: <small>44 </small>
+                </div>
+                <img src="./ASSETS/amState.png" id="amimg" />
+                <p class="date-style">01- Mar- 2020</p>
+              </div>
+            </div>
           </div>
-          <div class="city-info-bottom">
+          <div class="temp-info">
             <div>
-              <p class="time-color">
-                10: 10: <small>44 </small
-                ><img src="ASSETS\amState.png" id="amimg" />
-              </p>
-              <p class="date-style">01- Mar- 2020</p>
+              <p class="temp-color">Temp&#176;C</p>
+              <p class="temp-text" id="temp-celsius">25 C</p>
+              <p class="temp-color">Temp F</p>
+              <p class="temp-text" id="temp-farenheit">78 F</p>
+            </div>
+            <div class="line-styling">
+              <div class="line"></div>
+              <div class="line"></div>
+            </div>
+            <div>
+              <p class="temp-color">Humidity</p>
+              <p class="temp-text" id="humidity_percentage">26 %</p>
+              <p class="temp-color">Precipitation</p>
+              <p class="temp-text" id="precipitation_percentage">0 %</p>
+            </div>
+          </div>
+          <div class="time-wise-info">
+            <div class="time-wise-info-container">
+              <p>NOW</p>
+              <h2>|</h2>
+              <img src="./ASSETS/cloudyIcon.svg" class="cloud-img" id='icon_based_present_temp'/>
+              <h3 id="present_temperature">23</h3>
+            </div>
+            <div id="time-based-line">
+              <h2>|</h2>
+            </div>
+            <div class="time-wise-info-container">
+              <p id="time-after-1hour">11AM</p>
+              <h2>|</h2>
+              <img src="./ASSETS/rainyIcon.svg" class="cloud-img" id='icon_based_tempafter-1hour'/>
+              <h3 id="temp-after-1hour">-7</h3>
+            </div>
+            <div id="time-based-line">
+              <h2>|</h2>
+            </div>
+            <div class="time-wise-info-container">
+              <p  id="time-after-2hour">12PM</p>
+              <h2>|</h2>
+              <img src="./ASSETS/windyIcon.svg" class="cloud-img" id='icon_based_tempafter-2hour'/>
+              <h3 id="temp-after-2hour">18</h3>
+            </div>
+            <div id="time-based-line">
+              <h2>|</h2>
+            </div>
+            <div class="time-wise-info-container">
+              <p  id="time-after-3hour">1PM</p>
+              <h2>|</h2>
+              <img src="./ASSETS/cloudyIcon.svg" class="cloud-img" id='icon_based_tempafter-3hour'/>
+              <h3 id="temp-after-3hour">26</h3>
+            </div>
+            <div id="time-based-line">
+              <h2>|</h2>
+            </div>
+            <div class="time-wise-info-container">
+              <p  id="time-after-4hour">2PM</p>
+              <h2>|</h2>
+              <img src="./ASSETS/rainyIcon.svg" class="cloud-img" id='icon_based_tempafter-4hour'/>
+              <h3 id="temp-after-4hour">8</h3>
+            </div>
+            <div id="time-based-line">
+              <h2>|</h2>
+            </div>
+            <div class="time-wise-info-container">
+              <p  id="time-after-5hour">3PM</p>
+              <h2>|</h2>
+              <img src="./ASSETS/windyIcon.svg" class="cloud-img" id='icon_based_tempafter-5hour'/>
+              <h3 id="temp-after-5hour">19</h3>
             </div>
           </div>
         </div>
-        <div class="temp-info">
-          <div>
-            <p id="temp-color">Temp&#176;C</p>
-            <p id="temp-text">25 C</p>
-            <p id="temp-color">Temp F</p>
-            <p id="temp-text">78 F</p>
-          </div>
-          <div class="line-styling">
-            <div class="line"></div>
-            <div class="line"></div>
-          </div>
-          <div>
-            <p id="temp-color">Humidity</p>
-            <p id="temp-text">26 %</p>
-            <p id="temp-color">Precipitation</p>
-            <p id="temp-text">0 %</p>
-          </div>
-        </div>
-        <div class="time-wise-info">
-          <div class="time-wise-info-container">
-            <p>NOW</p>
-            <h2>|</h2>
-            <img src="ASSETS\cloudyIcon.svg" id="cloud-img" />
-            <h3>6</h3>
-          </div>
-          <div id="time-based-line">
-            <h2>|</h2>
-          </div>
-          <div class="time-wise-info-container">
-            <p>11AM</p>
-            <h2>|</h2>
-            <img src="ASSETS\rainyIcon.svg" id="cloud-img" />
-            <h3>7</h3>
-          </div>
-          <div id="time-based-line">
-            <h2>|</h2>
-          </div>
-          <div class="time-wise-info-container">
-            <p>12AM</p>
-            <h2>|</h2>
-            <img src="ASSETS\windyIcon.svg" id="cloud-img" />
-            <h3>8</h3>
-          </div>
-          <div id="time-based-line">
-            <h2>|</h2>
-          </div>
-          <div class="time-wise-info-container">
-            <p>1PM</p>
-            <h2>|</h2>
-            <img src="ASSETS\cloudyIcon.svg" id="cloud-img" />
-            <h3>6</h3>
-          </div>
-          <div id="time-based-line">
-            <h2>|</h2>
-          </div>
-          <div class="time-wise-info-container">
-            <p>2PM</p>
-            <h2>|</h2>
-            <img src="ASSETS\rainyIcon.svg" id="cloud-img" />
-            <h3>8</h3>
-          </div>
-          <div id="time-based-line">
-            <h2>|</h2>
-          </div>
-          <div class="time-wise-info-container">
-            <p>3PM</p>
-            <h2>|</h2>
-            <img src="ASSETS\windyIcon.svg" id="cloud-img" />
-            <h3>7</h3>
-          </div>
-        </div>
-      </div>
-    </section>
+      </section>
     <section class="middle-container">
       <div class="top-heading">
         <h3 class="top-content">Top cities around world</h3>
@@ -311,4 +315,6 @@
     </section>
   </div>
   </body>
+  <script src="DATA\data.json" type="text/javascript"></script>
+  <script src="JAVASCRIPT\index.js"></script>
 </html>
