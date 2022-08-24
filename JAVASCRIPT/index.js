@@ -63,4 +63,27 @@ function cityname_fetch() {
     if (city_time[2].slice(3, 5) == "PM")
       document.getElementById("amimg").src = "./ASSETS/pmState.svg";
     else document.getElementById("amimg").src = "./ASSETS/amState.png";
+
+    let temperature_celsius = weather_data[cityname].temperature;
+    temperature_celsius = temperature_celsius.split("°");
+    document.getElementById("temp-celsius").innerHTML =
+      temperature_celsius[0] + " " + temperature_celsius[1];
+
+    let temperature_farenheit = weather_data[cityname].temperature;
+    temperature_farenheit = temperature_farenheit.split("°");
+    temperature_farenheit[0] = (
+      (temperature_farenheit[0] * 9) / 5 +
+      32
+    ).toFixed(1);
+    document.getElementById("temp-farenheit").innerHTML =
+      temperature_farenheit[0] + " F";
+
+    let humidity_value = weather_data[cityname].humidity;
+    document.getElementById("humidity_percentage").innerHTML =
+      humidity_value.slice(0, humidity_value.length - 1) + " %";
+
+    let precipitation_value = weather_data[cityname].precipitation;
+    document.getElementById("precipitation_percentage").innerHTML =
+      precipitation_value.slice(0, precipitation_value.length - 1) + " %";
+
 }
