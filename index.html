@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="UTF-8" />
     <meta name="description" content="Weather app" />
+    <link rel="icon" type="image/png" href="./ASSETS/weather_icon.png"/>
     <link rel="stylesheet" href="CSS\index.css" />
   </head>
   <body>
@@ -15,19 +16,22 @@
             <div class="city-info-top">
               <img src="./ASSETS/london.svg" id="icon" />
               <input
-                list="browsers"
-                name="browser"
-                id="browser"
+                list="city_lists"
+                name="city"
+                id="city_list"
                 value="London"
                 class="dropdown"
-                autocomplete="off" onchange="cityname_fetch()"
+                autocomplete="off" onchange="update_Data_On_Cityname()"
               />
-              <datalist id="browsers"> </datalist>
+              <datalist id="city_lists"> </datalist>
             </div>
             <div class="city-info-bottom">
               <div>
                 <div class="time-color">
-                  10: 10: <small>44 </small>
+                  <!-- 10: 10: <small>44</small> -->
+                  <span id="time_in_hour">10: </span>
+                  <span id="time_in_minutes">10: </span> 
+                  <span id="time_in_seconds">44</span>
                 </div>
                 <img src="./ASSETS/amState.png" id="amimg" />
                 <p class="date-style">01- Mar- 2020</p>

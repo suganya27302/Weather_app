@@ -16,7 +16,7 @@ weather_data={
   },
   "newyork": {
     "cityName": "NewYork",
-    "dateAndTime": "4/1/2020, 1:21:46 AM",
+    "dateAndTime": "4/1/2020, 11:59:56 AM",
     "timeZone": "America/New_york",
     "temperature": "23°C",
     "humidity": "52%",
@@ -61,7 +61,7 @@ weather_data={
   },
     "winnipeg": {
     "cityName": "Winnipeg",
-    "dateAndTime": "4/1/2020, 12:21:46 AM",
+    "dateAndTime": "4/1/2020, 12:59:46 AM",
     "timeZone": "America/Winnipeg",
     "temperature": "9°C",
     "humidity": "81%",
@@ -196,7 +196,7 @@ weather_data={
   },
     "yangon": {
     "cityName": "Yangon",
-    "dateAndTime": "4/1/2020, 11:51:46 AM",
+    "dateAndTime": "4/1/2020, 11:59:46 AM",
     "timeZone": "Asia/Yangon",
     "temperature": "24°C",
     "humidity": "50%",

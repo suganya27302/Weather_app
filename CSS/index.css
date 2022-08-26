@@ -259,6 +259,10 @@ body {
 .tile-content > p {
   margin: 0.3em;
 }
+#time_in_seconds
+{
+  font-size: 0.7em;
+}
 #time-based-line {
   color: white;
   font-size: 0.7em;
