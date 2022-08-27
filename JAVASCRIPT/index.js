@@ -1,10 +1,9 @@
-
 let cityname_list = [];
 let timeout;
 // Import cityname from json to the datalist
 (function () {
   const cities_list = document.getElementById("city_lists");
-  for (const city_weather in weather_data) {
+  for(let city_weather in weather_data) {
     const options = document.createElement("OPTION");
     options.setAttribute("value", weather_data[city_weather].cityName);
     cities_list.appendChild(options);
@@ -21,7 +20,7 @@ let check_Cityname = (cityname) => {
   }
   return false;
 };
-
+update_Data_On_Cityname();
 //Update the city icon based on city
 function update_Icon_Image_Source(cityname) {
   const image_path = "./ASSETS/" + cityname + ".svg";
@@ -29,13 +28,16 @@ function update_Icon_Image_Source(cityname) {
 }
 
 // Update the date based on city
-function update_Date_Based_On_City(cityname, date_time,  date_of_a_city) {
-  var date_of_city = new Date(date_time);
-  date = date_of_city.getDate();
-  month = date_of_city.toLocaleString("en-US", {
+function update_Date_Based_On_City(selected_city, date_of_a_city) {
+  var date_time = new Date().toLocaleString("en-US", {
+    timeZone: weather_data[selected_city].timeZone,
+  });
+  //console.log(date_time);
+  date = new Date(date_time).getDate();
+  month = new Date(date_time).toLocaleString("en-US", {
     month: "short",
   });
-  year = date_of_city.getFullYear();
+  year = new Date(date_time).getFullYear();
 
   let city_date = (function () {
     if (date >= 1 && date <= 9) {
@@ -54,107 +56,45 @@ function ampm_Image_Update(current_ampm) {
 }
 
 // Update live time of the city
-function Update_live_time(date_time) {
-  let current_ampm;
-  var hour = new Date(date_time).getHours();
-  var minute = new Date(date_time).getMinutes();
-  var second = new Date(date_time).getSeconds();
-  console.log(hour);
-  if (hour == 0) {
-    hour = 12;
-    current_ampm = "AM";
-  } else if (hour < 12) {
-    current_ampm = "AM";
-  } else if (hour == 12) {
-    current_ampm = "PM";
-  } else {
-    current_ampm = "PM";
-    hour = hour - 12;
-  }
-  document.getElementById("time_in_seconds").innerHTML = second;
-  document.getElementById("time_in_minutes").innerHTML = minute + ": ";
-  document.getElementById("time_in_hour").innerHTML = hour + ": ";
-  ampm_Image_Update(current_ampm);
-  clearInterval(timeout);
-
-  function display_time() {
-    console.log(second);
-    if (second < 60) {
-      second++;
-      if (second < 10)
-        document.getElementById("time_in_seconds").innerHTML = "0" + second;
-      else if (second < 60) {
-        document.getElementById("time_in_seconds").innerHTML = second;
-      }
-    } else if (second == 60 && minute == 59) {
-      second = 0;
-      minute++;
-      if (minute == 60) {
-        minute = 0;
-        hour++;
-        document.getElementById("time_in_seconds").innerHTML = "0" + second;
-        document.getElementById("time_in_minutes").innerHTML =
-          "0" + minute + ": ";
-        if (hour < 10)
-          document.getElementById("time_in_hour").innerHTML = "0" + hour + ": ";
-        else if (hour < 12)
-          document.getElementById("time_in_hour").innerHTML = hour + ": ";
-        else if (hour == 12) {
-          document.getElementById("time_in_hour").innerHTML = hour + ": ";
-          current_ampm = "PM";
-          ampm_Image_Update(current_ampm);
-        } else if (hour > 12) {
-          current_ampm = "PM";
-          ampm_Image_Update(current_ampm);
-          hour = hour - 12;
-          document.getElementById("time_in_hour").innerHTML = "0" + hour + ": ";
-        }
-      }
-    } else if (minute < 60) {
-      second = 0;
-      minute++;
-      if (minute < 10)
-        document.getElementById("time_in_minutes").innerHTML =
-          "0" + minute + ": ";
-      else if (minute < 59) {
-        document.getElementById("time_in_minutes").innerHTML = minute + ": ";
-      }
-      if (minute == 60) {
-        hour++;
-        minute = 0;
-        document.getElementById("time_in_minutes").innerHTML =
-          "0" + minute + ": ";
-        if (hour < 10)
-          document.getElementById("time_in_hour").innerHTML = "0" + hour + ": ";
-        else if (hour < 12)
-          document.getElementById("time_in_hour").innerHTML = hour + ": ";
-        else if (hour == 12) {
-          document.getElementById("time_in_hour").innerHTML = hour + ": ";
-          current_ampm = "PM";
-          ampm_Image_Update(current_ampm);
-        } else if (hour > 12) {
-          current_ampm = "PM";
-          ampm_Image_Update(ampm);
-          hour = hour - 12;
-          document.getElementById("time_in_hour").innerHTML = hour + ": ";
-        }
-      }
-    } else if (hour <= 12) {
-      minute = 0;
-      hour++;
-      if (hour < 10)
-        document.getElementById("time_in_hour").innerHTML = "0" + hour + ": ";
-      else if (hour < 12)
-        document.getElementById("time_in_hour").innerHTML = hour + ": ";
-    } else if (hour > 12) {
+function update_live_time_based_on_timezone(selected_city) {
+  function display_Live_Time() {
+    let date_time = new Date().toLocaleString("en-US", {
+      timeZone: weather_data[selected_city].timeZone,
+    });
+    //console.log(time);
+    let current_ampm;
+    var hour = new Date(date_time).getHours();
+    var minute = new Date(date_time).getMinutes();
+    var second = new Date(date_time).getSeconds();
+    if (hour == 0) {
+      hour = 12;
+      current_ampm = "AM";
+    } else if (hour < 12) {
+      current_ampm = "AM";
+    } else if (hour == 12) {
       current_ampm = "PM";
-      ampm_Image_Update(current_ampm);
+    } else {
+      current_ampm = "PM";
       hour = hour - 12;
-      document.getElementById("time_in_hour").innerHTML = hour + ": ";
     }
+    if (second < 10)
+      document.getElementById("time_in_seconds").innerHTML = "0" + second;
+    else document.getElementById("time_in_seconds").innerHTML = second;
+
+    if (minute < 10)
+      document.getElementById("time_in_minutes").innerHTML =
+        "0" + minute + ": ";
+    else document.getElementById("time_in_minutes").innerHTML = minute + ": ";
+
+    if (hour < 10)
+      document.getElementById("time_in_hour").innerHTML = "0" + hour + ": ";
+    else document.getElementById("time_in_hour").innerHTML = hour + ": ";
+
+    ampm_Image_Update(current_ampm);
     ampm_Update_For_Nextfivehrs(hour, current_ampm);
   }
-  timeout = setInterval(display_time, 1000);
+  clearInterval(timeout);
+  timeout = setInterval(display_Live_Time, 1000);
 }
 
 // Update the Temperature in celsius ,in farenheit and humidity ,precipitation
@@ -184,11 +124,11 @@ function update_Image_Source(temp_after_every_hour, temp_icon) {
   if (temp_after_every_hour >= 23 && temp_after_every_hour <= 29)
     document.getElementById(temp_icon).src = "./ASSETS/cloudyIcon.svg";
   else if (temp_after_every_hour < 18)
-    document.getElementById(temp_icon).src = "./ASSETS/rainyIcon.svg";
+    document.getElementById(temp_icon).src = "./ASSETS/rainyIconBlack.svg";
   else if (temp_after_every_hour >= 18 && temp_after_every_hour <= 22)
     document.getElementById(temp_icon).src = "./ASSETS/windyIcon.svg";
   else if (temp_after_every_hour > 29)
-    document.getElementById(temp_icon).src = "./ASSETS/sunnyIcon.svg";
+    document.getElementById(temp_icon).src = "./ASSETS/sunnyIconBlack.svg";
 }
 
 // Fetch the temperature for the next five years from the current time
@@ -210,7 +150,7 @@ function fetch_Temperature_For_Nextfivehrs(cityname) {
 }
 
 // The cityname is not valid ,it display nil
-function invalid_Cityname( date_of_a_city,time_of_a_city) {
+function invalid_Cityname(date_of_a_city) {
   clearInterval(timeout);
   document.getElementById("icon").src = "./ASSETS/warning.svg";
   date_of_a_city[0].innerHTML = "NIL";
@@ -243,15 +183,13 @@ function invalid_Cityname( date_of_a_city,time_of_a_city) {
 function update_Data_On_Cityname() {
   let selected_city = document.getElementById("city_list").value.toLowerCase();
   const date_of_a_city = document.getElementsByClassName("date-style");
-  const time_of_a_city = document.getElementsByClassName("time-color");
   return (function () {
     if (check_Cityname(selected_city)) {
-      let date_time = weather_data[selected_city].dateAndTime;
       let temperature_celsius = weather_data[selected_city].temperature;
       temperature_celsius = temperature_celsius.split("°");
 
       update_Icon_Image_Source(selected_city);
-      update_Date_Based_On_City(selected_city, date_time,  date_of_a_city);
+      update_Date_Based_On_City(selected_city, date_of_a_city);
       update_Temperature(selected_city, temperature_celsius);
 
       document.getElementById("present_time").innerHTML = "NOW";
@@ -260,9 +198,10 @@ function update_Data_On_Cityname() {
 
       update_Image_Source(temperature_celsius[0], "icon_based_present_temp");
       fetch_Temperature_For_Nextfivehrs(selected_city);
-      Update_live_time(date_time);
+      //update_Live_Time(date_time);
+      update_live_time_based_on_timezone(selected_city);
     } else {
-      invalid_Cityname( date_of_a_city, time_of_a_city);
+      invalid_Cityname(date_of_a_city);
     }
   })();
 }
