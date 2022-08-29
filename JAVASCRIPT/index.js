@@ -1,9 +1,17 @@
+//top section
+import {weather_data} from '/DATA/data.js'
+
+/** @type {Array,number} */
 let cityname_list = [];
 let timeout;
-// Import cityname from json to the datalist
+document.getElementById('city_list').addEventListener("change",update_Data_On_Cityname);
+/* Import cityname from json to the datalist,
+   Create a array of citynames.
+   This is a self invoking function.
+ */
 (function () {
   const cities_list = document.getElementById("city_lists");
-  for(let city_weather in weather_data) {
+  for (let city_weather in weather_data) {
     const options = document.createElement("OPTION");
     options.setAttribute("value", weather_data[city_weather].cityName);
     cities_list.appendChild(options);
@@ -11,7 +19,12 @@ let timeout;
   }
 })();
 
-//Check the cityname is valid or not
+/**
+ *
+ * Validating the entered cityname is valid or not
+ * @param {string} cityname name of the  selected city
+ * @return {boolean} cityname is valid or not
+ */
 let check_Cityname = (cityname) => {
   for (let name of cityname_list) {
     if (cityname == name) {
@@ -21,62 +34,74 @@ let check_Cityname = (cityname) => {
   return false;
 };
 update_Data_On_Cityname();
-//Update the city icon based on city
+
+/**
+ *
+ * Manipulates the image source based on the cityname
+ * @param {string} cityname name of the  selected city
+ * @return {void} nothing
+ */
 function update_Icon_Image_Source(cityname) {
   const image_path = "./ASSETS/" + cityname + ".svg";
   document.getElementById("icon").src = image_path;
 }
 
-// Update the date based on city
+
+/**
+ *
+ * To update the Live date of the selected city in the top section
+ * @param {string} selected_city name of the  selected city
+ * @param {reference} date_of_a_city Object reference 
+ * @return {void} nothing
+ */
 function update_Date_Based_On_City(selected_city, date_of_a_city) {
   var date_time = new Date().toLocaleString("en-US", {
     timeZone: weather_data[selected_city].timeZone,
   });
-  //console.log(date_time);
-  date = new Date(date_time).getDate();
-  month = new Date(date_time).toLocaleString("en-US", {
+  let date = new Date(date_time).getDate();
+  let month = new Date(date_time).toLocaleString("en-US", {
     month: "short",
   });
-  year = new Date(date_time).getFullYear();
+  let year = new Date(date_time).getFullYear();
 
   let city_date = (function () {
-    if (date >= 1 && date <= 9) {
-      return `0${date}- ${month}- ${year}`;
-    }
-    return `${date}-${month}-${year}`;
+    return date >= 1 && date <= 9 ?`0${date}- ${month}- ${year}`:`${date}-${month}-${year}`;
   })();
   date_of_a_city[0].innerHTML = city_date;
 }
 
-// Update ampm image source based on the time
+/**
+ *
+ * Decides whether to display am or pm image.
+ * @param {string} current_ampm  am or pm based on time
+ * @return {void} nothing
+ */
 function ampm_Image_Update(current_ampm) {
   if (current_ampm == "PM")
     document.getElementById("amimg").src = "./ASSETS/pmState.svg";
   else document.getElementById("amimg").src = "./ASSETS/amState.png";
 }
 
-// Update live time of the city
+/**
+ *
+ * To update the Live time of the selected city in the top section
+ * @param {string} selected_city name of the  selected city
+ * @return {void} nothing
+ */
 function update_live_time_based_on_timezone(selected_city) {
   function display_Live_Time() {
     let date_time = new Date().toLocaleString("en-US", {
       timeZone: weather_data[selected_city].timeZone,
     });
-    //console.log(time);
+   
     let current_ampm;
     var hour = new Date(date_time).getHours();
     var minute = new Date(date_time).getMinutes();
     var second = new Date(date_time).getSeconds();
-    if (hour == 0) {
-      hour = 12;
-      current_ampm = "AM";
-    } else if (hour < 12) {
-      current_ampm = "AM";
-    } else if (hour == 12) {
-      current_ampm = "PM";
-    } else {
-      current_ampm = "PM";
-      hour = hour - 12;
-    }
+
+    (hour==0)?(hour = 12,current_ampm = "AM"):(hour < 12)?current_ampm = "AM":(hour == 12)?current_ampm = "PM":(current_ampm = "PM",
+    hour = hour - 12);
+
     if (second < 10)
       document.getElementById("time_in_seconds").innerHTML = "0" + second;
     else document.getElementById("time_in_seconds").innerHTML = second;
@@ -97,7 +122,13 @@ function update_live_time_based_on_timezone(selected_city) {
   timeout = setInterval(display_Live_Time, 1000);
 }
 
-// Update the Temperature in celsius ,in farenheit and humidity ,precipitation
+/**
+ *
+ * Update the Temperature in celsius ,in farenheit and humidity ,precipitation for the selected city
+ * @param {string} cityname  name of the  selected city
+ * @param {Array.<string>} temperature_celsius city temperature
+ * @return {void} nothing
+ */
 function update_Temperature(cityname, temperature_celsius) {
   document.getElementById("temp-celsius").innerHTML =
     temperature_celsius[0] + " " + temperature_celsius[1];
@@ -119,8 +150,15 @@ function update_Temperature(cityname, temperature_celsius) {
     precipitation_value.slice(0, precipitation_value.length - 1) + " %";
 }
 
-// Update Icon based on temperature
+/**
+ *
+ * Update the source of the weather images based the temperature and its condition 
+ * @param {number} temp_after_every_hour temperature of the city for every one hour
+ * @param {string} temp_icon id name of the image source
+ * @return {void} nothing
+ */
 function update_Image_Source(temp_after_every_hour, temp_icon) {
+
   if (temp_after_every_hour >= 23 && temp_after_every_hour <= 29)
     document.getElementById(temp_icon).src = "./ASSETS/cloudyIcon.svg";
   else if (temp_after_every_hour < 18)
@@ -131,7 +169,13 @@ function update_Image_Source(temp_after_every_hour, temp_icon) {
     document.getElementById(temp_icon).src = "./ASSETS/sunnyIconBlack.svg";
 }
 
-// Fetch the temperature for the next five years from the current time
+/**
+ *
+ * Update the temperature in celsius for the next five years from the current time for the 
+ * selected city
+ * @param {string} cityname name of the selected city
+ * @return {void} nothing
+ */
 function fetch_Temperature_For_Nextfivehrs(cityname) {
   let temp_list = weather_data[cityname].nextFiveHrs;
   for (var count = 1; count <= 5; count++) {
@@ -149,7 +193,12 @@ function fetch_Temperature_For_Nextfivehrs(cityname) {
   }
 }
 
-// The cityname is not valid ,it display nil
+/**
+ *
+ * validate the cityname , if not it will display nil and warning image
+ * @param {reference} date_of_a_city Object reference
+ * @return {void} nothing
+ */
 function invalid_Cityname(date_of_a_city) {
   clearInterval(timeout);
   document.getElementById("icon").src = "./ASSETS/warning.svg";
@@ -179,7 +228,12 @@ function invalid_Cityname(date_of_a_city) {
   }
 }
 
-// Update the data based on cityname
+/**
+ *
+ * event listener function to update data for the city
+ * @params {}
+ * @return {Function}function to update all data for the selected city and for invalid cityname.
+ */
 function update_Data_On_Cityname() {
   let selected_city = document.getElementById("city_list").value.toLowerCase();
   const date_of_a_city = document.getElementsByClassName("date-style");
@@ -206,7 +260,14 @@ function update_Data_On_Cityname() {
   })();
 }
 
-// Update ampm for the next five hours.
+
+/**
+ *
+ * Update source of the weather images based on the temperature 
+ * @param {number} hour
+ * @param {string} current_ampm
+ * @return {void} nothing
+ */
 function ampm_Update_For_Nextfivehrs(hour, current_ampm) {
   let time_iterator = hour;
   for (var count = 1; count <= 5; count++) {
@@ -214,18 +275,34 @@ function ampm_Update_For_Nextfivehrs(hour, current_ampm) {
     time_iterator++;
     var time_value = time_iterator;
 
-    if (time_value == 12 && current_ampm == "PM") {
-      current_ampm = "AM";
-    } else if (time_value == 12 && current_ampm == "AM") {
-      current_ampm = "PM";
-    } else if (time_value > 12 && current_ampm == "PM") {
-      time_value = time_value - 12;
-      current_ampm = "PM";
-    } else if (time_value > 12 && current_ampm == "AM") {
-      time_value = time_value - 12;
-      current_ampm = "AM";
-    } else if (time_value < 12 && current_ampm == "PM") current_ampm = "PM";
-    else current_ampm = "AM";
+   (time_value == 12 && current_ampm == "PM")?current_ampm = "AM":
+   (time_value == 12 && current_ampm == "AM")?current_ampm = "PM":
+   (time_value > 12 && current_ampm == "PM")?(time_value = time_value - 12,current_ampm = "PM"):
+   (time_value > 12 && current_ampm == "AM")?(time_value = time_value - 12,current_ampm = "AM"):
+   (time_value < 12 && current_ampm == "PM")?current_ampm = "PM":current_ampm = "AM";
+    
     document.getElementById(id_name).innerHTML = time_value + current_ampm;
   }
 }
+
+// middle section
+var sunny_list=[];
+var snow_list=[];
+var rainy_list=[];
+
+for (let city in weather_data)
+{
+  if(parseInt(weather_data[city].temperature)>29 && parseInt(weather_data[city].humidity)<50 && parseInt(weather_data[city].precipitation)>=50)
+  sunny_list.push(weather_data[city]);
+  else if((parseInt(weather_data[city].temperature)>=20  && parseInt(weather_data[city].temperature)<=28) && parseInt(weather_data[city].humidity)>50 && parseInt(weather_data[city].precipitation)<50)
+  snow_list.push(weather_data[city]);
+  else if(parseInt(weather_data[city].temperature)<20 && parseInt(weather_data[city].humidity)>=50)
+  rainy_list.push(weather_data[city]);
+}
+sunny_list.sort((a,b)=> a.temperature<b.temperature?1:-1);
+snow_list.sort((a,b)=> a.precipitation<b.precipitation?1:-1);
+rainy_list.sort((a,b)=> a.humidity<b.humidity?1:-1);
+// console.log(sunny_list);
+// console.log(snow_list);
+// console.log(rainy_list);
+

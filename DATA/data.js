@@ -1,4 +1,4 @@
-weather_data={
+export var weather_data={
   "nome": {
     "cityName": "Nome",
       "dateAndTime": "3/31/2020, 9:21:46 PM",

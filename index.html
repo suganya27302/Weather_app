@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="UTF-8" />
     <meta name="description" content="Weather app" />
-    <link rel="icon" type="image/png" href="./ASSETS/weather_icon.png"/>
+    <link rel="icon" type="image/png" href="./ASSETS/weather_icon.png" />
     <link rel="stylesheet" href="CSS\index.css" />
   </head>
   <body>
@@ -21,7 +21,7 @@
                 id="city_list"
                 value="London"
                 class="dropdown"
-                autocomplete="off" onchange="update_Data_On_Cityname()"
+                autocomplete="off"
               />
               <datalist id="city_lists"> </datalist>
             </div>
@@ -29,7 +29,7 @@
               <div>
                 <div class="time-color">
                   <span id="time_in_hour">10: </span>
-                  <span id="time_in_minutes">10: </span> 
+                  <span id="time_in_minutes">10: </span>
                   <span id="time_in_seconds">44</span>
                 </div>
                 <img src="./ASSETS/amState.png" id="amimg" />
@@ -59,7 +59,11 @@
             <div class="time-wise-info-container">
               <p id="present_time">NOW</p>
               <h2>|</h2>
-              <img src="./ASSETS/cloudyIcon.svg" class="cloud-img" id='icon_based_present_temp'/>
+              <img
+                src="./ASSETS/cloudyIcon.svg"
+                class="cloud-img"
+                id="icon_based_present_temp"
+              />
               <h3 id="present_temperature">23</h3>
             </div>
             <div id="time-based-line">
@@ -68,256 +72,347 @@
             <div class="time-wise-info-container">
               <p id="time-after-1hour">11AM</p>
               <h2>|</h2>
-              <img src="./ASSETS/rainyIcon.svg" class="cloud-img" id='icon_based_tempafter-1hour'/>
+              <img
+                src="./ASSETS/rainyIcon.svg"
+                class="cloud-img"
+                id="icon_based_tempafter-1hour"
+              />
               <h3 id="temp-after-1hour">-7</h3>
             </div>
             <div id="time-based-line">
               <h2>|</h2>
             </div>
             <div class="time-wise-info-container">
-              <p  id="time-after-2hour">12PM</p>
+              <p id="time-after-2hour">12PM</p>
               <h2>|</h2>
-              <img src="./ASSETS/windyIcon.svg" class="cloud-img" id='icon_based_tempafter-2hour'/>
+              <img
+                src="./ASSETS/windyIcon.svg"
+                class="cloud-img"
+                id="icon_based_tempafter-2hour"
+              />
               <h3 id="temp-after-2hour">18</h3>
             </div>
             <div id="time-based-line">
               <h2>|</h2>
             </div>
             <div class="time-wise-info-container">
-              <p  id="time-after-3hour">1PM</p>
+              <p id="time-after-3hour">1PM</p>
               <h2>|</h2>
-              <img src="./ASSETS/cloudyIcon.svg" class="cloud-img" id='icon_based_tempafter-3hour'/>
+              <img
+                src="./ASSETS/cloudyIcon.svg"
+                class="cloud-img"
+                id="icon_based_tempafter-3hour"
+              />
               <h3 id="temp-after-3hour">26</h3>
             </div>
             <div id="time-based-line">
               <h2>|</h2>
             </div>
             <div class="time-wise-info-container">
-              <p  id="time-after-4hour">2PM</p>
+              <p id="time-after-4hour">2PM</p>
               <h2>|</h2>
-              <img src="./ASSETS/rainyIcon.svg" class="cloud-img" id='icon_based_tempafter-4hour'/>
+              <img
+                src="./ASSETS/rainyIcon.svg"
+                class="cloud-img"
+                id="icon_based_tempafter-4hour"
+              />
               <h3 id="temp-after-4hour">8</h3>
             </div>
             <div id="time-based-line">
               <h2>|</h2>
             </div>
             <div class="time-wise-info-container">
-              <p  id="time-after-5hour">3PM</p>
+              <p id="time-after-5hour">3PM</p>
               <h2>|</h2>
-              <img src="./ASSETS/windyIcon.svg" class="cloud-img" id='icon_based_tempafter-5hour'/>
+              <img
+                src="./ASSETS/windyIcon.svg"
+                class="cloud-img"
+                id="icon_based_tempafter-5hour"
+              />
               <h3 id="temp-after-5hour">19</h3>
             </div>
           </div>
         </div>
       </section>
-    <section class="middle-container">
-      <div class="top-heading">
-        <h3 class="top-content">Top cities around world</h3>
-        <figure class="top-icon-style">
-          <input
-            type="image"
-            src="ASSETS\sunnyIcon.svg"
-            alt="sunny icon"
-            class="top-icon"
-            id="sun-design"
-          />
-          <input type="image" src="ASSETS\snowflakeIcon.svg" class="top-icon" />
-          <input type="image" src="ASSETS\rainyIcon.svg" class="top-icon" />
-          <label id="side-text" for="number">Display&nbsp;Top</label>
-          <input
-            type="number"
-            id="number"
-            min="3"
-            max="10"
-            class="display-count"
-            value="4"
-          />
-        </figure>
-      </div>
-      <div class="card-container">
-        <div class="card card-img">
-          <div class="continent-content">
-            <p class="city-name">London</p>
-            <div class="temp-cardstyle">
-              <img src="ASSETS\sunnyIcon.svg" width="25px" />
-              <span class="card-temp"> 25&#176;C </span>
+      <section class="middle-container">
+        <div class="top-heading">
+          <h3 class="top-content">Top cities around world</h3>
+          <figure class="top-icon-style">
+            <button type="button" class="top-icon" id="Sunny-icon" onclick="Get"><input
+              type="image"
+              src="ASSETS\sunnyIcon.svg"
+              alt="sunny icon"
+              id="sun-design"
+            /></button>
+            <button type="button" class="top-icon" id="Snow-icon"><input
+              type="image"
+              src="ASSETS\snowflakeIcon.svg"
+            /></button>
+            <button type="button"  class="top-icon" id="rainy-icon"><input type="image" src="ASSETS\rainyIcon.svg" /></button>
+            <label id="side-text" for="number">Display&nbsp;Top</label>
+            <input
+              type="number"
+              id="number"
+              min="3"
+              max="10"
+              class="display-count"
+              value="4"
+            />
+          </figure>
+        </div>
+        <div class="card-container">
+          <div class="card card-img">
+            <div class="continent-content">
+              <p class="city-name">London</p>
+              <div class="temp-cardstyle">
+                <img src="ASSETS\sunnyIcon.svg" width="25px" />
+                <span class="card-temp"> 25&#176;C </span>
+              </div>
+            </div>
+            <p class="card-date">10:00 AM</p>
+            <p class="card-date">2-Mar-2002</p>
+            <p>
+              <img src="ASSETS\humidityIcon.svg" width="15px" /><span
+                class="rainy-temp"
+                >52%</span
+              >
+            </p>
+            <p>
+              <img src="ASSETS\precipitationIcon.svg" width="15px" /><span
+                class="rainy-temp"
+                >10%</span
+              >
+            </p>
+          </div>
+          <div class="card card-img">
+            <div class="continent-content">
+              <p class="city-name">London</p>
+              <div class="temp-cardstyle">
+                <img src="ASSETS\sunnyIcon.svg" width="25px" />
+                <span class="card-temp">25&#176;C</span>
+              </div>
+            </div>
+            <p class="card-date">10:00 AM</p>
+            <p class="card-date">2-Mar-2002</p>
+            <p>
+              <img src="ASSETS\humidityIcon.svg" width="15px" /><span
+                class="rainy-temp"
+                >52%</span
+              >
+            </p>
+            <p>
+              <img src="ASSETS\precipitationIcon.svg" width="15px" /><span
+                class="rainy-temp"
+                >10%</span
+              >
+            </p>
+          </div>
+          <div class="card card-img">
+            <div class="continent-content">
+              <p class="city-name">London</p>
+              <div class="temp-cardstyle">
+                <img src="ASSETS\sunnyIcon.svg" width="25px" />
+                <span class="card-temp">25&#176;C</span>
+              </div>
+            </div>
+            <p class="card-date">10:00 AM</p>
+            <p class="card-date">2-Mar-2002</p>
+            <p>
+              <img src="ASSETS\humidityIcon.svg" width="15px" /><span
+                class="rainy-temp"
+                >52%</span
+              >
+            </p>
+            <p>
+              <img src="ASSETS\precipitationIcon.svg" width="15px" /><span
+                class="rainy-temp"
+                >10%</span
+              >
+            </p>
+          </div>
+          <div class="card card-img">
+            <div class="continent-content">
+              <p class="city-name">London</p>
+              <div class="temp-cardstyle">
+                <img src="ASSETS\sunnyIcon.svg" width="25px" />
+                <span class="card-temp">25&#176;C</span>
+              </div>
+            </div>
+            <p class="card-date">10:00 AM</p>
+            <p class="card-date">2-Mar-2002</p>
+            <p>
+              <img src="ASSETS\humidityIcon.svg" width="15px" />
+              <span class="rainy-temp">52%</span>
+            </p>
+            <p>
+              <img src="ASSETS\precipitationIcon.svg" width="15px" /><span
+                class="rainy-temp"
+                >10%</span
+              >
+            </p>
+          </div>
+        </div>
+      </section>
+      <section class="bottom-container">
+        <div class="bottom-heading-content">
+          <p class="bottom-main-heading">
+            Cities&nbsp;across&nbsp;continents&nbsp;at&nbsp;a&nbsp;Glance
+          </p>
+          <div class="heading-sort-content">
+            <div>
+              <p class="sort-continent-temperature">Continent&nbsp;Name</p>
+              <img
+                src="ASSETS\arrowDown.svg"
+                alt="arrowdown image"
+                id="arrow-img"
+              />
+            </div>
+            <div>
+              <p class="sort-continent-temperature">Temperature</p>
+              <img
+                src="ASSETS\arrowUp.svg"
+                alt="arrowup image"
+                id="arrow-img"
+              />
             </div>
           </div>
-          <p class="card-date">10:00 AM</p>
-          <p class="card-date">2-Mar-2002</p>
-          <p>
-            <img src="ASSETS\humidityIcon.svg" width="15px" /><span
-              class="rainy-temp"
-              >52%</span
-            >
-          </p>
-          <p>
-            <img src="ASSETS\precipitationIcon.svg" width="15px" /><span
-              class="rainy-temp"
-              >10%</span
-            >
-          </p>
         </div>
-        <div class="card card-img">
-          <div class="continent-content">
-            <p class="city-name">London</p>
-            <div class="temp-cardstyle">
-              <img src="ASSETS\sunnyIcon.svg" width="25px" />
-              <span class="card-temp">25&#176;C</span>
-            </div>
+        <div class="cities-with-temp-info">
+          <div class="tile-content">
+            <p class="continent-name">Asia</p>
+            <p id="continent-temp">38&deg;C</p>
+            <p class="state-name">Delhi,10:10 AM</p>
+            <p>
+              <img src="ASSETS\humidityIcon.svg" id="humidity-img" /><span
+                class="humidity-per"
+                >53%</span
+              >
+            </p>
           </div>
-          <p class="card-date">10:00 AM</p>
-          <p class="card-date">2-Mar-2002</p>
-          <p>
-            <img src="ASSETS\humidityIcon.svg" width="15px" /><span
-              class="rainy-temp"
-              >52%</span
-            >
-          </p>
-          <p>
-            <img src="ASSETS\precipitationIcon.svg" width="15px" /><span
-              class="rainy-temp"
-              >10%</span
-            >
-          </p>
-        </div>
-        <div class="card card-img">
-          <div class="continent-content">
-            <p class="city-name">London</p>
-            <div class="temp-cardstyle">
-              <img src="ASSETS\sunnyIcon.svg" width="25px" />
-              <span class="card-temp">25&#176;C</span>
-            </div>
+          <div class="tile-content">
+            <p class="continent-name">Africa</p>
+            <p id="continent-temp">38&deg;C</p>
+            <p class="state-name">Egypt,10:10 AM</p>
+            <p>
+              <img src="ASSETS\humidityIcon.svg" id="humidity-img" /><span
+                class="humidity-per"
+                >53%</span
+              >
+            </p>
           </div>
-          <p class="card-date">10:00 AM</p>
-          <p class="card-date">2-Mar-2002</p>
-          <p>
-            <img src="ASSETS\humidityIcon.svg" width="15px" /><span
-              class="rainy-temp"
-              >52%</span
-            >
-          </p>
-          <p>
-            <img src="ASSETS\precipitationIcon.svg" width="15px" /><span
-              class="rainy-temp"
-              >10%</span
-            >
-          </p>
-        </div>
-        <div class="card card-img">
-          <div class="continent-content">
-            <p class="city-name">London</p>
-            <div class="temp-cardstyle">
-              <img src="ASSETS\sunnyIcon.svg" width="25px" />
-              <span class="card-temp">25&#176;C</span>
-            </div>
+          <div class="tile-content">
+            <p class="continent-name">Europe</p>
+            <p id="continent-temp">26&deg;C</p>
+            <p class="state-name">London,10:10 AM</p>
+            <p>
+              <img src="ASSETS\humidityIcon.svg" id="humidity-img" /><span
+                class="humidity-per"
+                >53%</span
+              >
+            </p>
           </div>
-          <p class="card-date">10:00 AM</p>
-          <p class="card-date">2-Mar-2002</p>
-          <p>
-            <img src="ASSETS\humidityIcon.svg" width="15px" />
-            <span class="rainy-temp">52%</span>
-          </p>
-          <p>
-            <img src="ASSETS\precipitationIcon.svg" width="15px" /><span
-              class="rainy-temp"
-              >10%</span
-            >
-          </p>
+          <div class="tile-content">
+            <p class="continent-name">Asia</p>
+            <p id="continent-temp">37&deg;C</p>
+            <p class="state-name">Chennai,10:10 AM</p>
+            <p>
+              <img src="ASSETS\humidityIcon.svg" id="humidity-img" /><span
+                class="humidity-per"
+                >53%</span
+              >
+            </p>
+          </div>
+          <div class="tile-content">
+            <p class="continent-name">Africa</p>
+            <p id="continent-temp">32&deg;C</p>
+            <p class="state-name">Egypt,10:10 AM</p>
+            <p>
+              <img src="ASSETS\humidityIcon.svg" id="humidity-img" /><span
+                class="humidity-per"
+                >53%</span
+              >
+            </p>
+          </div>
+          <div class="tile-content">
+            <p class="continent-name">Europe</p>
+            <p id="continent-temp">22&deg;C</p>
+            <p class="state-name">London,10:10 AM</p>
+            <p>
+              <img src="ASSETS\humidityIcon.svg" id="humidity-img" /><span
+                class="humidity-per"
+                >53%</span
+              >
+            </p>
+          </div>
+          <div class="tile-content">
+            <p class="continent-name">Asia</p>
+            <p id="continent-temp">36&deg;C</p>
+            <p class="state-name">Chennai,10:10 AM</p>
+            <p>
+              <img src="ASSETS\humidityIcon.svg" id="humidity-img" /><span
+                class="humidity-per"
+                >53%</span
+              >
+            </p>
+          </div>
+          <div class="tile-content">
+            <p class="continent-name">Europe</p>
+            <p id="continent-temp">30&deg;C</p>
+            <p class="state-name">London,10:10 AM</p>
+            <p>
+              <img src="ASSETS\humidityIcon.svg" id="humidity-img" /><span
+                class="humidity-per"
+                >53%</span
+              >
+            </p>
+          </div>
+          <div class="tile-content">
+            <p class="continent-name">South America</p>
+            <p id="continent-temp">35&deg;C</p>
+            <p class="state-name">Brazil,10:10 AM</p>
+            <p>
+              <img src="ASSETS\humidityIcon.svg" id="humidity-img" /><span
+                class="humidity-per"
+                >53%</span
+              >
+            </p>
+          </div>
+          <div class="tile-content">
+            <p class="continent-name">Asia</p>
+            <p id="continent-temp">36&deg;C</p>
+            <p class="state-name">Delhi,10:10 AM</p>
+            <p>
+              <img src="ASSETS\humidityIcon.svg" id="humidity-img" /><span
+                class="humidity-per"
+                >53%</span
+              >
+            </p>
+          </div>
+          <div class="tile-content">
+            <p class="continent-name">Europe</p>
+            <p id="continent-temp">28&deg;C</p>
+            <p class="state-name">London,10:10 AM</p>
+            <p>
+              <img src="ASSETS\humidityIcon.svg" id="humidity-img" /><span
+                class="humidity-per"
+                >53%</span
+              >
+            </p>
+          </div>
+          <div class="tile-content">
+            <p class="continent-name">South America</p>
+            <p id="continent-temp">32&deg;C</p>
+            <p class="state-name">Brazil,10:10 AM</p>
+            <p>
+              <img src="ASSETS\humidityIcon.svg" id="humidity-img" /><span
+                class="humidity-per"
+                >53%</span
+              >
+            </p>
+          </div>
         </div>
-      </div>
-    </section>
-    <section class="bottom-container">
-     <div class="bottom-heading-content">
-       <p class="bottom-main-heading">Cities&nbsp;across&nbsp;continents&nbsp;at&nbsp;a&nbsp;Glance</p>
-       <div  class="heading-sort-content">
-       <div>
-        <p class="sort-continent-temperature">Continent&nbsp;Name</p>
-          <img src="ASSETS\arrowDown.svg" alt="arrowdown image" id="arrow-img">
-       </div>
-       <div>
-        <p class="sort-continent-temperature">Temperature</p>
-        <img src="ASSETS\arrowUp.svg" alt="arrowup image" id="arrow-img">
-       </div>
-      </div>
-     </div>
-     <div class="cities-with-temp-info">
-        <div class="tile-content">
-          <p class="continent-name">Asia</p>
-          <p id="continent-temp">38&deg;C</p>
-          <p class="state-name">Delhi,10:10 AM</p>
-          <p><img src="ASSETS\humidityIcon.svg" id="humidity-img"><span class="humidity-per">53%</span></p>
-        </div>
-        <div class="tile-content">
-          <p class="continent-name">Africa</p>
-          <p id="continent-temp">38&deg;C</p>
-          <p class="state-name">Egypt,10:10 AM</p>
-          <p><img src="ASSETS\humidityIcon.svg" id="humidity-img"><span class="humidity-per">53%</span></p>
-        </div>
-        <div class="tile-content">
-          <p class="continent-name">Europe</p>
-          <p id="continent-temp">26&deg;C</p>
-          <p class="state-name">London,10:10 AM</p>
-          <p><img src="ASSETS\humidityIcon.svg" id="humidity-img"><span class="humidity-per">53%</span></p>
-        </div>
-        <div class="tile-content">
-          <p class="continent-name">Asia</p>
-          <p id="continent-temp">37&deg;C</p>
-          <p class="state-name">Chennai,10:10 AM</p>
-          <p><img src="ASSETS\humidityIcon.svg" id="humidity-img"><span class="humidity-per">53%</span></p>
-        </div>
-        <div class="tile-content">
-          <p class="continent-name">Africa</p>
-          <p id="continent-temp">32&deg;C</p>
-          <p class="state-name">Egypt,10:10 AM</p>
-          <p><img src="ASSETS\humidityIcon.svg" id="humidity-img"><span class="humidity-per">53%</span></p>
-        </div>
-        <div class="tile-content">
-          <p class="continent-name">Europe</p>
-          <p id="continent-temp">22&deg;C</p>
-          <p class="state-name">London,10:10 AM</p>
-          <p><img src="ASSETS\humidityIcon.svg" id="humidity-img"><span class="humidity-per">53%</span></p>
-        </div>
-        <div class="tile-content">
-          <p class="continent-name">Asia</p>
-          <p id="continent-temp">36&deg;C</p>
-          <p class="state-name">Chennai,10:10 AM</p>
-          <p><img src="ASSETS\humidityIcon.svg" id="humidity-img"><span class="humidity-per">53%</span></p>
-        </div>
-        <div class="tile-content">
-          <p class="continent-name">Europe</p>
-          <p id="continent-temp">30&deg;C</p>
-          <p class="state-name">London,10:10 AM</p>
-          <p><img src="ASSETS\humidityIcon.svg" id="humidity-img"><span class="humidity-per">53%</span></p>
-        </div>
-        <div class="tile-content">
-          <p class="continent-name">South America</p>
-          <p id="continent-temp">35&deg;C</p>
-          <p class="state-name">Brazil,10:10 AM</p>
-          <p><img src="ASSETS\humidityIcon.svg" id="humidity-img"><span class="humidity-per">53%</span></p>
-        </div>
-        <div class="tile-content">
-          <p class="continent-name">Asia</p>
-          <p id="continent-temp">36&deg;C</p>
-          <p class="state-name">Delhi,10:10 AM</p>
-          <p><img src="ASSETS\humidityIcon.svg" id="humidity-img"><span class="humidity-per">53%</span></p>
-        </div>
-        <div class="tile-content">
-          <p class="continent-name">Europe</p>
-          <p id="continent-temp">28&deg;C</p>
-          <p class="state-name">London,10:10 AM</p>
-          <p><img src="ASSETS\humidityIcon.svg" id="humidity-img"><span class="humidity-per">53%</span></p>
-        </div>
-        <div class="tile-content">
-          <p class="continent-name">South America</p>
-          <p id="continent-temp">32&deg;C</p>
-          <p class="state-name">Brazil,10:10 AM</p>
-          <p><img src="ASSETS\humidityIcon.svg" id="humidity-img"><span class="humidity-per">53%</span></p>
-        </div>
-     </div>
-    </section>
-  </div>
+      </section>
+    </div>
   </body>
-  <script src="DATA\data.json" type="text/javascript"></script>
-  <script src="JAVASCRIPT\index.js"></script>
+  <script type="module" src="JAVASCRIPT\index.js"></script>
 </html>

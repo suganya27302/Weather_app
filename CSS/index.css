@@ -197,7 +197,6 @@ body {
   border-top-right-radius: 20px;
   color: white;
   min-width: 80%;
-  overflow-x: auto;
 }
 .rainy-temp {
   font-size: 0.8em;
@@ -326,11 +325,8 @@ body {
 }
 
 .top-icon {
-  height: 2em;
-  width: 3em;
-}
-.top-icon:hover {
-  border-bottom: 2px solid skyblue;
+  background-color: black;
+  width:3em;
 }
 /* Scrollbar Styling */
 ::-webkit-scrollbar {
