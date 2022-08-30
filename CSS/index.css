@@ -219,7 +219,7 @@ body {
   font-weight: lighter;
   letter-spacing: 2px;
 }
-#sun-design {
+#sun-image {
   border-bottom: 2px solid skyblue;
   padding-bottom: 3px;
 }
@@ -320,7 +320,7 @@ body {
   gap: 15px;
   justify-content: center;
   margin: 0;
-  margin-right: 2em;
+  margin-right: 4em;
   width: 40%;
 }
 

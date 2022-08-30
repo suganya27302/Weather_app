@@ -1,12 +1,14 @@
 //Top section Javscript functions
-import {weather_data} from '/DATA/data.js'
+import { weather_data } from "/DATA/data.js";
 
 /** @type {Array,number} */
-const at_present='NOW';
-const empty_value='NIL';
+const at_present = "NOW";
+const empty_value = "NIL";
 let cityname_list = [];
 let timeout;
-document.getElementById('city_list').addEventListener("change",update_Data_On_Cityname);
+document
+  .getElementById("city_list")
+  .addEventListener("change", update_Data_On_Cityname);
 /* Import cityname from json to the datalist,
    Create a array of citynames.
    This is a self invoking function.
@@ -46,9 +48,8 @@ update_Data_On_Cityname();
  */
 function update_Icon_Image_Source(cityname) {
   const image_path = "./ASSETS/" + cityname + ".svg";
-  update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City('icon','src',image_path);
+  updateUIElementAttributeWithTheGivenValue("icon", "src", image_path);
 }
-
 
 /**
  *
@@ -56,7 +57,7 @@ function update_Icon_Image_Source(cityname) {
  * By using date object and its predefined method live date is updated and citydate function is used to
  * append prefix as zero to the date.
  * @param {string} selected_city name of the  selected city
- * @param {reference} date_of_a_city Object reference 
+ * @param {reference} date_of_a_city Object reference
  * @return {void} nothing
  */
 function update_Date_Based_On_City(selected_city, date_of_a_city) {
@@ -70,7 +71,9 @@ function update_Date_Based_On_City(selected_city, date_of_a_city) {
   let year = new Date(date_time).getFullYear();
 
   let city_date = (function () {
-    return date >= 1 && date <= 9 ?`0${date}- ${month}- ${year}`:`${date}-${month}-${year}`;
+    return date >= 1 && date <= 9
+      ? `0${date}- ${month}- ${year}`
+      : `${date}-${month}-${year}`;
   })();
   date_of_a_city[0].innerHTML = city_date;
 }
@@ -81,7 +84,7 @@ function update_Date_Based_On_City(selected_city, date_of_a_city) {
  * By using date object and its methods live date is fetched and  using hour value am or pm is decided.
  * if the second , minute , hour is less than 10 append zero to the beginning.
  * setinterval used to repeatedly call the display_live_time function
- * @param {string} selected_city name of the  selected city 
+ * @param {string} selected_city name of the  selected city
  * @return {void} nothing
  */
 function update_live_time_based_on_timezone(selected_city) {
@@ -89,32 +92,71 @@ function update_live_time_based_on_timezone(selected_city) {
     let date_time = new Date().toLocaleString("en-US", {
       timeZone: weather_data[selected_city].timeZone,
     });
-   
+
     let part_Of_Time;
     var hour = new Date(date_time).getHours();
     var minute = new Date(date_time).getMinutes();
     var second = new Date(date_time).getSeconds();
 
-    (hour==0)?(hour = 12,part_Of_Time = "AM"):(hour < 12)?part_Of_Time = "AM":(hour == 12)?part_Of_Time = "PM":(part_Of_Time = "PM",
-    hour = hour - 12);
+    hour == 0
+      ? ((hour = 12), (part_Of_Time = "AM"))
+      : hour < 12
+      ? (part_Of_Time = "AM")
+      : hour == 12
+      ? (part_Of_Time = "PM")
+      : ((part_Of_Time = "PM"), (hour = hour - 12));
 
     if (second < 10)
-        update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City('time_in_seconds','innerHTML', "0" + second);
-    else  update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City('time_in_seconds','innerHTML', second);
+      updateUIElementAttributeWithTheGivenValue(
+        "time_in_seconds",
+        "innerHTML",
+        "0" + second
+      );
+    else
+      updateUIElementAttributeWithTheGivenValue(
+        "time_in_seconds",
+        "innerHTML",
+        second
+      );
 
     if (minute < 10)
-    update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City('time_in_minutes','innerHTML', "0" + minute + ": ");
-    else update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City('time_in_minutes','innerHTML', minute + ": ");
-  
+      updateUIElementAttributeWithTheGivenValue(
+        "time_in_minutes",
+        "innerHTML",
+        "0" + minute + ": "
+      );
+    else
+      updateUIElementAttributeWithTheGivenValue(
+        "time_in_minutes",
+        "innerHTML",
+        minute + ": "
+      );
 
     if (hour < 10)
-    update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City('time_in_hour','innerHTML', "0" + hour + ": ");
-    else  update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City('time_in_hour','innerHTML', hour + ": ");
-  
+      updateUIElementAttributeWithTheGivenValue(
+        "time_in_hour",
+        "innerHTML",
+        "0" + hour + ": "
+      );
+    else
+      updateUIElementAttributeWithTheGivenValue(
+        "time_in_hour",
+        "innerHTML",
+        hour + ": "
+      );
 
-    part_Of_Time == "PM"?(update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City("amimg",'src',"./ASSETS/pmState.svg")):
-    (update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City("amimg",'src',"./ASSETS/amState.png"));
-  
+    part_Of_Time == "PM"
+      ? updateUIElementAttributeWithTheGivenValue(
+          "amimg",
+          "src",
+          "./ASSETS/pmState.svg"
+        )
+      : updateUIElementAttributeWithTheGivenValue(
+          "amimg",
+          "src",
+          "./ASSETS/amState.png"
+        );
+
     Update_ampm_For_Nextfivehrs(hour, part_Of_Time);
   }
   clearInterval(timeout);
@@ -124,7 +166,7 @@ function update_live_time_based_on_timezone(selected_city) {
 /**
  *
  * Update the Temperature in celsius ,in farenheit and humidity ,precipitation for the selected city
- * Display the temperature values as per the format for the selected city 
+ * Display the temperature values as per the format for the selected city
  * @param {string} cityname  name of the  selected city
  * @param {Array.<string>} temperature_celsius city temperature
  * @return {void} nothing
@@ -152,7 +194,7 @@ function update_Temperature(cityname, temperature_celsius) {
 
 /**
  *
- * Update the source of the weather images based the temperature and its condition 
+ * Update the source of the weather images based the temperature and its condition
  * If the temperature value is between 23 and 29, update source with cloud image
  * If the temperature value is less than 18, update source with rainy image
  * If the temperature value is  between 23 and 29, update source with windy image
@@ -162,21 +204,36 @@ function update_Temperature(cityname, temperature_celsius) {
  * @return {void} nothing
  */
 function update_Image_Source(temp_after_every_hour, temp_icon) {
-
   if (temp_after_every_hour >= 23 && temp_after_every_hour <= 29)
-    update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City(temp_icon,'src',"./ASSETS/cloudyIcon.svg");
+    updateUIElementAttributeWithTheGivenValue(
+      temp_icon,
+      "src",
+      "./ASSETS/cloudyIcon.svg"
+    );
   else if (temp_after_every_hour < 18)
-    update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City(temp_icon,'src',"./ASSETS/rainyIconBlack.svg");
+    updateUIElementAttributeWithTheGivenValue(
+      temp_icon,
+      "src",
+      "./ASSETS/rainyIconBlack.svg"
+    );
   else if (temp_after_every_hour >= 18 && temp_after_every_hour <= 22)
-  update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City(temp_icon,'src',"./ASSETS/windyIcon.svg");
+    updateUIElementAttributeWithTheGivenValue(
+      temp_icon,
+      "src",
+      "./ASSETS/windyIcon.svg"
+    );
   else if (temp_after_every_hour > 29)
-  update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City(temp_icon,'src',"./ASSETS/sunnyIconBlack.svg");
+    updateUIElementAttributeWithTheGivenValue(
+      temp_icon,
+      "src",
+      "./ASSETS/sunnyIconBlack.svg"
+    );
 }
 
 /**
  *
- * Update the temperature in celsius for the next five hours from the current time for the 
- * selected city 
+ * Update the temperature in celsius for the next five hours from the current time for the
+ * selected city
  * Using for loop , time is incremented by 1 and temperature value is fetched from the object for the selected city
  * and by using object reference , the value is assigned.
  * @param {string} cityname name of the selected city
@@ -192,7 +249,11 @@ function fetch_And_Update_Temperature_For_Nextfivehrs(cityname) {
       0,
       temp_list[count - 1].length - 2
     );
-    update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City(celsius_temperature,'innerHTML',temp_after_every_hour);
+    updateUIElementAttributeWithTheGivenValue(
+      celsius_temperature,
+      "innerHTML",
+      temp_after_every_hour
+    );
     update_Image_Source(temp_after_every_hour, temp_icon);
   }
 }
@@ -205,12 +266,15 @@ function fetch_And_Update_Temperature_For_Nextfivehrs(cityname) {
  * @param {string} UIAttribute  Atrribute need to be change
  * @param {string} value_To_Update value to change
  */
-function update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City(UIElementID,UIAttribute,value_To_Update)
-{
-  if(UIAttribute=='src')
-  document.getElementById(UIElementID).src = value_To_Update;
-  else if(UIAttribute=='innerHTML')
-  document.getElementById(UIElementID).innerHTML = value_To_Update;
+function updateUIElementAttributeWithTheGivenValue(
+  UIElementID,
+  UIAttribute,
+  value_To_Update
+) {
+  if (UIAttribute == "src")
+    document.getElementById(UIElementID).src = value_To_Update;
+  else if (UIAttribute == "innerHTML")
+    document.getElementById(UIElementID).innerHTML = value_To_Update;
 }
 /**
  *
@@ -222,28 +286,80 @@ function update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City(UIElementID,
  */
 function update_UI_With_Nil(date_of_a_city) {
   clearInterval(timeout);
-  update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City("icon",'src','./ASSETS/warning.svg');
-  date_of_a_city[0].innerHTML =empty_value;
-  update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City('time_in_seconds','innerHTML',"");
-  update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City('time_in_minutes','innerHTML',"")
-  update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City('time_in_hour','innerHTML',empty_value);
-  update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City("amimg",'src','./ASSETS/warning.svg');
-  update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City('temp-celsius','innerHTML',empty_value);
-  update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City('temp-farenheit','innerHTML',empty_value);
-  update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City('humidity_percentage','innerHTML',empty_value);
-  update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City('precipitation_percentage','innerHTML',empty_value);
-  update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City('present_temperature','innerHTML',empty_value);
-  update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City('present_time','innerHTML',empty_value);
-  update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City("icon_based_present_temp",'src','./ASSETS/warning.svg');
+  updateUIElementAttributeWithTheGivenValue(
+    "icon",
+    "src",
+    "./ASSETS/warning.svg"
+  );
+  date_of_a_city[0].innerHTML = empty_value;
+  updateUIElementAttributeWithTheGivenValue("time_in_seconds", "innerHTML", "");
+  updateUIElementAttributeWithTheGivenValue("time_in_minutes", "innerHTML", "");
+  updateUIElementAttributeWithTheGivenValue(
+    "time_in_hour",
+    "innerHTML",
+    empty_value
+  );
+  updateUIElementAttributeWithTheGivenValue(
+    "amimg",
+    "src",
+    "./ASSETS/warning.svg"
+  );
+  updateUIElementAttributeWithTheGivenValue(
+    "temp-celsius",
+    "innerHTML",
+    empty_value
+  );
+  updateUIElementAttributeWithTheGivenValue(
+    "temp-farenheit",
+    "innerHTML",
+    empty_value
+  );
+  updateUIElementAttributeWithTheGivenValue(
+    "humidity_percentage",
+    "innerHTML",
+    empty_value
+  );
+  updateUIElementAttributeWithTheGivenValue(
+    "precipitation_percentage",
+    "innerHTML",
+    empty_value
+  );
+  updateUIElementAttributeWithTheGivenValue(
+    "present_temperature",
+    "innerHTML",
+    empty_value
+  );
+  updateUIElementAttributeWithTheGivenValue(
+    "present_time",
+    "innerHTML",
+    empty_value
+  );
+  updateUIElementAttributeWithTheGivenValue(
+    "icon_based_present_temp",
+    "src",
+    "./ASSETS/warning.svg"
+  );
   for (var count = 1; count <= 5; count++) {
     let id_name = `time-after-${count}hour`;
-    update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City(id_name,'innerHTML',empty_value);
+    updateUIElementAttributeWithTheGivenValue(
+      id_name,
+      "innerHTML",
+      empty_value
+    );
   }
   for (var count = 1; count <= 5; count++) {
     let celsius_temperature = `temp-after-${count}hour`;
     let temp_icon = `icon_based_tempafter-${count}hour`;
-    update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City(celsius_temperature,'innerHTML',empty_value);
-    update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City(temp_icon,'src','./ASSETS/warning.svg');
+    updateUIElementAttributeWithTheGivenValue(
+      celsius_temperature,
+      "innerHTML",
+      empty_value
+    );
+    updateUIElementAttributeWithTheGivenValue(
+      temp_icon,
+      "src",
+      "./ASSETS/warning.svg"
+    );
   }
 }
 
@@ -271,10 +387,13 @@ function update_Data_On_Cityname() {
       update_Temperature(selected_city, temperature_celsius);
 
       document.getElementById("present_time").innerHTML = at_present;
-      update_UI_Details_With_Nil_And_Warningimg_For_Invalid_City("present_temperature",'innerHTML',temperature_celsius[0]);
+      updateUIElementAttributeWithTheGivenValue(
+        "present_temperature",
+        "innerHTML",
+        temperature_celsius[0]
+      );
       update_Image_Source(temperature_celsius[0], "icon_based_present_temp");
       fetch_And_Update_Temperature_For_Nextfivehrs(selected_city);
-      //update_Live_Time(date_time);
       update_live_time_based_on_timezone(selected_city);
     } else {
       update_UI_With_Nil(date_of_a_city);
@@ -282,10 +401,9 @@ function update_Data_On_Cityname() {
   })();
 }
 
-
 /**
  *
- * Update source of the weather images based on the temperature 
+ * Update source of the weather images based on the temperature
  * By using for loop, am ,pm value for the time is updated
  * @param {number} hour
  * @param {string} part_Of_Time
@@ -298,62 +416,110 @@ function Update_ampm_For_Nextfivehrs(hour, part_Of_Time) {
     time_iterator++;
     var time_value = time_iterator;
 
-   (time_value == 12 && part_Of_Time == "PM")?part_Of_Time = "AM":
-   (time_value == 12 && part_Of_Time == "AM")?part_Of_Time = "PM":
-   (time_value > 12 && part_Of_Time == "PM")?(time_value = time_value - 12,part_Of_Time = "PM"):
-   (time_value > 12 && part_Of_Time == "AM")?(time_value = time_value - 12,part_Of_Time = "AM"):
-   (time_value < 12 && part_Of_Time == "PM")?part_Of_Time = "PM":part_Of_Time = "AM";
-    
-    document.getElementById(id_name).innerHTML = time_value + ' '+ part_Of_Time;
+    time_value == 12 && part_Of_Time == "PM"
+      ? (part_Of_Time = "AM")
+      : time_value == 12 && part_Of_Time == "AM"
+      ? (part_Of_Time = "PM")
+      : time_value > 12 && part_Of_Time == "PM"
+      ? ((time_value = time_value - 12), (part_Of_Time = "PM"))
+      : time_value > 12 && part_Of_Time == "AM"
+      ? ((time_value = time_value - 12), (part_Of_Time = "AM"))
+      : time_value < 12 && part_Of_Time == "PM"
+      ? (part_Of_Time = "PM")
+      : (part_Of_Time = "AM");
+
+    document.getElementById(id_name).innerHTML =
+      time_value + " " + part_Of_Time;
   }
 }
 
 // middle section
-// var sunny_list=[];
-// var snow_list=[];
-// var rainy_list=[];
 
-// var sunny_list= Object.values(weather_data)
-// .filter( ([value])=>
-//  parseInt(weather_data.temperature)>29 
-//  && parseInt(weather_data.humidity)<50 
-//  && parseInt(weather_data.precipitation)>=50)
-// );
-// for (let city in weather_data)
-// {
-//   if(parseInt(weather_data[city].temperature)>29 && parseInt(weather_data[city].humidity)<50 && parseInt(weather_data[city].precipitation)>=50)
-//   sunny_list.push(weather_data[city]);
-//   else if((parseInt(weather_data[city].temperature)>=20  && parseInt(weather_data[city].temperature)<=28) && parseInt(weather_data[city].humidity)>50 && parseInt(weather_data[city].precipitation)<50)
-//   snow_list.push(weather_data[city]);
-//   else if(parseInt(weather_data[city].temperature)<20 && parseInt(weather_data[city].humidity)>=50)
-//   rainy_list.push(weather_data[city]);
-// }
-// sunny_list.sort((a,b)=> a.temperature<b.temperature?1:-1);
-// snow_list.sort((a,b)=> a.precipitation<b.precipitation?1:-1);
-// rainy_list.sort((a,b)=> a.humidity<b.humidity?1:-1);
-//console.log(sunny_list);
+var sunny_list = Object.values(weather_data).filter(
+  (value) =>
+    parseInt(value.temperature) > 29 &&
+    parseInt(value.humidity) < 50 &&
+    parseInt(value.precipitation) >= 50
+);
+
+var snow_list = Object.values(weather_data).filter(
+  (value) =>
+    parseInt(value.temperature) >= 20 &&
+    parseInt(value.temperature) <= 28 &&
+    parseInt(value.humidity) > 50 &&
+    parseInt(value.precipitation) < 50
+);
+
+var rainy_list = Object.values(weather_data).filter(
+  (value) => parseInt(value.temperature) < 20 && parseInt(value.humidity) >= 50
+);
+
+sunny_list.sort((a, b) => (a.temperature < b.temperature ? 1 : -1));
+snow_list.sort((a, b) => (a.precipitation < b.precipitation ? 1 : -1));
+rainy_list.sort((a, b) => (a.humidity < b.humidity ? 1 : -1));
+
+// console.log(sunny_list);
 // console.log(snow_list);
 // console.log(rainy_list);
-//document.getElementById('City-card').removeChild("div:last-child");
-// function create_card()
-// {
-//   let container=document.getElementById('City-card');
-//   let division=document.createElement("div");
-//   container.appendChild(division);
-
-// }
-// function Get_button_id(selected_icon)
-// {
-//   if(selected_icon=='Sunny-icon')
-//   {
-//     document.getElementById('sun-design').style.borderBottomColor='1px solid skyblue';
-//   }
-//   else if(selected_icon=='Snow-icon')
-//   {
-
-//   }
-//   else if(selected_icon=='rainy-icon')
-//   {
-
-//   }
-// }
+const division = document.getElementById("City-card");
+//division.removeChild(division.lastElementChild);
+division.remove();
+function create_card(Name)
+{
+  let container=document.getElementById('City-card');
+  console.log(container);
+  let card_division=document.createElement("div");
+  let city_content_division=document.createElement('div');
+  let name_of_city=document.createElement('p');
+  name_of_city.value=Name;
+  let icon_temp_division=document.createElement('div');
+  let weather_icon=document.createElement('img');
+  let temperature_in_celsius=document.createElement('span');
+  let time=document.createElement('p');
+  let date=document.createElement('p');
+  let humidity_division=document.createElement('div');
+  let precipitation_division=document.createElement('div');
+  let humidity_icon=document.createElement('img');
+  let humidity_in_percentage=document.createElement('span');
+  let precipitation_icon=document.createElement('img');
+  let precipitation_in_percentage=document.createElement('span');
+  container.appendChild(card_division);
+  card_division.appendChild(city_content_division);
+  city_content_division.appendChild(name_of_city);
+  city_content_division.appendChild(icon_temp_division);
+  icon_temp_division.appendChild(weather_icon);
+  icon_temp_division.appendChild(temperature_in_celsius);
+  card_division.appendChild(time);
+  card_division.appendChild(date);
+  card_division.appendChild(humidity_division);
+  card_division.appendChild(precipitation_division);
+  humidity_division.appendChild(humidity_icon);
+  humidity_division.appendChild(humidity_in_percentage);
+  precipitation_division.appendChild(precipitation_icon);
+  precipitation_division.appendChild(precipitation_in_percentage);
+}
+document.getElementById("Sunny-icon").addEventListener("click", function () {
+  document.getElementById("sun-image").style.borderBottom = "2px solid skyblue";
+  document.getElementById("sun-image").style.paddingBottom = "3px";
+  document.getElementById("snow-image").style.borderBottom = 0;
+  document.getElementById("rainy-image").style.borderBottom = 0;
+  for(let city of sunny_list)
+  {
+   create_card(city.cityName);
+   //console.log(city);
+  }
+});
+document.getElementById("Snow-icon").addEventListener("click", function () {
+  document.getElementById("snow-image").style.borderBottom =
+    "2px solid skyblue";
+  document.getElementById("snow-image").style.paddingBottom = "3px";
+  document.getElementById("rainy-image").style.borderBottom = 0;
+  document.getElementById("sun-image").style.borderBottom = 0;
+});
+document.getElementById("rainy-icon").addEventListener("click", function () {
+  document.getElementById("rainy-image").style.borderBottom =
+    "2px solid skyblue";
+  document.getElementById("rainy-image").style.paddingBottom = "3px";
+  document.getElementById("snow-image").style.borderBottom = 0;
+  document.getElementById("sun-image").style.borderBottom = 0;
+});

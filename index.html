@@ -138,17 +138,20 @@
         <div class="top-heading">
           <h3 class="top-content">Top cities around world</h3>
           <figure class="top-icon-style">
-            <button type="button" class="top-icon" id="Sunny-icon" onclick="Get_button_id(id)"><input
+            <button type="button" class="top-icon" id="Sunny-icon"><input
               type="image"
               src="ASSETS\sunnyIcon.svg"
               alt="sunny icon"
-              id="sun-design"
+              id="sun-image"
             /></button>
             <button type="button" class="top-icon" id="Snow-icon"><input
               type="image"
               src="ASSETS\snowflakeIcon.svg"
+              alt="snow icon"
+              id="snow-image"
             /></button>
-            <button type="button"  class="top-icon" id="rainy-icon"><input type="image" src="ASSETS\rainyIcon.svg" /></button>
+            <button type="button"  class="top-icon" id="rainy-icon"><input type="image" src="ASSETS\rainyIcon.svg"  alt="rainy icon"
+              id="rainy-image" /></button>
             <label id="side-text" for="number">Display&nbsp;Top</label>
             <input
               type="number"
@@ -158,6 +161,7 @@
               class="display-count"
               value="4"
             />
+            <label>Cities</label>
           </figure>
         </div>
         <div class="card-container" id="City-card">
@@ -171,18 +175,18 @@
             </div>
             <p class="card-date">10:00 AM</p>
             <p class="card-date">2-Mar-2002</p>
-            <p>
+            <div>
               <img src="ASSETS\humidityIcon.svg" width="15px" /><span
                 class="rainy-temp"
                 >52%</span
               >
-            </p>
-            <p>
+            </div>
+            <div>
               <img src="ASSETS\precipitationIcon.svg" width="15px" /><span
                 class="rainy-temp"
                 >10%</span
               >
-            </p>
+            </div>
           </div>
           <div class="card card-img">
             <div class="continent-content">
@@ -194,18 +198,18 @@
             </div>
             <p class="card-date">10:00 AM</p>
             <p class="card-date">2-Mar-2002</p>
-            <p>
+            <div>
               <img src="ASSETS\humidityIcon.svg" width="15px" /><span
                 class="rainy-temp"
                 >52%</span
               >
-            </p>
-            <p>
+            </div>
+            <div>
               <img src="ASSETS\precipitationIcon.svg" width="15px" /><span
                 class="rainy-temp"
                 >10%</span
               >
-            </p>
+            </div>
           </div>
           <div class="card card-img">
             <div class="continent-content">
@@ -217,18 +221,18 @@
             </div>
             <p class="card-date">10:00 AM</p>
             <p class="card-date">2-Mar-2002</p>
-            <p>
+            <div>
               <img src="ASSETS\humidityIcon.svg" width="15px" /><span
                 class="rainy-temp"
                 >52%</span
               >
-            </p>
-            <p>
+            </div>
+            <div>
               <img src="ASSETS\precipitationIcon.svg" width="15px" /><span
                 class="rainy-temp"
                 >10%</span
               >
-            </p>
+            </div>
           </div>
           <div class="card card-img">
             <div class="continent-content">
@@ -240,16 +244,16 @@
             </div>
             <p class="card-date">10:00 AM</p>
             <p class="card-date">2-Mar-2002</p>
-            <p>
+            <div>
               <img src="ASSETS\humidityIcon.svg" width="15px" />
               <span class="rainy-temp">52%</span>
-            </p>
-            <p>
+            </div>
+            <div>
               <img src="ASSETS\precipitationIcon.svg" width="15px" /><span
                 class="rainy-temp"
                 >10%</span
               >
-            </p>
+            </div>
           </div>
         </div>
       </section>
