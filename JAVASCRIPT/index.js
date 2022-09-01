@@ -96,7 +96,7 @@ function update_Date_Based_On_City(
  * @param {string} selected_city name of the  selected city
  * @return {void} nothing
  */
-function update_live_time_based_on_timezone(selected_city) {
+function update_live_time_based_on_timezone(selected_city){
   function display_Live_Time() {
     let date_time = new Date().toLocaleString("en-US", {
       timeZone: weather_data[selected_city].timeZone,
@@ -114,7 +114,6 @@ function update_live_time_based_on_timezone(selected_city) {
       : hour == 12
       ? (part_Of_Time = "PM")
       : ((part_Of_Time = "PM"), (hour = hour - 12));
-
     if (second < 10)
       updateUIElementAttributeWithTheGivenValue(
         "time_in_seconds",
@@ -380,7 +379,7 @@ function update_UI_With_Nil(date_of_a_city) {
  * city icon, temperature, humitidy, precipitation, temperature for next five hours from current time and weather
  * icons according to the temperature value.
  * If it is invalid the invalid_Cityname function is called to display Nil value
- * @params {}
+ * @params {} nothing
  * @return {Function}function to update all data for the selected city and for invalid cityname.
  */
 function update_Data_On_Cityname() {
@@ -391,7 +390,7 @@ function update_Data_On_Cityname() {
       let temperature_celsius = weather_data[selected_city].temperature;
       temperature_celsius = temperature_celsius.split("°");
 
-      update_Icon_Image_Source(selected_city, "null");
+      update_Icon_Image_Source(selected_city);
       update_Date_Based_On_City(selected_city, date_of_a_city, "null");
       update_Temperature(selected_city, temperature_celsius);
 
@@ -403,7 +402,7 @@ function update_Data_On_Cityname() {
       );
       update_Image_Source(temperature_celsius[0], "icon_based_present_temp");
       fetch_And_Update_Temperature_For_Nextfivehrs(selected_city);
-      update_live_time_based_on_timezone(selected_city);
+      update_live_time_based_on_timezone(selected_city,'null');
     } else {
       update_UI_With_Nil(date_of_a_city);
     }
@@ -443,7 +442,10 @@ function Update_ampm_For_Nextfivehrs(hour, part_Of_Time) {
 }
 
 // middle section
-
+var spinner=3;
+var weatherIcon_Idname;
+var Cityname_list;
+var Icon_image;
 var sunny_list = Object.values(weather_data).filter(
   (value) =>
     parseInt(value.temperature) > 29 &&
@@ -467,75 +469,9 @@ sunny_list.sort((a, b) => (a.temperature < b.temperature ? 1 : -1));
 snow_list.sort((a, b) => (a.precipitation < b.precipitation ? 1 : -1));
 rainy_list.sort((a, b) => (a.humidity < b.humidity ? 1 : -1));
 
-// console.log(sunny_list);
-// console.log(snow_list);
-// console.log(rainy_list);
 const card_container = document.getElementById("city-card");
 card_container.replaceChildren();
 
-// function update_live_time_based_on_timezone(selected_city, weatherIcon_Idname) {
-//   function display_Live_Time() {
-//     let date_time = new Date().toLocaleString("en-US", {
-//       timeZone: weather_data[selected_city].timeZone,
-//     });
-
-//     let part_Of_Time;
-//     var hour = new Date(date_time).getHours();
-//     var minute = new Date(date_time).getMinutes();
-//     var second = new Date(date_time).getSeconds();
-
-//     hour == 0
-//       ? ((hour = 12), (part_Of_Time = "AM"))
-//       : hour < 12
-//       ? (part_Of_Time = "AM")
-//       : hour == 12
-//       ? (part_Of_Time = "PM")
-//       : ((part_Of_Time = "PM"), (hour = hour - 12));
-//     if (weatherIcon_Idname == "null") {
-//       //(second < 10)?(minute < 10)
-
-//       if (minute < 10)
-//         updateUIElementAttributeWithTheGivenValue(
-//           "time_in_minutes",
-//           "innerHTML",
-//           "0" + minute + ": "
-//         );
-//       else
-//         updateUIElementAttributeWithTheGivenValue(
-//           "time_in_minutes",
-//           "innerHTML",
-//           minute + ": "
-//         );
-
-//       if (hour < 10)
-//         updateUIElementAttributeWithTheGivenValue(
-//           "time_in_hour",
-//           "innerHTML",
-//           "0" + hour + ": "
-//         );
-//       else
-//         updateUIElementAttributeWithTheGivenValue(
-//           "time_in_hour",
-//           "innerHTML",
-//           hour + ": "
-//         );
-
-//       part_Of_Time == "PM"
-//         ? updateUIElementAttributeWithTheGivenValue(
-//             "amimg",
-//             "src",
-//             "./ASSETS/pmState.svg"
-//           )
-//         : updateUIElementAttributeWithTheGivenValue(
-//             "amimg",
-//             "src",
-//             "./ASSETS/amState.png"
-//           );
-//     }
-//   }
-//   clearInterval(timeout);
-//   timeout = setInterval(display_Live_Time, 1000);
-// }
 
 function create_card(
   cityname,
@@ -576,6 +512,7 @@ function create_card(
   date.setAttribute("class", "card-date-time");
   date.innerHTML = live_date_of_city;
   time.setAttribute("class", "card-date-time");
+  setInterval(display_Live_Time_To_The_City,1000,cityname.toLowerCase(),time);
   humidity_icon.src = humidity_icon_img_path;
   humidity_icon.style.width = "16px";
   humidity_in_percentage.innerHTML = humidity_value;
@@ -658,14 +595,46 @@ function populate_CityDetails_ToTheContainer(weatherIcon_Idname,weather_list,wea
     }
   }
 }
-var spinner=3;
+function display_Live_Time_To_The_City(selected_city,time) {
+  let date_time = new Date().toLocaleString("en-US", {
+    timeZone: weather_data[selected_city].timeZone,
+  });
+
+  let part_Of_Time;
+  var hour = new Date(date_time).getHours();
+  var minute = new Date(date_time).getMinutes();
+  var second = new Date(date_time).getSeconds();
+
+    hour == 0
+    ? ((hour = 12), (part_Of_Time = "AM"))
+    : hour < 12
+    ? (part_Of_Time = "AM")
+    : hour == 12
+    ? (part_Of_Time = "PM")
+    : ((part_Of_Time = "PM"), (hour = hour - 12));
+
+    if (second < 10)
+         second= "0" + second
+     if (minute < 10)
+        minute =  "0" + minute + ": "
+     else
+         minute=minute + ": "
+     if (hour < 10)
+        hour="0" + hour + ": "
+     else
+       hour=hour + ": "
+
+    date_time =hour+minute+second+" "+part_Of_Time;
+    time.innerHTML=date_time;
+}
 function noOfCitiesToDisplayInUI()
 {
   let display_NOofCity=document.getElementById('numberofcities');
   spinner=display_NOofCity.value;
-  console.log(spinner);
+  card_container.replaceChildren();
+  populate_CityDetails_ToTheContainer(weatherIcon_Idname,Cityname_list,Icon_image,spinner);
 }
-function updateContainerWithCitiesInformationBasedOnWeatherIconSelected(weatherIcon_Idname,Cityname_list,Icon_image) {
+function updateContainerWithCitiesInformationBasedOnWeatherIconSelected() {
   set_WeatherIcon_Hovering(weatherIcon_Idname);
   card_container.replaceChildren();
   populate_CityDetails_ToTheContainer(weatherIcon_Idname,Cityname_list,Icon_image,spinner);
@@ -673,15 +642,24 @@ function updateContainerWithCitiesInformationBasedOnWeatherIconSelected(weatherI
 
 document.getElementById("sunny-icon").addEventListener("click",()=>
 {
-    updateContainerWithCitiesInformationBasedOnWeatherIconSelected('sunny-icon',sunny_list,'./ASSETS/sunnyIcon.svg');
+    weatherIcon_Idname='sunny-icon';
+    Cityname_list=sunny_list;
+    Icon_image='./ASSETS/sunnyIcon.svg';
+    updateContainerWithCitiesInformationBasedOnWeatherIconSelected();
 });
 document.getElementById("snow-icon").addEventListener("click",()=>
 {
-updateContainerWithCitiesInformationBasedOnWeatherIconSelected("snow-icon",snow_list,'./ASSETS/snowflakeIcon.svg');
+  weatherIcon_Idname='snow-icon';
+  Cityname_list=snow_list;
+  Icon_image='./ASSETS/snowflakeIcon.svg';
+updateContainerWithCitiesInformationBasedOnWeatherIconSelected();
 });
 document.getElementById("rainy-icon").addEventListener("click", ()=>
 {
-  updateContainerWithCitiesInformationBasedOnWeatherIconSelected("rainy-icon",rainy_list,'./ASSETS/rainyIcon.svg');
+    weatherIcon_Idname='rainy-icon';
+    Cityname_list=rainy_list;
+    Icon_image='./ASSETS/rainyIcon.svg';
+  updateContainerWithCitiesInformationBasedOnWeatherIconSelected();
 });
 document.getElementById('numberofcities').addEventListener('change',noOfCitiesToDisplayInUI);
 populate_CityDetails_ToTheContainer("sunny-icon",sunny_list,'./ASSETS/sunnyIcon.svg',spinner);
