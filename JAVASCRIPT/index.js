@@ -31,11 +31,8 @@ document
  * @return {boolean} cityname is valid or not
  */
 let check_Cityname_Is_Valid = (cityname) => {
-  for (let name of cityname_list) {
-    if (cityname == name) {
+   if(cityname_list.includes(cityname))
       return true;
-    }
-  }
   return false;
 };
 update_Data_On_Cityname();
@@ -46,9 +43,13 @@ update_Data_On_Cityname();
  * @param {string} cityname name of the  selected city
  * @return {void} nothing
  */
-function update_Icon_Image_Source(cityname) {
+function update_Icon_Image_Source(cityname, weatherIcon_Idname) {
   const image_path = "./ASSETS/" + cityname + ".svg";
-  updateUIElementAttributeWithTheGivenValue("icon", "src", image_path);
+  if (weatherIcon_Idname == "null") {
+    updateUIElementAttributeWithTheGivenValue("icon", "src", image_path);
+  } else {
+    return image_path;
+  }
 }
 
 /**
@@ -58,9 +59,13 @@ function update_Icon_Image_Source(cityname) {
  * append prefix as zero to the date.
  * @param {string} selected_city name of the  selected city
  * @param {reference} date_of_a_city Object reference
- * @return {void} nothing
+ * @return {string} city_date  live date of the city
  */
-function update_Date_Based_On_City(selected_city, date_of_a_city) {
+function update_Date_Based_On_City(
+  selected_city,
+  date_of_a_city,
+  weatherIcon_Idname
+) {
   var date_time = new Date().toLocaleString("en-US", {
     timeZone: weather_data[selected_city].timeZone,
   });
@@ -75,7 +80,11 @@ function update_Date_Based_On_City(selected_city, date_of_a_city) {
       ? `0${date}- ${month}- ${year}`
       : `${date}-${month}-${year}`;
   })();
-  date_of_a_city[0].innerHTML = city_date;
+  if (weatherIcon_Idname == "null") {
+    date_of_a_city[0].innerHTML = city_date;
+  } else {
+    return city_date;
+  }
 }
 
 /**
@@ -156,13 +165,12 @@ function update_live_time_based_on_timezone(selected_city) {
           "src",
           "./ASSETS/amState.png"
         );
-
-    Update_ampm_For_Nextfivehrs(hour, part_Of_Time);
-  }
+  Update_ampm_For_Nextfivehrs(hour, part_Of_Time);
+}
   clearInterval(timeout);
   timeout = setInterval(display_Live_Time, 1000);
-}
 
+}
 /**
  *
  * Update the Temperature in celsius ,in farenheit and humidity ,precipitation for the selected city
@@ -271,10 +279,11 @@ function updateUIElementAttributeWithTheGivenValue(
   UIAttribute,
   value_To_Update
 ) {
-  if (UIAttribute == "src")
+  if (UIAttribute == "src") {
     document.getElementById(UIElementID).src = value_To_Update;
-  else if (UIAttribute == "innerHTML")
+  } else if (UIAttribute == "innerHTML") {
     document.getElementById(UIElementID).innerHTML = value_To_Update;
+  }
 }
 /**
  *
@@ -382,8 +391,8 @@ function update_Data_On_Cityname() {
       let temperature_celsius = weather_data[selected_city].temperature;
       temperature_celsius = temperature_celsius.split("°");
 
-      update_Icon_Image_Source(selected_city);
-      update_Date_Based_On_City(selected_city, date_of_a_city);
+      update_Icon_Image_Source(selected_city, "null");
+      update_Date_Based_On_City(selected_city, date_of_a_city, "null");
       update_Temperature(selected_city, temperature_celsius);
 
       document.getElementById("present_time").innerHTML = at_present;
@@ -461,28 +470,124 @@ rainy_list.sort((a, b) => (a.humidity < b.humidity ? 1 : -1));
 // console.log(sunny_list);
 // console.log(snow_list);
 // console.log(rainy_list);
-const division = document.getElementById("City-card");
-//division.removeChild(division.lastElementChild);
-division.remove();
-function create_card(Name)
-{
-  let container=document.getElementById('City-card');
-  console.log(container);
-  let card_division=document.createElement("div");
-  let city_content_division=document.createElement('div');
-  let name_of_city=document.createElement('p');
-  name_of_city.value=Name;
-  let icon_temp_division=document.createElement('div');
-  let weather_icon=document.createElement('img');
-  let temperature_in_celsius=document.createElement('span');
-  let time=document.createElement('p');
-  let date=document.createElement('p');
-  let humidity_division=document.createElement('div');
-  let precipitation_division=document.createElement('div');
-  let humidity_icon=document.createElement('img');
-  let humidity_in_percentage=document.createElement('span');
-  let precipitation_icon=document.createElement('img');
-  let precipitation_in_percentage=document.createElement('span');
+const card_container = document.getElementById("city-card");
+card_container.replaceChildren();
+
+// function update_live_time_based_on_timezone(selected_city, weatherIcon_Idname) {
+//   function display_Live_Time() {
+//     let date_time = new Date().toLocaleString("en-US", {
+//       timeZone: weather_data[selected_city].timeZone,
+//     });
+
+//     let part_Of_Time;
+//     var hour = new Date(date_time).getHours();
+//     var minute = new Date(date_time).getMinutes();
+//     var second = new Date(date_time).getSeconds();
+
+//     hour == 0
+//       ? ((hour = 12), (part_Of_Time = "AM"))
+//       : hour < 12
+//       ? (part_Of_Time = "AM")
+//       : hour == 12
+//       ? (part_Of_Time = "PM")
+//       : ((part_Of_Time = "PM"), (hour = hour - 12));
+//     if (weatherIcon_Idname == "null") {
+//       //(second < 10)?(minute < 10)
+
+//       if (minute < 10)
+//         updateUIElementAttributeWithTheGivenValue(
+//           "time_in_minutes",
+//           "innerHTML",
+//           "0" + minute + ": "
+//         );
+//       else
+//         updateUIElementAttributeWithTheGivenValue(
+//           "time_in_minutes",
+//           "innerHTML",
+//           minute + ": "
+//         );
+
+//       if (hour < 10)
+//         updateUIElementAttributeWithTheGivenValue(
+//           "time_in_hour",
+//           "innerHTML",
+//           "0" + hour + ": "
+//         );
+//       else
+//         updateUIElementAttributeWithTheGivenValue(
+//           "time_in_hour",
+//           "innerHTML",
+//           hour + ": "
+//         );
+
+//       part_Of_Time == "PM"
+//         ? updateUIElementAttributeWithTheGivenValue(
+//             "amimg",
+//             "src",
+//             "./ASSETS/pmState.svg"
+//           )
+//         : updateUIElementAttributeWithTheGivenValue(
+//             "amimg",
+//             "src",
+//             "./ASSETS/amState.png"
+//           );
+//     }
+//   }
+//   clearInterval(timeout);
+//   timeout = setInterval(display_Live_Time, 1000);
+// }
+
+function create_card(
+  cityname,
+  icon_image_path,
+  temperature_celsius,
+  live_date_of_city,
+  weatherIcon_Idname,
+  humidity_icon_img_path,
+  humidity_value,
+  precipitation_icon_img_path,
+  precipitation_value,
+  city_image
+) {
+  let container = document.getElementById("city-card");
+  let card_division = document.createElement("div");
+  let city_content_division = document.createElement("div");
+  let name_of_city = document.createElement("p");
+  let icon_temp_division = document.createElement("div");
+  let weather_icon = document.createElement("img");
+  let temperature_in_celsius = document.createElement("span");
+  let time = document.createElement("p");
+  let date = document.createElement("p");
+  let humidity_division = document.createElement("div");
+  let precipitation_division = document.createElement("div");
+  let humidity_icon = document.createElement("img");
+  let humidity_in_percentage = document.createElement("span");
+  let precipitation_icon = document.createElement("img");
+  let precipitation_in_percentage = document.createElement("span");
+  card_division.setAttribute("class", "card");
+  city_content_division.setAttribute("class", "continent-content");
+  name_of_city.setAttribute("class", "city-name");
+  name_of_city.innerHTML = cityname;
+  icon_temp_division.setAttribute("class", "temp-cardstyle");
+  weather_icon.src = icon_image_path;
+  weather_icon.style.width = "25px";
+  temperature_in_celsius.setAttribute("class", "card-temp");
+  temperature_in_celsius.innerHTML = temperature_celsius;
+  date.setAttribute("class", "card-date-time");
+  date.innerHTML = live_date_of_city;
+  time.setAttribute("class", "card-date-time");
+  humidity_icon.src = humidity_icon_img_path;
+  humidity_icon.style.width = "16px";
+  humidity_in_percentage.innerHTML = humidity_value;
+  humidity_in_percentage.setAttribute("class", "rainy-temp");
+  precipitation_icon.src = precipitation_icon_img_path;
+  precipitation_icon.style.width = "16px";
+  precipitation_in_percentage.innerHTML = precipitation_value;
+  precipitation_in_percentage.setAttribute("class", "rainy-temp");
+  card_division.style.backgroundImage = "url(" + city_image + ")";
+  card_division.style.backgroundRepeat = "no-repeat";
+  card_division.style.backgroundPosition = "bottom right";
+  card_division.style.backgroundSize = "65%";
   container.appendChild(card_division);
   card_division.appendChild(city_content_division);
   city_content_division.appendChild(name_of_city);
@@ -498,28 +603,86 @@ function create_card(Name)
   precipitation_division.appendChild(precipitation_icon);
   precipitation_division.appendChild(precipitation_in_percentage);
 }
-document.getElementById("Sunny-icon").addEventListener("click", function () {
-  document.getElementById("sun-image").style.borderBottom = "2px solid skyblue";
-  document.getElementById("sun-image").style.paddingBottom = "3px";
-  document.getElementById("snow-image").style.borderBottom = 0;
-  document.getElementById("rainy-image").style.borderBottom = 0;
-  for(let city of sunny_list)
-  {
-   create_card(city.cityName);
-   //console.log(city);
+
+function set_WeatherIcon_Hovering(weatherIcon_Idname) {
+  if (weatherIcon_Idname == "sunny-icon") {
+    document.getElementById("sun-image").style.borderBottom =
+      "2px solid skyblue";
+    document.getElementById("sun-image").style.paddingBottom = "3px";
+    document.getElementById("snow-image").style.borderBottom = 0;
+    document.getElementById("rainy-image").style.borderBottom = 0;
+  } else if (weatherIcon_Idname == "snow-icon") {
+    document.getElementById("snow-image").style.borderBottom =
+      "2px solid skyblue";
+    document.getElementById("snow-image").style.paddingBottom = "3px";
+    document.getElementById("rainy-image").style.borderBottom = 0;
+    document.getElementById("sun-image").style.borderBottom = 0;
+  } else if (weatherIcon_Idname == "rainy-icon") {
+    document.getElementById("rainy-image").style.borderBottom =
+      "2px solid skyblue";
+    document.getElementById("rainy-image").style.paddingBottom = "3px";
+    document.getElementById("snow-image").style.borderBottom = 0;
+    document.getElementById("sun-image").style.borderBottom = 0;
   }
+}
+
+function populate_CityDetails_ToTheContainer(weatherIcon_Idname,weather_list,weatherIcon_img_path,noOfCitiesToDisplay) {
+  let length_of_list=weather_list.length;
+  if(length_of_list<noOfCitiesToDisplay)
+  {
+    noOfCitiesToDisplay=length_of_list;
+  }
+  let count=0;
+  for (let city of weather_list) {
+    if(count<noOfCitiesToDisplay){
+    let live_date_of_city = update_Date_Based_On_City(
+      city.cityName.toLowerCase(),
+      "null",
+      weatherIcon_Idname
+    );
+    //  let live_time_of_city=update_live_time_based_on_timezone(selected_city);
+    let city_image = update_Icon_Image_Source(city.cityName, weatherIcon_Idname);
+    create_card(
+      city.cityName,
+      weatherIcon_img_path,
+      city.temperature,
+      live_date_of_city,
+      "card-date-time",
+      "./ASSETS/humidityIcon.svg",
+      city.humidity,
+      "./ASSETS/precipitationIcon.svg",
+      city.precipitation,
+      city_image
+    );
+    count++;
+    }
+  }
+}
+var spinner=3;
+function noOfCitiesToDisplayInUI()
+{
+  let display_NOofCity=document.getElementById('numberofcities');
+  spinner=display_NOofCity.value;
+  console.log(spinner);
+}
+function updateContainerWithCitiesInformationBasedOnWeatherIconSelected(weatherIcon_Idname,Cityname_list,Icon_image) {
+  set_WeatherIcon_Hovering(weatherIcon_Idname);
+  card_container.replaceChildren();
+  populate_CityDetails_ToTheContainer(weatherIcon_Idname,Cityname_list,Icon_image,spinner);
+}
+
+document.getElementById("sunny-icon").addEventListener("click",()=>
+{
+    updateContainerWithCitiesInformationBasedOnWeatherIconSelected('sunny-icon',sunny_list,'./ASSETS/sunnyIcon.svg');
 });
-document.getElementById("Snow-icon").addEventListener("click", function () {
-  document.getElementById("snow-image").style.borderBottom =
-    "2px solid skyblue";
-  document.getElementById("snow-image").style.paddingBottom = "3px";
-  document.getElementById("rainy-image").style.borderBottom = 0;
-  document.getElementById("sun-image").style.borderBottom = 0;
+document.getElementById("snow-icon").addEventListener("click",()=>
+{
+updateContainerWithCitiesInformationBasedOnWeatherIconSelected("snow-icon",snow_list,'./ASSETS/snowflakeIcon.svg');
 });
-document.getElementById("rainy-icon").addEventListener("click", function () {
-  document.getElementById("rainy-image").style.borderBottom =
-    "2px solid skyblue";
-  document.getElementById("rainy-image").style.paddingBottom = "3px";
-  document.getElementById("snow-image").style.borderBottom = 0;
-  document.getElementById("sun-image").style.borderBottom = 0;
+document.getElementById("rainy-icon").addEventListener("click", ()=>
+{
+  updateContainerWithCitiesInformationBasedOnWeatherIconSelected("rainy-icon",rainy_list,'./ASSETS/rainyIcon.svg');
 });
+document.getElementById('numberofcities').addEventListener('change',noOfCitiesToDisplayInUI);
+populate_CityDetails_ToTheContainer("sunny-icon",sunny_list,'./ASSETS/sunnyIcon.svg',spinner);
+
