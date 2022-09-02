@@ -43,19 +43,21 @@ body {
   flex-direction: column;
   gap:7px;
   height: 240px;
-  min-width: 15rem;
+  min-width: 14.6rem;
   padding-left: 1%;
   overflow-x: hidden;
   width: 20%;
   z-index: 1;
 }
 .card-container {
+  scroll-behavior: smooth;
   display: flex;
   height: 250px;
   gap: 5%;
   margin: 0 auto;
   padding: 1em;
   overflow-y: hidden;
+  overflow-x: hidden;
   width: 90%;
 }
 .card-date-time {
@@ -63,14 +65,9 @@ body {
   font-weight: bold;
   letter-spacing: 1px;
 }
-.Card-scroll
-{
-  display:flex;
-  align-items: center;
-}
 .card:hover {
   transform: scale(1.1);
-  transition: 2s;
+  transition: 1s;
 }
 .card-img {
   background-image: url("../ASSETS/london.svg");
@@ -87,6 +84,11 @@ body {
   font-size: 1.4em;
   font-weight: normal;
   vertical-align: top;
+}
+.city-details-based-onWeather
+{
+  display:flex;
+  align-items: center;
 }
 .city-info {
   display: flex;
@@ -225,6 +227,13 @@ body {
   font-size: 1.2em;
   font-weight: lighter;
   letter-spacing: 2px;
+}
+.scroll-image
+{
+  background-color:gray;
+  border-radius: 35px;
+  height:3.5rem;
+  width:3.5rem;
 }
 #sun-image {
   border-bottom: 2px solid skyblue;
@@ -459,6 +468,11 @@ body {
     font-size: 1.1em;
     width: 55%;
   }
+  .scroll-image
+ {
+  height:3rem;
+  width:2.4rem;
+ }
 }
 
 /* bottom section */

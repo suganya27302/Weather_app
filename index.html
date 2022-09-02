@@ -152,20 +152,21 @@
             /></button>
             <button type="button"  class="top-icon" id="rainy-icon"><input type="image" src="ASSETS\rainyIcon.svg"  alt="rainy icon"
               id="rainy-image" /></button>
-            <label id="side-text" for="number">Display&nbsp;Top</label>
+            <label id="side-text" for="numberofcities">Display&nbsp;Top</label>
             <input
               type="number"
               id="numberofcities"
               min="3"
               max="10"
               class="display-count"
-              value="3"
+              value="4"
+              message=""
             />
             <label>Cities</label>
           </figure>
         </div>
-        <div class="Card-scroll">
-        <img src="ASSETS\forwardArrow.svg" style="background-color:gray;width:4em;height:4em;">
+        <div class="city-details-based-onWeather">
+        <div><img src="ASSETS\backwardArrow.svg" class='scroll-image' id="left-scroll"></div>
         <div class="card-container" id="city-card">
           <div class="card card-img">
             <div class="continent-content">
@@ -258,7 +259,7 @@
             </div>
           </div>
         </div>
-        <img src="ASSETS\forwardArrow.svg" style="background-color:gray;width:4em;height:4em;">
+        <div><img src="ASSETS\forwardArrow.svg" class='scroll-image' id="right-scroll"></div>
       </div>
       </section>
       <section class="bottom-container">

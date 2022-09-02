@@ -442,10 +442,7 @@ function Update_ampm_For_Nextfivehrs(hour, part_Of_Time) {
 }
 
 // middle section
-var spinner=3;
-var weatherIcon_Idname;
-var Cityname_list;
-var Icon_image;
+var spinner=4;
 var sunny_list = Object.values(weather_data).filter(
   (value) =>
     parseInt(value.temperature) > 29 &&
@@ -462,17 +459,35 @@ var snow_list = Object.values(weather_data).filter(
 );
 
 var rainy_list = Object.values(weather_data).filter(
-  (value) => parseInt(value.temperature) < 20 && parseInt(value.humidity) >= 50
+  (value) => parseInt(value.temperature)<20 && parseInt(value.humidity) >= 50
 );
 
-sunny_list.sort((a, b) => (a.temperature < b.temperature ? 1 : -1));
-snow_list.sort((a, b) => (a.precipitation < b.precipitation ? 1 : -1));
-rainy_list.sort((a, b) => (a.humidity < b.humidity ? 1 : -1));
+sunny_list.sort((a, b) => (parseInt(a.temperature) < parseInt(b.temperature) ? 1 : -1));
+snow_list.sort((a, b) => (parseInt(a.precipitation) < parseInt(b.precipitation) ? 1 : -1));
+rainy_list.sort((a, b) => (parseInt(a.humidity) < parseInt(b.humidity) ? 1 : -1));
 
 const card_container = document.getElementById("city-card");
 card_container.replaceChildren();
 
-
+var weatherIcon_Idname='sunny-icon';
+var Cityname_list=[...sunny_list];
+var Icon_image='./ASSETS/sunnyIcon.svg';
+var sunny_data_list={
+  weatherIcon_Idname:'sunny-icon',
+    Cityname_list:sunny_list,
+    Icon_image:'./ASSETS/sunnyIcon.svg'
+}
+var snow_data_list={
+  weatherIcon_Idname:'snow-icon',
+  Cityname_list:snow_list,
+  Icon_image:'./ASSETS/snowflakeIcon.svg'
+}
+var rainy_data_list=
+{
+  weatherIcon_Idname:'rainy-icon',
+  Cityname_list:rainy_list,
+  Icon_image:'./ASSETS/rainyIcon.svg'
+}
 function create_card(
   cityname,
   icon_image_path,
@@ -548,18 +563,21 @@ function set_WeatherIcon_Hovering(weatherIcon_Idname) {
     document.getElementById("sun-image").style.paddingBottom = "3px";
     document.getElementById("snow-image").style.borderBottom = 0;
     document.getElementById("rainy-image").style.borderBottom = 0;
+
   } else if (weatherIcon_Idname == "snow-icon") {
     document.getElementById("snow-image").style.borderBottom =
       "2px solid skyblue";
     document.getElementById("snow-image").style.paddingBottom = "3px";
     document.getElementById("rainy-image").style.borderBottom = 0;
     document.getElementById("sun-image").style.borderBottom = 0;
+    
   } else if (weatherIcon_Idname == "rainy-icon") {
     document.getElementById("rainy-image").style.borderBottom =
       "2px solid skyblue";
     document.getElementById("rainy-image").style.paddingBottom = "3px";
     document.getElementById("snow-image").style.borderBottom = 0;
     document.getElementById("sun-image").style.borderBottom = 0;
+  
   }
 }
 
@@ -577,7 +595,7 @@ function populate_CityDetails_ToTheContainer(weatherIcon_Idname,weather_list,wea
       "null",
       weatherIcon_Idname
     );
-    //  let live_time_of_city=update_live_time_based_on_timezone(selected_city);
+
     let city_image = update_Icon_Image_Source(city.cityName, weatherIcon_Idname);
     create_card(
       city.cityName,
@@ -591,6 +609,7 @@ function populate_CityDetails_ToTheContainer(weatherIcon_Idname,weather_list,wea
       city.precipitation,
       city_image
     );
+   hideTheScrollArrow();
     count++;
     }
   }
@@ -631,36 +650,89 @@ function noOfCitiesToDisplayInUI()
 {
   let display_NOofCity=document.getElementById('numberofcities');
   spinner=display_NOofCity.value;
+  if(spinner>10)
+  {
+    spinner=10;
+  }
   card_container.replaceChildren();
   populate_CityDetails_ToTheContainer(weatherIcon_Idname,Cityname_list,Icon_image,spinner);
 }
 function updateContainerWithCitiesInformationBasedOnWeatherIconSelected() {
-  set_WeatherIcon_Hovering(weatherIcon_Idname);
-  card_container.replaceChildren();
-  populate_CityDetails_ToTheContainer(weatherIcon_Idname,Cityname_list,Icon_image,spinner);
+  return function()
+  {
+    set_WeatherIcon_Hovering(weatherIcon_Idname);
+    card_container.replaceChildren();
+    populate_CityDetails_ToTheContainer(weatherIcon_Idname,Cityname_list,Icon_image,spinner);
+  }();
 }
 
+function populate_Details()
+{
+    weatherIcon_Idname=this.weatherIcon_Idname;
+    Cityname_list=this.Cityname_list;
+    Icon_image=this.Icon_image;
+}
 document.getElementById("sunny-icon").addEventListener("click",()=>
 {
-    weatherIcon_Idname='sunny-icon';
-    Cityname_list=sunny_list;
-    Icon_image='./ASSETS/sunnyIcon.svg';
+    populate_Details.call(sunny_data_list);
     updateContainerWithCitiesInformationBasedOnWeatherIconSelected();
 });
+
 document.getElementById("snow-icon").addEventListener("click",()=>
 {
-  weatherIcon_Idname='snow-icon';
-  Cityname_list=snow_list;
-  Icon_image='./ASSETS/snowflakeIcon.svg';
+  populate_Details.call(snow_data_list);
 updateContainerWithCitiesInformationBasedOnWeatherIconSelected();
 });
+
 document.getElementById("rainy-icon").addEventListener("click", ()=>
 {
-    weatherIcon_Idname='rainy-icon';
-    Cityname_list=rainy_list;
-    Icon_image='./ASSETS/rainyIcon.svg';
+  populate_Details.call(rainy_data_list);
   updateContainerWithCitiesInformationBasedOnWeatherIconSelected();
 });
-document.getElementById('numberofcities').addEventListener('change',noOfCitiesToDisplayInUI);
-populate_CityDetails_ToTheContainer("sunny-icon",sunny_list,'./ASSETS/sunnyIcon.svg',spinner);
 
+document.getElementById('numberofcities').addEventListener('change',noOfCitiesToDisplayInUI);
+populate_CityDetails_ToTheContainer(weatherIcon_Idname,Cityname_list,Icon_image,spinner);
+
+var scroll_Amount=0;
+var scroll_max=card_container.clientWidth;
+var scroll_min=0;
+document.getElementById('left-scroll').addEventListener('click',()=>
+{
+   setTimeout(()=>
+    card_container.scrollTo({top:0,
+      left :Math.min(scroll_Amount-=450,scroll_min),
+    }),150);
+    
+});
+document.getElementById('right-scroll').addEventListener('click',()=>
+{
+   
+    setTimeout(()=>card_container.scrollTo({top:0,
+      left :Math.max(scroll_Amount+=450,scroll_max),
+    }),150);
+});
+
+document.getElementById("numberofcities").addEventListener('input',validity);
+function validity()
+{
+  (parseInt(this.value)<3)?(document.getElementById("numberofcities").value = 3):
+  (parseInt(this.value)>10)?(document.getElementById("numberofcities").value = 10):
+  document.getElementById("numberofcities").value=parseInt(this.value);
+}
+
+function hideTheScrollArrow()
+{
+let length_of_container=card_container.clientWidth;
+let length_of_Whole_city=card_container.scrollWidth;
+
+if(length_of_Whole_city<=length_of_container)
+{
+  document.getElementById('left-scroll').style.display='none';
+  document.getElementById('right-scroll').style.display="none";
+}
+else
+{
+  document.getElementById('left-scroll').style.display='flex';
+  document.getElementById('right-scroll').style.display='flex';
+}
+}
