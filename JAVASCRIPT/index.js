@@ -488,7 +488,7 @@ var rainy_data_list=
   Cityname_list:rainy_list,
   Icon_image:'./ASSETS/rainyIcon.svg'
 }
-function create_card(
+function createCardAndUpdateDataWithTheGivenValue(
   cityname,
   icon_image_path,
   temperature_celsius,
@@ -581,7 +581,7 @@ function set_WeatherIcon_Hovering(weatherIcon_Idname) {
   }
 }
 
-function populate_CityDetails_ToTheContainer(weatherIcon_Idname,weather_list,weatherIcon_img_path,noOfCitiesToDisplay) {
+function createCardToTheSelectedCityAndpopulate_CityDetails(weatherIcon_Idname,weather_list,weatherIcon_img_path,noOfCitiesToDisplay) {
   let length_of_list=weather_list.length;
   if(length_of_list<noOfCitiesToDisplay)
   {
@@ -597,7 +597,7 @@ function populate_CityDetails_ToTheContainer(weatherIcon_Idname,weather_list,wea
     );
 
     let city_image = update_Icon_Image_Source(city.cityName, weatherIcon_Idname);
-    create_card(
+    createCardAndUpdateDataWithTheGivenValue(
       city.cityName,
       weatherIcon_img_path,
       city.temperature,
@@ -632,18 +632,10 @@ function display_Live_Time_To_The_City(selected_city,time) {
     ? (part_Of_Time = "PM")
     : ((part_Of_Time = "PM"), (hour = hour - 12));
 
-    if (second < 10)
-         second= "0" + second
-     if (minute < 10)
-        minute =  "0" + minute + ": "
-     else
-         minute=minute + ": "
-     if (hour < 10)
-        hour="0" + hour + ": "
-     else
-       hour=hour + ": "
+     (hour < 10)?(hour="0" + hour + ": "):
+     ((hour=hour + ": "),minute < 10)?(minute =  "0" + minute):(minute=minute);
 
-    date_time =hour+minute+second+" "+part_Of_Time;
+    date_time =hour+minute+" "+part_Of_Time;
     time.innerHTML=date_time;
 }
 function noOfCitiesToDisplayInUI()
@@ -655,18 +647,18 @@ function noOfCitiesToDisplayInUI()
     spinner=10;
   }
   card_container.replaceChildren();
-  populate_CityDetails_ToTheContainer(weatherIcon_Idname,Cityname_list,Icon_image,spinner);
+  createCardToTheSelectedCityAndpopulate_CityDetails(weatherIcon_Idname,Cityname_list,Icon_image,spinner);
 }
 function updateContainerWithCitiesInformationBasedOnWeatherIconSelected() {
   return function()
   {
     set_WeatherIcon_Hovering(weatherIcon_Idname);
     card_container.replaceChildren();
-    populate_CityDetails_ToTheContainer(weatherIcon_Idname,Cityname_list,Icon_image,spinner);
+    createCardToTheSelectedCityAndpopulate_CityDetails(weatherIcon_Idname,Cityname_list,Icon_image,spinner);
   }();
 }
 
-function populate_Details()
+function populate_Details_Based_On_Icon_Selected()
 {
     weatherIcon_Idname=this.weatherIcon_Idname;
     Cityname_list=this.Cityname_list;
@@ -674,24 +666,24 @@ function populate_Details()
 }
 document.getElementById("sunny-icon").addEventListener("click",()=>
 {
-    populate_Details.call(sunny_data_list);
+  populate_Details_Based_On_Icon_Selected.call(sunny_data_list);
     updateContainerWithCitiesInformationBasedOnWeatherIconSelected();
 });
 
 document.getElementById("snow-icon").addEventListener("click",()=>
 {
-  populate_Details.call(snow_data_list);
+  populate_Details_Based_On_Icon_Selected.call(snow_data_list);
 updateContainerWithCitiesInformationBasedOnWeatherIconSelected();
 });
 
 document.getElementById("rainy-icon").addEventListener("click", ()=>
 {
-  populate_Details.call(rainy_data_list);
+  populate_Details_Based_On_Icon_Selected.call(rainy_data_list);
   updateContainerWithCitiesInformationBasedOnWeatherIconSelected();
 });
 
 document.getElementById('numberofcities').addEventListener('change',noOfCitiesToDisplayInUI);
-populate_CityDetails_ToTheContainer(weatherIcon_Idname,Cityname_list,Icon_image,spinner);
+createCardToTheSelectedCityAndpopulate_CityDetails(weatherIcon_Idname,Cityname_list,Icon_image,spinner);
 
 var scroll_Amount=0;
 var scroll_max=card_container.clientWidth;
@@ -699,21 +691,17 @@ var scroll_min=0;
 document.getElementById('left-scroll').addEventListener('click',()=>
 {
    setTimeout(()=>
-    card_container.scrollTo({top:0,
-      left :Math.min(scroll_Amount-=450,scroll_min),
-    }),150);
+    card_container.scrollLeft-=530,150);
     
 });
 document.getElementById('right-scroll').addEventListener('click',()=>
 {
    
-    setTimeout(()=>card_container.scrollTo({top:0,
-      left :Math.max(scroll_Amount+=450,scroll_max),
-    }),150);
+    setTimeout(()=>card_container.scrollLeft+=530,150);
 });
 
-document.getElementById("numberofcities").addEventListener('input',validity);
-function validity()
+document.getElementById("numberofcities").addEventListener('input', validate_The_Spinner);
+function validate_The_Spinner()
 {
   (parseInt(this.value)<3)?(document.getElementById("numberofcities").value = 3):
   (parseInt(this.value)>10)?(document.getElementById("numberofcities").value = 10):
@@ -736,3 +724,4 @@ else
   document.getElementById('right-scroll').style.display='flex';
 }
 }
+

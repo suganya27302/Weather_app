@@ -3,10 +3,14 @@
   top: 6px;
   width: 3.2rem;
 }
-#arrow-img {
+.arrow-img {
   height: 1.7em;
   vertical-align: bottom;
   width: 3.5em;
+}
+.arrow-icon
+{
+  background-color: black;
 }
 body {
   background-image: url("../ASSETS/background.png");
@@ -43,22 +47,23 @@ body {
   flex-direction: column;
   gap:7px;
   height: 240px;
-  min-width: 14.6rem;
-  padding-left: 1%;
+  margin:0px 20px;
+  min-width: 14.7rem;
+  padding-left: 8px;
   overflow-x: hidden;
   width: 20%;
   z-index: 1;
 }
 .card-container {
-  scroll-behavior: smooth;
+  align-items: center;
   display: flex;
   height: 250px;
-  gap: 5%;
   margin: 0 auto;
-  padding: 1em;
+  padding: 0.7em;
   overflow-y: hidden;
   overflow-x: hidden;
-  width: 90%;
+  scroll-behavior: smooth;
+  width: fit-content;
 }
 .card-date-time {
   font-size: 1em;
@@ -66,7 +71,7 @@ body {
   letter-spacing: 1px;
 }
 .card:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
   transition: 1s;
 }
 .card-img {
@@ -136,9 +141,10 @@ body {
   color: rgba(218, 218, 5, 0.836);
   font-size: 1.2em;
 }
-#continent-temp {
+.continent-temp {
   font-size: 1.5em;
   margin-top: 0.2em;
+  text-align: end;
 }
 .date-style {
   color: white;
@@ -184,6 +190,10 @@ body {
   font-size: 1.1em;
   font-weight: normal;
   vertical-align: top;
+}
+.humidity-representation
+{
+  text-align: end;
 }
 #icon {
   height: 70px;
@@ -454,11 +464,11 @@ body {
   .card {
     height: 230px;
     gap: 3%;
-    width: 14%;
+    min-width:14em;
   }
   .card:hover {
-    transform: scale(1.1);
-    transition: 0.2s;
+    transform: scale(1.05);
+    transition: 0.1s;
   }
   #side-text {
     font-size: 0.9em;
@@ -469,10 +479,10 @@ body {
     width: 55%;
   }
   .scroll-image
- {
+  {
   height:3rem;
   width:2.4rem;
- }
+  }
 }
 
 /* bottom section */
