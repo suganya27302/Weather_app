@@ -8,7 +8,7 @@ let cityname_list = [];
 let timeout;
 document
   .getElementById("city_list")
-  .addEventListener("change", update_Data_On_Cityname);
+  .addEventListener("change", updateDataOnCityname);
 /* Import cityname from json to the datalist,
    Create a array of citynames.
    This is a self invoking function.
@@ -30,11 +30,11 @@ document
  * @param {string} cityname name of the  selected city
  * @return {boolean} cityname is valid or not
  */
-let check_Cityname_Is_Valid = (cityname) => {
+let checkCitynameIsValid = (cityname) => {
   if (cityname_list.includes(cityname)) return true;
   return false;
 };
-update_Data_On_Cityname();
+updateDataOnCityname();
 
 /**
  *
@@ -42,9 +42,9 @@ update_Data_On_Cityname();
  * @param {string} cityname name of the  selected city
  * @return {void} nothing
  */
-function update_Icon_Image_Source(cityname, weatherIcon_Idname) {
+function updateIconImageSource(cityname, weathericon_idname) {
   const image_path = "./ASSETS/" + cityname + ".svg";
-  if (weatherIcon_Idname == "null") {
+  if (weathericon_idname == "null") {
     updateUIElementAttributeWithTheGivenValue("icon", "src", image_path);
   } else {
     return image_path;
@@ -60,10 +60,10 @@ function update_Icon_Image_Source(cityname, weatherIcon_Idname) {
  * @param {reference} date_of_a_city Object reference
  * @return {string} city_date  live date of the city
  */
-function update_Date_Based_On_City(
+function updateDateBasedOnCity(
   selected_city,
   date_of_a_city,
-  weatherIcon_Idname
+  weathericon_idname
 ) {
   var date_time = new Date().toLocaleString("en-US", {
     timeZone: weather_data[selected_city].timeZone,
@@ -79,7 +79,7 @@ function update_Date_Based_On_City(
       ? `0${date}- ${month}- ${year}`
       : `${date}-${month}-${year}`;
   })();
-  if (weatherIcon_Idname == "null") {
+  if (weathericon_idname == "null") {
     date_of_a_city[0].innerHTML = city_date;
   } else {
     return city_date;
@@ -95,24 +95,24 @@ function update_Date_Based_On_City(
  * @param {string} selected_city name of the  selected city
  * @return {void} nothing
  */
-function update_live_time_based_on_timezone(selected_city) {
+function updateLiveTimeBasedOnTimezone(selected_city) {
   function display_Live_Time() {
     let date_time = new Date().toLocaleString("en-US", {
       timeZone: weather_data[selected_city].timeZone,
     });
 
-    let part_Of_Time;
+    let part_of_time;
     var hour = new Date(date_time).getHours();
     var minute = new Date(date_time).getMinutes();
     var second = new Date(date_time).getSeconds();
 
     hour == 0
-      ? ((hour = 12), (part_Of_Time = "AM"))
+      ? ((hour = 12), (part_of_time = "AM"))
       : hour < 12
-      ? (part_Of_Time = "AM")
+      ? (part_of_time = "AM")
       : hour == 12
-      ? (part_Of_Time = "PM")
-      : ((part_Of_Time = "PM"), (hour = hour - 12));
+      ? (part_of_time = "PM")
+      : ((part_of_time = "PM"), (hour = hour - 12));
     if (second < 10)
       updateUIElementAttributeWithTheGivenValue(
         "time_in_seconds",
@@ -152,7 +152,7 @@ function update_live_time_based_on_timezone(selected_city) {
         hour + ": "
       );
 
-    part_Of_Time == "PM"
+    part_of_time == "PM"
       ? updateUIElementAttributeWithTheGivenValue(
           "amimg",
           "src",
@@ -163,7 +163,7 @@ function update_live_time_based_on_timezone(selected_city) {
           "src",
           "./ASSETS/amState.png"
         );
-    Update_ampm_For_Nextfivehrs(hour, part_Of_Time);
+    UpdateAmpmForNextfivehrs(hour, part_of_time);
   }
   clearInterval(timeout);
   timeout = setInterval(display_Live_Time, 1000);
@@ -176,7 +176,7 @@ function update_live_time_based_on_timezone(selected_city) {
  * @param {Array.<string>} temperature_celsius city temperature
  * @return {void} nothing
  */
-function update_Temperature(cityname, temperature_celsius) {
+function updateTemperature(cityname, temperature_celsius) {
   document.getElementById("temp-celsius").innerHTML =
     temperature_celsius[0] + " " + temperature_celsius[1];
 
@@ -208,7 +208,7 @@ function update_Temperature(cityname, temperature_celsius) {
  * @param {string} temp_icon id name of the image source
  * @return {void} nothing
  */
-function update_Image_Source(temp_after_every_hour, temp_icon) {
+function updateImageSource(temp_after_every_hour, temp_icon) {
   if (temp_after_every_hour >= 23 && temp_after_every_hour <= 29)
     updateUIElementAttributeWithTheGivenValue(
       temp_icon,
@@ -244,7 +244,7 @@ function update_Image_Source(temp_after_every_hour, temp_icon) {
  * @param {string} cityname name of the selected city
  * @return {void} nothing
  */
-function fetch_And_Update_Temperature_For_Nextfivehrs(cityname) {
+function fetchAndUpdateTemperatureForNextfivehrs(cityname) {
   let temp_list = weather_data[cityname].nextFiveHrs;
   for (var count = 1; count <= 5; count++) {
     let celsius_temperature = `temp-after-${count}hour`;
@@ -259,7 +259,7 @@ function fetch_And_Update_Temperature_For_Nextfivehrs(cityname) {
       "innerHTML",
       temp_after_every_hour
     );
-    update_Image_Source(temp_after_every_hour, temp_icon);
+    updateImageSource(temp_after_every_hour, temp_icon);
   }
 }
 
@@ -276,11 +276,21 @@ function updateUIElementAttributeWithTheGivenValue(
   UIAttribute,
   value_To_Update
 ) {
-  if (UIAttribute == "src") {
+  if (UIAttribute == "src") 
     document.getElementById(UIElementID).src = value_To_Update;
-  } else if (UIAttribute == "innerHTML") {
+  else if (UIAttribute == "innerHTML") 
     document.getElementById(UIElementID).innerHTML = value_To_Update;
-  }
+  else if(UIAttribute=='value')
+    document.getElementById(UIElementID).value=value_To_Update;
+  else if(UIAttribute=='borderBottom')
+    document.getElementById(UIElementID).style.borderBottom=value_To_Update;
+  else if(UIAttribute=='paddingBottom')
+    document.getElementById(UIElementID).style.paddingBottom=value_To_Update;
+  else if(UIAttribute=='display')
+  document.getElementById(UIElementID).style.display=value_To_Update;
+  else if(UIAttribute=='max')
+  document.getElementById(UIElementID).max=value_To_Update;
+
 }
 /**
  *
@@ -290,7 +300,7 @@ function updateUIElementAttributeWithTheGivenValue(
  * @param {reference} date_of_a_city Object reference
  * @return {void} nothing
  */
-function update_UI_With_Nil(date_of_a_city) {
+function updateUIWithNil(date_of_a_city) {
   clearInterval(timeout);
   updateUIElementAttributeWithTheGivenValue(
     "icon",
@@ -367,6 +377,7 @@ function update_UI_With_Nil(date_of_a_city) {
       "./ASSETS/warning.svg"
     );
   }
+  alert('Invalid Cityname!, Please enter a valid cityname.')
 }
 
 /**
@@ -380,17 +391,17 @@ function update_UI_With_Nil(date_of_a_city) {
  * @params {} nothing
  * @return {Function}function to update all data for the selected city and for invalid cityname.
  */
-function update_Data_On_Cityname() {
+function updateDataOnCityname() {
   let selected_city = document.getElementById("city_list").value.toLowerCase();
   const date_of_a_city = document.getElementsByClassName("date-style");
   return (function () {
-    if (check_Cityname_Is_Valid(selected_city)) {
+    if (checkCitynameIsValid(selected_city)) {
       let temperature_celsius = weather_data[selected_city].temperature;
       temperature_celsius = temperature_celsius.split("°");
 
-      update_Icon_Image_Source(selected_city);
-      update_Date_Based_On_City(selected_city, date_of_a_city, "null");
-      update_Temperature(selected_city, temperature_celsius);
+      updateIconImageSource(selected_city,'null');
+      updateDateBasedOnCity(selected_city, date_of_a_city, "null");
+      updateTemperature(selected_city, temperature_celsius);
 
       document.getElementById("present_time").innerHTML = at_present;
       updateUIElementAttributeWithTheGivenValue(
@@ -398,11 +409,11 @@ function update_Data_On_Cityname() {
         "innerHTML",
         temperature_celsius[0]
       );
-      update_Image_Source(temperature_celsius[0], "icon_based_present_temp");
-      fetch_And_Update_Temperature_For_Nextfivehrs(selected_city);
-      update_live_time_based_on_timezone(selected_city, "null");
+      updateImageSource(temperature_celsius[0], "icon_based_present_temp");
+      fetchAndUpdateTemperatureForNextfivehrs(selected_city);
+      updateLiveTimeBasedOnTimezone(selected_city, "null");
     } else {
-      update_UI_With_Nil(date_of_a_city);
+      updateUIWithNil(date_of_a_city);
     }
   })();
 }
@@ -412,30 +423,30 @@ function update_Data_On_Cityname() {
  * Update source of the weather images based on the temperature
  * By using for loop, am ,pm value for the time is updated
  * @param {number} hour
- * @param {string} part_Of_Time
+ * @param {string} part_of_time
  * @return {void} nothing
  */
-function Update_ampm_For_Nextfivehrs(hour, part_Of_Time) {
+function UpdateAmpmForNextfivehrs(hour, part_of_time) {
   let time_iterator = hour;
   for (var count = 1; count <= 5; count++) {
     let id_name = `time-after-${count}hour`;
     time_iterator++;
     var time_value = time_iterator;
 
-    time_value == 12 && part_Of_Time == "PM"
-      ? (part_Of_Time = "AM")
-      : time_value == 12 && part_Of_Time == "AM"
-      ? (part_Of_Time = "PM")
-      : time_value > 12 && part_Of_Time == "PM"
-      ? ((time_value = time_value - 12), (part_Of_Time = "PM"))
-      : time_value > 12 && part_Of_Time == "AM"
-      ? ((time_value = time_value - 12), (part_Of_Time = "AM"))
-      : time_value < 12 && part_Of_Time == "PM"
-      ? (part_Of_Time = "PM")
-      : (part_Of_Time = "AM");
+    time_value == 12 && part_of_time == "PM"
+      ? (part_of_time = "AM")
+      : time_value == 12 && part_of_time == "AM"
+      ? (part_of_time = "PM")
+      : time_value > 12 && part_of_time == "PM"
+      ? ((time_value = time_value - 12), (part_of_time = "PM"))
+      : time_value > 12 && part_of_time == "AM"
+      ? ((time_value = time_value - 12), (part_of_time = "AM"))
+      : time_value < 12 && part_of_time == "PM"
+      ? (part_of_time = "PM")
+      : (part_of_time = "AM");
 
     document.getElementById(id_name).innerHTML =
-      time_value + " " + part_Of_Time;
+      time_value + " " + part_of_time;
   }
 }
 
@@ -463,6 +474,17 @@ var snow_list = Object.values(weather_data).filter(
 var rainy_list = Object.values(weather_data).filter(
   (value) => parseInt(value.temperature) < 20 && parseInt(value.humidity) >= 50
 );
+/**
+ * The function which is used to sort the three array based on the particular 
+ * category.
+ * 1.Sort Sunny list based on temperature.
+ * 2.Sort Snow list based on precipitation.
+ * 3.Sort Rainy list based on humidity. 
+ * @params {}
+ * @return {void} nothing
+ */
+(function sortTheArrayBasedOnParticularCategory()
+{
 /** Sort the sunny list data based on temperature */ 
 sunny_list.sort((a, b) =>
   parseInt(a.temperature) < parseInt(b.temperature) ? 1 : -1
@@ -475,31 +497,141 @@ snow_list.sort((a, b) =>
 rainy_list.sort((a, b) =>
   parseInt(a.humidity) < parseInt(b.humidity) ? 1 : -1
 );
-
+})();
 // card container's object reference
 const card_container = document.getElementById("city-card");
 
 /*objects to populate value when the weather icon is clicked*/
 card_container.replaceChildren();
-var weatherIcon_Idname = "sunny-icon";
-var Cityname_list = [...sunny_list];
-var Icon_image = "./ASSETS/sunnyIcon.svg";
+var weathericon_idname = "sunny-icon";
+var list_of_city = [...sunny_list];
+var icon_image = "./ASSETS/sunnyIcon.svg";
+
 var sunny_data_list = {
-  weatherIcon_Idname: "sunny-icon",
-  Cityname_list: sunny_list,
-  Icon_image: "./ASSETS/sunnyIcon.svg",
+  weathericon_idname: "sunny-icon",
+  list_of_city: sunny_list,
+  icon_image: "./ASSETS/sunnyIcon.svg",
 };
 var snow_data_list = {
-  weatherIcon_Idname: "snow-icon",
-  Cityname_list: snow_list,
-  Icon_image: "./ASSETS/snowflakeIcon.svg",
+  weathericon_idname: "snow-icon",
+  list_of_city: snow_list,
+  icon_image: "./ASSETS/snowflakeIcon.svg",
 };
 var rainy_data_list = {
-  weatherIcon_Idname: "rainy-icon",
-  Cityname_list: rainy_list,
-  Icon_image: "./ASSETS/rainyIcon.svg",
+  weathericon_idname: "rainy-icon",
+  list_of_city: rainy_list,
+  icon_image: "./ASSETS/rainyIcon.svg",
 };
 
+
+/**
+ *
+ * The function will create elements and populate the city name,temperature value to it and append  
+ * it to the card.
+ * @param {object reference} card_division Object reference of the card division
+ * @param {string} cityname name of the city
+ * @param {string} icon_image_path weather Icon image source  
+ * @param {string} temperature_celsius temperature value of a city
+ */
+function updateCitynameAndTemperatureInTheCard(card_division,cityname,icon_image_path,temperature_celsius)
+{
+  let city_content_division = document.createElement("div");
+  let name_of_city = document.createElement("p");
+  let icon_temp_division = document.createElement("div");
+  let weather_icon = document.createElement("img");
+  let temperature_in_celsius = document.createElement("span");
+  card_division.setAttribute("class", "card");
+  city_content_division.setAttribute("class", "continent-content");
+  name_of_city.setAttribute("class", "city-name");
+  name_of_city.innerHTML = cityname;
+  icon_temp_division.setAttribute("class", "temp-cardstyle");
+  weather_icon.src = icon_image_path;
+  weather_icon.style.width = "25px";
+  temperature_in_celsius.setAttribute("class", "card-temp");
+  temperature_in_celsius.innerHTML = temperature_celsius;
+  card_container.appendChild(card_division);
+  card_division.appendChild(city_content_division);
+  city_content_division.appendChild(name_of_city);
+  city_content_division.appendChild(icon_temp_division);
+  icon_temp_division.appendChild(weather_icon);
+  icon_temp_division.appendChild(temperature_in_celsius);
+}
+
+
+/**
+ *
+ * The function will create elements and populate the live date and time to it and append  
+ * it to the card.
+ * @param {object reference} card_division
+ * @param {string} live_date_of_city
+ * @param {string} cityname
+ */
+function updateDateAndTimeInTheCard(card_division,live_date_of_city,cityname)
+{
+  let time = document.createElement("p");
+  let date = document.createElement("p");
+  date.setAttribute("class", "card-date-time");
+  date.innerHTML = live_date_of_city;
+  time.setAttribute("class", "card-date-time");
+  setInterval(
+    displayLiveTimeToTheCity,
+    10,
+    cityname.toLowerCase(),
+    time
+  );
+  card_division.appendChild(time);
+  card_division.appendChild(date);
+}
+
+
+/**
+ *
+ * Whenever this function is invoked, it will set the background image as the City icon and 
+ * add styles to it.
+ * @param {object reference} card_division
+ * @param {string} city_image
+ */
+function updateCityIconInTheCard(card_division,city_image)
+{
+  card_division.style.backgroundImage = "url(" + city_image + ")";
+  card_division.style.backgroundRepeat = "no-repeat";
+  card_division.style.backgroundPosition = "bottom right";
+  card_division.style.backgroundSize = "65%";
+}
+
+
+/**
+ * The function will create elements and populate the humidity and precipitation to it and append  
+ * it to the card.
+ * @param {object reference} card_division
+ * @param {string} humidity_icon_img_path
+ * @param {string} humidity_value
+ * @param {string} precipitation_icon_img_path
+ * @param {string} precipitation_value
+ */
+function updateHumidityAndPrecipitationInTheCard(card_division,humidity_icon_img_path,humidity_value,precipitation_icon_img_path,precipitation_value)
+{
+  let humidity_division = document.createElement("div");
+  let precipitation_division = document.createElement("div");
+  let humidity_icon = document.createElement("img");
+  let humidity_in_percentage = document.createElement("span");
+  let precipitation_icon = document.createElement("img");
+  let precipitation_in_percentage = document.createElement("span");
+  humidity_icon.src = humidity_icon_img_path;
+  humidity_icon.style.width = "16px";
+  humidity_in_percentage.innerHTML = humidity_value;
+  humidity_in_percentage.setAttribute("class", "rainy-temp");
+  precipitation_icon.src = precipitation_icon_img_path;
+  precipitation_icon.style.width = "16px";
+  precipitation_in_percentage.innerHTML = precipitation_value;
+  precipitation_in_percentage.setAttribute("class", "rainy-temp");
+  card_division.appendChild(humidity_division);
+  card_division.appendChild(precipitation_division);
+  humidity_division.appendChild(humidity_icon);
+  humidity_division.appendChild(humidity_in_percentage);
+  precipitation_division.appendChild(precipitation_icon);
+  precipitation_division.appendChild(precipitation_in_percentage);
+}
 /**
  *
  * whenever The function is invoked , it will create card and 
@@ -509,7 +641,6 @@ var rainy_data_list = {
  * @param {string} icon_image_path weather icon image source
  * @param {string} temperature_celsius  temperature value in celsius for the city
  * @param {string} live_date_of_city    live date of the city
- * @param {string} weatherIcon_Idname    Id name of the weather icon ,it is used to change values
  * @param {string} humidity_icon_img_path  humidity icon image source
  * @param {string} humidity_value humidity value in percentage
  * @param {string} precipitation_icon_img_path  precipitation icon image source
@@ -522,72 +653,17 @@ function createCardAndUpdateDataWithTheGivenValue(
   icon_image_path,
   temperature_celsius,
   live_date_of_city,
-  weatherIcon_Idname,
   humidity_icon_img_path,
   humidity_value,
   precipitation_icon_img_path,
   precipitation_value,
   city_image
 ) {
-  let container = document.getElementById("city-card");
   let card_division = document.createElement("div");
-  let city_content_division = document.createElement("div");
-  let name_of_city = document.createElement("p");
-  let icon_temp_division = document.createElement("div");
-  let weather_icon = document.createElement("img");
-  let temperature_in_celsius = document.createElement("span");
-  let time = document.createElement("p");
-  let date = document.createElement("p");
-  let humidity_division = document.createElement("div");
-  let precipitation_division = document.createElement("div");
-  let humidity_icon = document.createElement("img");
-  let humidity_in_percentage = document.createElement("span");
-  let precipitation_icon = document.createElement("img");
-  let precipitation_in_percentage = document.createElement("span");
-  card_division.setAttribute("class", "card");
-  city_content_division.setAttribute("class", "continent-content");
-  name_of_city.setAttribute("class", "city-name");
-  name_of_city.innerHTML = cityname;
-  icon_temp_division.setAttribute("class", "temp-cardstyle");
-  weather_icon.src = icon_image_path;
-  weather_icon.style.width = "25px";
-  temperature_in_celsius.setAttribute("class", "card-temp");
-  temperature_in_celsius.innerHTML = temperature_celsius;
-  date.setAttribute("class", "card-date-time");
-  date.innerHTML = live_date_of_city;
-  time.setAttribute("class", "card-date-time");
-  setInterval(
-    display_Live_Time_To_The_City,
-    1000,
-    cityname.toLowerCase(),
-    time
-  );
-  humidity_icon.src = humidity_icon_img_path;
-  humidity_icon.style.width = "16px";
-  humidity_in_percentage.innerHTML = humidity_value;
-  humidity_in_percentage.setAttribute("class", "rainy-temp");
-  precipitation_icon.src = precipitation_icon_img_path;
-  precipitation_icon.style.width = "16px";
-  precipitation_in_percentage.innerHTML = precipitation_value;
-  precipitation_in_percentage.setAttribute("class", "rainy-temp");
-  card_division.style.backgroundImage = "url(" + city_image + ")";
-  card_division.style.backgroundRepeat = "no-repeat";
-  card_division.style.backgroundPosition = "bottom right";
-  card_division.style.backgroundSize = "65%";
-  container.appendChild(card_division);
-  card_division.appendChild(city_content_division);
-  city_content_division.appendChild(name_of_city);
-  city_content_division.appendChild(icon_temp_division);
-  icon_temp_division.appendChild(weather_icon);
-  icon_temp_division.appendChild(temperature_in_celsius);
-  card_division.appendChild(time);
-  card_division.appendChild(date);
-  card_division.appendChild(humidity_division);
-  card_division.appendChild(precipitation_division);
-  humidity_division.appendChild(humidity_icon);
-  humidity_division.appendChild(humidity_in_percentage);
-  precipitation_division.appendChild(precipitation_icon);
-  precipitation_division.appendChild(precipitation_in_percentage);
+  updateCitynameAndTemperatureInTheCard(card_division,cityname,icon_image_path,temperature_celsius);
+  updateDateAndTimeInTheCard(card_division,live_date_of_city,cityname);
+  updateCityIconInTheCard(card_division,city_image);
+  updateHumidityAndPrecipitationInTheCard(card_division,humidity_icon_img_path,humidity_value,precipitation_icon_img_path,precipitation_value);
 }
 
 
@@ -596,71 +672,89 @@ function createCardAndUpdateDataWithTheGivenValue(
  * whenever the Icon is selected , there will be appearing of blue line under the Icon.
  * From DOM event listener the idname of the weather icon is passed to this function based on that, 
  * it functions
- * @param {string} weatherIcon_Idname Id name of the weather icon ,it is used to change values
+ * @param {string} weathericon_idname Id name of the weather icon ,it is used to change values
  * @return {void} nothing
  */
-function selectWhichTheIconIsClicked(weatherIcon_Idname) {
-  if (weatherIcon_Idname == "sunny-icon") {
-    document.getElementById("sun-image").style.borderBottom =
-      "2px solid skyblue";
-    document.getElementById("sun-image").style.paddingBottom = "3px";
-    document.getElementById("snow-image").style.borderBottom = 0;
-    document.getElementById("rainy-image").style.borderBottom = 0;
-  } else if (weatherIcon_Idname == "snow-icon") {
-    document.getElementById("snow-image").style.borderBottom =
-      "2px solid skyblue";
-    document.getElementById("snow-image").style.paddingBottom = "3px";
-    document.getElementById("rainy-image").style.borderBottom = 0;
-    document.getElementById("sun-image").style.borderBottom = 0;
-  } else if (weatherIcon_Idname == "rainy-icon") {
-    document.getElementById("rainy-image").style.borderBottom =
-      "2px solid skyblue";
-    document.getElementById("rainy-image").style.paddingBottom = "3px";
-    document.getElementById("snow-image").style.borderBottom = 0;
-    document.getElementById("sun-image").style.borderBottom = 0;
+function selectTheIconWhichIsClicked(weathericon_idname) {
+  if (weathericon_idname == "sunny-icon") {
+    updateUIElementAttributeWithTheGivenValue('sun-image','borderBottom','2px solid skyblue');
+    updateUIElementAttributeWithTheGivenValue('snow-image','borderBottom',0);
+    updateUIElementAttributeWithTheGivenValue('rainy-image','borderBottom',0);
+    updateUIElementAttributeWithTheGivenValue('sun-image','paddingBottom','3px');
+  } else if (weathericon_idname == "snow-icon") {
+    updateUIElementAttributeWithTheGivenValue('snow-image','borderBottom','2px solid skyblue');
+    updateUIElementAttributeWithTheGivenValue('sun-image','borderBottom',0);
+    updateUIElementAttributeWithTheGivenValue('rainy-image','borderBottom',0);
+    updateUIElementAttributeWithTheGivenValue('snow-image','paddingBottom','3px');
+  } else if (weathericon_idname == "rainy-icon") {
+    updateUIElementAttributeWithTheGivenValue('rainy-image','borderBottom','2px solid skyblue');
+    updateUIElementAttributeWithTheGivenValue('sun-image','borderBottom',0);
+    updateUIElementAttributeWithTheGivenValue('snow-image','borderBottom',0);
+    updateUIElementAttributeWithTheGivenValue('rainy-image','paddingBottom','3px');
   }
 }
 
-
+ /**
+  *
+  * The function will set the value of the spinner based on the condition provided for
+  * the particular weather.
+  * @param {Array} weather_list array of objects
+  * @param {number} no_of_cities_to_display number of city to display in the UI
+  * @return {number} no_of_cities_to_display -number of city to display in the UI
+  */
+ function updateSpinnerValueBasedOnTheGivenCondition(weather_list,no_of_cities_to_display)
+{
+  let length_of_list = weather_list.length;
+  if (length_of_list < no_of_cities_to_display) {
+    no_of_cities_to_display = length_of_list;
+  }
+  if(length_of_list<=3)
+  {
+    spinner=3;
+    updateUIElementAttributeWithTheGivenValue('numberofcities','max',3);
+    updateUIElementAttributeWithTheGivenValue('numberofcities','value',3);
+  }
+  else
+  {
+    updateUIElementAttributeWithTheGivenValue('numberofcities','max',10);
+  }
+  return no_of_cities_to_display;
+}
 /**
  *
- * The function will loop through the list and call createCardAndUpdateDataWithTheGivenValue function to
- * create a card and populate data and display it in UI based on the selected Weather Icon
- * @param {string} weatherIcon_Idname Id name of the weather icon ,it is used to change values
+ * This function will decides, how many card to display on UI and 
+ * create the card and populate data and display it in UI based on the selected Weather Icon
+ * @param {string} weathericon_idname Id name of the weather icon ,it is used to change values
  * @param {Array} weather_list Array list to display data to the UI 
- * @param {string} weatherIcon_img_path weather icon image source
- * @param {number} noOfCitiesToDisplay count of the city to display in UI
+ * @param {string} weathericon_img_path weather icon image source
+ * @param {number} no_of_cities_to_display count of the city to display in UI
  * @return {void} nothing
  */
-function createCardToTheSelectedCityAndpopulate_CityDetails(
-  weatherIcon_Idname,
+function createCardToTheSelectedCityAndPopulateCityDetails(
+  weathericon_idname,
   weather_list,
-  weatherIcon_img_path,
-  noOfCitiesToDisplay
+  weathericon_img_path,
+  no_of_cities_to_display
 ) {
-  let length_of_list = weather_list.length;
-  if (length_of_list < noOfCitiesToDisplay) {
-    noOfCitiesToDisplay = length_of_list;
-  }
+  no_of_cities_to_display=updateSpinnerValueBasedOnTheGivenCondition(weather_list,no_of_cities_to_display);
   let count = 0;
   for (let city of weather_list) {
-    if (count < noOfCitiesToDisplay) {
-      let live_date_of_city = update_Date_Based_On_City(
+    if (count < no_of_cities_to_display) {
+      
+      let live_date_of_city = updateDateBasedOnCity(
         city.cityName.toLowerCase(),
         "null",
-        weatherIcon_Idname
+        weathericon_idname
       );
-
-      let city_image = update_Icon_Image_Source(
+      let city_image = updateIconImageSource(
         city.cityName,
-        weatherIcon_Idname
+        weathericon_idname
       );
       createCardAndUpdateDataWithTheGivenValue(
         city.cityName,
-        weatherIcon_img_path,
+        weathericon_img_path,
         city.temperature,
         live_date_of_city,
-        "card-date-time",
         "./ASSETS/humidityIcon.svg",
         city.humidity,
         "./ASSETS/precipitationIcon.svg",
@@ -676,60 +770,56 @@ function createCardToTheSelectedCityAndpopulate_CityDetails(
 
 /**
  *
- * To update the Live time of the city in the card
+ * To update the Live time of the city in the card.
  * By using date object and its methods live date is fetched and  using hour value am or pm is decided.
- * if the second , minute , hour is less than 10 append zero to the beginning.
  * setinterval used to repeatedly call the display_live_time function
  * @param {string} nameOfThe_city name of the city 
  * @param {object reference} time object reference
  */
-function display_Live_Time_To_The_City(nameOfThe_city, time) {
+function displayLiveTimeToTheCity(nameOfThe_city, time) {
   let date_time = new Date().toLocaleString("en-US", {
     timeZone: weather_data[nameOfThe_city].timeZone,
   });
 
-  let part_Of_Time;
+  let part_of_time;
   var hour = new Date(date_time).getHours();
   var minute = new Date(date_time).getMinutes();
   var second = new Date(date_time).getSeconds();
 
   hour == 0
-    ? ((hour = 12), (part_Of_Time = "AM"))
+    ? ((hour = 12), (part_of_time = "AM"))
     : hour < 12
-    ? (part_Of_Time = "AM")
+    ? (part_of_time = "AM")
     : hour == 12
-    ? (part_Of_Time = "PM")
-    : ((part_Of_Time = "PM"), (hour = hour - 12));
+    ? (part_of_time = "PM")
+    : ((part_of_time = "PM"), (hour = hour - 12));
 
-  hour < 10
-    ? (hour = "0" + hour + ": ")
-    : ((hour = hour + ": "), minute < 10)
-    ? (minute = "0" + minute)
-    : (minute = minute);
+  (hour < 10) ? (hour = "0" + hour + ": "): (hour = hour + ": ");
+  (minute < 10)? (minute = "0" + minute): (minute = minute);
 
-  date_time = hour + minute + " " + part_Of_Time;
+  date_time = hour + minute + " " + part_of_time;
   time.innerHTML = date_time;
 }
 
 
 /**
- * While changing the values in spinner,createCardToTheSelectedCityAndpopulate_CityDetails function will
+ * While changing the values in spinner,createCardToTheSelectedCityAndPopulateCityDetails function will
  * be called , which will create card and populate values in it. 
  * Based on the value in spinner , the cards will display
  * @params {}
  * @return {void}
  */
 function noOfCitiesToDisplayInUI() {
-  let display_NOofCity = document.getElementById("numberofcities");
-  spinner = display_NOofCity.value;
+  let display_no_of_city = document.getElementById("numberofcities");
+  spinner = display_no_of_city.value;
   if (spinner > 10) {
     spinner = 10;
   }
   card_container.replaceChildren();
-  createCardToTheSelectedCityAndpopulate_CityDetails(
-    weatherIcon_Idname,
-    Cityname_list,
-    Icon_image,
+  createCardToTheSelectedCityAndPopulateCityDetails(
+    weathericon_idname,
+    list_of_city,
+    icon_image,
     spinner
   );
 }
@@ -743,12 +833,12 @@ function noOfCitiesToDisplayInUI() {
  */
 function updateContainerWithCitiesInformationBasedOnWeatherIconSelected() {
   return (function () {
-    selectWhichTheIconIsClicked(weatherIcon_Idname);
+    selectTheIconWhichIsClicked(weathericon_idname);
     card_container.replaceChildren();
-    createCardToTheSelectedCityAndpopulate_CityDetails(
-      weatherIcon_Idname,
-      Cityname_list,
-      Icon_image,
+    createCardToTheSelectedCityAndPopulateCityDetails(
+      weathericon_idname,
+      list_of_city,
+      icon_image,
       spinner
     );
   })();
@@ -761,51 +851,48 @@ function updateContainerWithCitiesInformationBasedOnWeatherIconSelected() {
  * @params {}
  * @return {void}
  */
-function populate_Details_Based_On_Icon_Selected() {
-  weatherIcon_Idname = this.weatherIcon_Idname;
-  Cityname_list = this.Cityname_list;
-  Icon_image = this.Icon_image;
+function populateDetailsBasedOnIconSelected() {
+  weathericon_idname = this.weathericon_idname;
+  list_of_city = this.list_of_city;
+  icon_image = this.icon_image;
 }
 
 document.getElementById("sunny-icon").addEventListener("click", () => {
-  populate_Details_Based_On_Icon_Selected.call(sunny_data_list);
+  populateDetailsBasedOnIconSelected.call(sunny_data_list);
   updateContainerWithCitiesInformationBasedOnWeatherIconSelected();
 });
 
 document.getElementById("snow-icon").addEventListener("click", () => {
-  populate_Details_Based_On_Icon_Selected.call(snow_data_list);
+  populateDetailsBasedOnIconSelected.call(snow_data_list);
   updateContainerWithCitiesInformationBasedOnWeatherIconSelected();
 });
 
 document.getElementById("rainy-icon").addEventListener("click", () => {
-  populate_Details_Based_On_Icon_Selected.call(rainy_data_list);
+  populateDetailsBasedOnIconSelected.call(rainy_data_list);
   updateContainerWithCitiesInformationBasedOnWeatherIconSelected();
 });
 
 document
   .getElementById("numberofcities")
   .addEventListener("change", noOfCitiesToDisplayInUI);
-createCardToTheSelectedCityAndpopulate_CityDetails(
-  weatherIcon_Idname,
-  Cityname_list,
-  Icon_image,
+createCardToTheSelectedCityAndPopulateCityDetails(
+  weathericon_idname,
+  list_of_city,
+  icon_image,
   spinner
 );
 
-var scroll_Amount = 0;
-var scroll_max = card_container.clientWidth;
-var scroll_min = 0;
 
 document.getElementById("left-scroll").addEventListener("click", () => {
-  setTimeout(() => (card_container.scrollLeft -= 530), 300);
+  setTimeout(() => (card_container.scrollLeft -= 530), 200);
 });
 document.getElementById("right-scroll").addEventListener("click", () => {
-  setTimeout(() => (card_container.scrollLeft += 530), 300);
+  setTimeout(() => (card_container.scrollLeft += 530), 200);
 });
 
 document
   .getElementById("numberofcities")
-  .addEventListener("input", validate_The_Spinner);
+  .addEventListener("input", validateTheSpinner);
 
 
 /**
@@ -815,12 +902,13 @@ document
  * @params {}
  * @return {void}
  */
-function validate_The_Spinner() {
+ 
+function validateTheSpinner() {
   parseInt(this.value) < 3
-    ? (document.getElementById("numberofcities").value = 3)
+    ? (updateUIElementAttributeWithTheGivenValue('numberofcities','value',3))
     : parseInt(this.value) > 10
-    ? (document.getElementById("numberofcities").value = 10)
-    : (document.getElementById("numberofcities").value = parseInt(this.value));
+    ? (updateUIElementAttributeWithTheGivenValue('numberofcities','value',10))
+    : (updateUIElementAttributeWithTheGivenValue('numberofcities','value',parseInt(this.value)));
 }
 
 
@@ -833,12 +921,19 @@ function validate_The_Spinner() {
 function hideTheScrollArrow() {
   let length_of_container = card_container.clientWidth;
   let length_of_Whole_city = card_container.scrollWidth;
-
+  let carousel_division=document.getElementsByClassName('carousel-div');
   if (length_of_Whole_city <= length_of_container) {
-    document.getElementById("left-scroll").style.display = "none";
-    document.getElementById("right-scroll").style.display = "none";
+    carousel_division[0].style.display='none';
+    carousel_division[1].style.display='none';
+    updateUIElementAttributeWithTheGivenValue('left-scroll','display',"none");
+    updateUIElementAttributeWithTheGivenValue('right-scroll','display',"none");
   } else {
-    document.getElementById("left-scroll").style.display = "flex";
-    document.getElementById("right-scroll").style.display = "flex";
+    carousel_division[0].style.display='flex';
+    carousel_division[1].style.display='flex';
+    updateUIElementAttributeWithTheGivenValue('left-scroll','display',"flex");
+    updateUIElementAttributeWithTheGivenValue('right-scroll','display',"flex");
   }
 }
+setInterval(hideTheScrollArrow,1000);
+
+

@@ -90,6 +90,24 @@ body {
   font-weight: normal;
   vertical-align: top;
 }
+.carousel-arrow-image
+{
+  height:1.8rem;
+}
+.carousel-div
+{
+    background-color: rgb(208, 208,208);
+    border-radius: 50%;
+    height: 2.1rem;
+    opacity: 0.8;
+    padding: 0.5em;
+    width: 2.5em;
+}
+.carousel-div:hover{
+ height: 2em;
+ opacity: 1;
+ width: 2.2em;
+}
 .city-details-based-onWeather
 {
   display:flex;
@@ -238,13 +256,7 @@ body {
   font-weight: lighter;
   letter-spacing: 2px;
 }
-.scroll-image
-{
-  background-color:gray;
-  border-radius: 35px;
-  height:3.5rem;
-  width:3.5rem;
-}
+
 #sun-image {
   border-bottom: 2px solid skyblue;
   padding-bottom: 3px;
@@ -495,30 +507,30 @@ body {
     font-size: 1.6em;
     margin-left: 2.5em;
   }
-  .heading-sort-content {
-    font-size: 1em;
+  .sort-continent-temperature {
+    font-size: 1.4em;
   }
 }
-@media all and (max-width: 860px) {
+@media all and (max-width: 905px) {
   #arrow-img {
     height: 1.2em;
-    width: 2em;
+    width: 1.7em;
   }
   .bottom-main-heading {
     font-size: 1.5em;
-    margin-left: 1.9em;
+    margin-left: 2.4em;
   }
   .heading-sort-content {
-    margin-right: 2.2em;
+    margin-right: 1.7em;
   }
   .sort-continent-temperature {
     font-size: 1.3em;
   }
 }
-@media all and (max-width: 760px) {
+@media all and (max-width: 815px) {
   #arrow-img {
     height: 1.1em;
-    width: 1em;
+    width: 0.8em;
   }
   .bottom-main-heading {
     font-size: 1.3em;
@@ -531,7 +543,7 @@ body {
     font-size: 1.3em;
   }
   .heading-sort-content {
-    margin-right: 1.5em;
+    margin-right: 0.8em;
   }
   #humidity-img {
     height: 1.2em;
@@ -541,7 +553,7 @@ body {
     font-size: 0.9em;
   }
   .sort-continent-temperature {
-    font-size: 1.1em;
+    font-size: 1.2em;
   }
   .state-name {
     font-size: 1em;
