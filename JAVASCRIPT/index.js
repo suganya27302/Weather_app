@@ -961,7 +961,84 @@ setInterval(hideTheScrollArrow,1000);
   let ContinentDescendList=()=>(weather_details.sort((a, b) => a.timeZone.split('/')[0]<b.timeZone.split('/')[0]?1:-1));
 
  
+ /**
+  *
+  * The funtion will create elements and populate continent name and temperature to the tile.
+  * @param {object reference} tile_content_division Object reference of the tile division
+  * @param {string} timezone Timezone of the city
+  * @param {string} temperature_celsius temperature of the city
+  */
+ function  updateContinentnameAndTemperatureInTheTile(tile_content_division,timezone,temperature_celsius)
+ {
+  let continent_name=document.createElement('p');
+  let temperature_of_continent=document.createElement('p');
+  tile_container.setAttribute('class','cities-with-temp-info');
+  tile_content_division.setAttribute('class','tile-content');
+  continent_name.setAttribute('class','continent-name');
+  continent_name.innerHTML=timezone.split('/')[0];
+  temperature_of_continent.setAttribute('class',"continent-temp");
+  temperature_of_continent.innerHTML=temperature_celsius;
+  tile_container.appendChild(tile_content_division);
+  tile_content_division.appendChild(continent_name);
+  tile_content_division.appendChild(temperature_of_continent);
+ }
+
+
+ /**
+  *
+  * The function will create elements and populate state name and live time to the tile.
+  * @param {object reference} tile_content_division  Object reference of the tile division
+  * @param {string} cityname name of the city
+  */
+ function updateStatenameAndTimeInTheTile(tile_content_division,cityname)
+ {
+  let state_name=document.createElement('p');
+  let live_time=document.createElement('span');
+  state_name.setAttribute('class','state-name');
+  state_name.innerHTML=cityname+',';
+  setInterval(displayLiveTimeToTheCity,10,cityname.toLowerCase(),live_time);
+  tile_content_division.appendChild(state_name);
+  state_name.appendChild(live_time);
+ }
+
+
+ /**
+  *
+  * The function will create elements and populate humidity value to the tile.
+  * @param {object reference} tile_content_division  Object reference of the tile division
+  * @param {string} humidity_value humidity of the city
+  */
+ function updateHumidityInTheTile(tile_content_division,humidity_value)
+ {
+  let humidity_division=document.createElement('p');
+  let humidity_icon=document.createElement('img');
+  let humidity_in_percentage=document.createElement('span');
+  humidity_division.setAttribute('class', 'humidity-representation');
+  humidity_icon.src="./ASSETS/humidityIcon.svg";
+  humidity_icon.setAttribute('id','humidity-img');
+  humidity_in_percentage.setAttribute('class','humidity-per');
+  humidity_in_percentage.innerHTML=humidity_value;
+  tile_content_division.appendChild(humidity_division);
+  humidity_division.appendChild(humidity_icon);
+  humidity_division.appendChild(humidity_in_percentage);
+ }
+
+ /**
+  * This will create the elements for the tile and set style attributes and 
+  * populate the given values to it
+  * @param {string} cityname name of the city
+  * @param {string} timezone timezone of the city
+  * @param {string} temperature_celsius temperature in celsius format of the city
+  * @param {string} humidity_value humidity in percentage of the city
+  */
+ function createTileAndPopulateCityDetails(cityname,timezone,temperature_celsius,humidity_value)
+ {
  
+ let tile_content_division=document.createElement('div');
+ updateContinentnameAndTemperatureInTheTile(tile_content_division,timezone,temperature_celsius);
+ updateStatenameAndTimeInTheTile(tile_content_division,cityname);
+ updateHumidityInTheTile(tile_content_division,humidity_value);
+ }
 
  /**
   * Whenever the page is loaded,the DOM event triggers and calls
@@ -977,7 +1054,7 @@ setInterval(hideTheScrollArrow,1000);
  function createTileOnLoad()
  {
    ContinentDescendList();
-   //createTile(weather_details);
+   createTile(weather_details);
  }
  
  /**
@@ -992,8 +1069,76 @@ setInterval(hideTheScrollArrow,1000);
    upadteTheArrowImageAndtemperatureOrder();
  })
  
+ /**
+  * Update the image source of the arrow and name attribute,
+  * sort the array list based on the continent name, 
+  * decides ascending or descending based on the name attribute of the arrow image. 
+  * @params {}
+  * @return {void} nothing
+  */
+ function updateTheArrowImageAndContinentOrder()
+ {
+   let continent_arrow=document.getElementById('sort-by-continent');
+  if(continent_arrow.name=='continent-arrow-down')
+  {
+   ContinentAscendList();
+   createTile(weather_details);
+   continent_arrow.name='continent-arrow-up';
+   updateUIElementAttributeWithTheGivenValue('sort-by-continent','src','/ASSETS/arrowUp.svg');
+  }
+  else
+  {
+   ContinentDescendList();
+   createTile(weather_details);
+   continent_arrow.name='continent-arrow-down';
+   updateUIElementAttributeWithTheGivenValue('sort-by-continent','src','/ASSETS/arrowDown.svg');
+  }
+ }
  
+ /**
+  * Update the image source of the arrow and name attribute,
+  * sort the array list based on the temperature, 
+  * decides ascending or descending based on the name attribute of the arrow image. 
+  * @params {}
+  * @return {void} nothing
+  */
+ function upadteTheArrowImageAndtemperatureOrder()
+ {
+  let temperature_arrow=document.getElementById('sort-by-temperature');
+  if(temperature_arrow.name=='temperature-arrow-up')
+  {
+   sortArrayInDescendingOrderBasedOnTemperature();
+   createTile(weather_details);
+   temperature_arrow.name='temperature-arrow-down';
+   updateUIElementAttributeWithTheGivenValue('sort-by-temperature','src','/ASSETS/arrowDown.svg');
+  }
+  else
+  {
+   sortArrayInAscendingOrderBasedOnTemperature();
+   createTile(weather_details);
+   temperature_arrow.name='temperature-arrow-up';
+   updateUIElementAttributeWithTheGivenValue('sort-by-temperature','src','/ASSETS/arrowUp.svg');
+  }
+ }
  
+ /**
+  * Create a tile and populate the continent details to the tile container
+  * @param {array} Weather_list 
+  * @return {void} nothing
+  */
+ function createTile(Weather_list)
+ {
+ tile_container.replaceChildren()  
+ let count=1;
+ for(let city of Weather_list)  
+ {
+ if(count<=12)
+ {
+ createTileAndPopulateCityDetails(city.cityName,city.timeZone,city.temperature,city.humidity);
+ count++;
+ }
+ }
+ }
  
  /**
   * Sort the array in the ascending order based on the temperature.
