@@ -936,4 +936,90 @@ function hideTheScrollArrow() {
 }
 setInterval(hideTheScrollArrow,1000);
 
+// bottom section 
+/**
+ * Tile container object reference
+ * Weather details is an array, that contains the city weather information 
+ */ 
+ var tile_container=document.getElementById('continent-wise-list');
+ tile_container.replaceChildren()
+ var weather_details=Object.values(weather_data);
+ 
 
+ /**
+  * This will sort the array in ascending order based on the Continent name.  
+  *@params {}
+  *@return {void} nothing
+  */
+  let ContinentAscendList=()=>(weather_details.sort((a, b) => a.timeZone.split('/')[0]>b.timeZone.split('/')[0]?1:-1));
+ 
+ /**
+  * This will sort the array in descending order based on the Continent name.  
+  *@params {}
+  *@return {void} nothing
+  */
+  let ContinentDescendList=()=>(weather_details.sort((a, b) => a.timeZone.split('/')[0]<b.timeZone.split('/')[0]?1:-1));
+
+ 
+ 
+
+ /**
+  * Whenever the page is loaded,the DOM event triggers and calls
+  * createTileOnLoad function to create tiles with continent details. 
+  */
+ document.getElementById('continent-wise-list').onload=createTileOnLoad();
+ 
+ /**
+  * The function is called whenever the page loads.
+  * @params{}
+  * @return{void} nothing
+  */
+ function createTileOnLoad()
+ {
+   ContinentDescendList();
+   //createTile(weather_details);
+ }
+ 
+ /**
+  * Whenever the arrow is clicked, the dom event triggers and calls the function.
+  */
+ document.getElementById('sort-by-continent').addEventListener('click',()=>
+ {
+   updateTheArrowImageAndContinentOrder();
+ })
+ document.getElementById('sort-by-temperature').addEventListener('click',()=>
+ {
+   upadteTheArrowImageAndtemperatureOrder();
+ })
+ 
+ 
+ 
+ 
+ /**
+  * Sort the array in the ascending order based on the temperature.
+  * @params {}
+  * @return {void} nothing
+  */
+ function sortArrayInAscendingOrderBasedOnTemperature()
+ {
+   weather_details.sort((a,b)=>{
+    if(a.timeZone.split('/')[0]===b.timeZone.split('/')[0])
+      return parseInt(a.temperature) > parseInt(b.temperature)?1:-1;
+   });
+ }
+ 
+ /**
+  * Sort the array in the Descending order based on the temperature.
+  * @params {}
+  * @return {void} nothing
+  */
+ function sortArrayInDescendingOrderBasedOnTemperature()
+ {
+  weather_details.sort((a,b)=>{
+    if(a.timeZone.split('/')[0]===b.timeZone.split('/')[0])
+      return parseInt(a.temperature) < parseInt(b.temperature)?1:-1;
+   });
+ }
+ 
+ 
+ 
