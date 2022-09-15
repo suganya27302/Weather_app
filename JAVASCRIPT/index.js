@@ -971,31 +971,38 @@ setInterval(hideTheScrollArrow, 1000);
 
 // bottom section
 /**
- * Tile container object reference
+ * Bottom tile container's object reference
  * Weather details is an array, that contains the city weather information
  */
 var tile_container = document.getElementById("continent-wise-list");
 tile_container.replaceChildren();
-var weather_details = Object.values(weather_data);
-
+var weather_details = Object.entries(weather_data).map((element) => element[1]);
 
 /**
  *
- *
- * @param {*} criteria
- * @param {*} sorting_order
+ * This function will sort the array based on the criteria and sorting order.
+ * @param {string} criteria the criteria based on sort happens
+ * @param {string} sorting_order sorting order of the array
  */
 function sortTheArrayBasedOnTheGivenPreference(criteria, sorting_order) {
   weather_details.sort((a, b) => {
     if (criteria == "temperature") {
       if (a.timeZone.split("/")[0] === b.timeZone.split("/")[0])
         return sorting_order == "ascend"
-          ? parseInt(a.temperature) > parseInt(b.temperature)? 1: -1
-          : parseInt(a.temperature) > parseInt(b.temperature)? -1: 1;
+          ? parseInt(a.temperature) > parseInt(b.temperature)
+            ? 1
+            : -1
+          : parseInt(a.temperature) > parseInt(b.temperature)
+          ? -1
+          : 1;
     } else
       return sorting_order == "ascend"
-        ? a.timeZone.split("/")[0] > b.timeZone.split("/")[0]? 1: -1
-        : a.timeZone.split("/")[0] > b.timeZone.split("/")[0]? -1: 1;
+        ? a.timeZone.split("/")[0] > b.timeZone.split("/")[0]
+          ? 1
+          : -1
+        : a.timeZone.split("/")[0] > b.timeZone.split("/")[0]
+        ? -1
+        : 1;
   });
 }
 
@@ -1112,8 +1119,7 @@ document.getElementById("sort-by-temperature").addEventListener("click", () => {
 
 /**
  * Update the image source of the arrow and name attribute,
- * sort the array list based on the continent name,
- * decides ascending or descending based on the name attribute of the arrow image.
+ * sort the array list based on the continent name.
  * @params {}
  * @return {void} nothing
  */
@@ -1142,8 +1148,7 @@ function updateTheArrowImageAndContinentOrder() {
 
 /**
  * Update the image source of the arrow and name attribute,
- * sort the array list based on the temperature,
- * decides ascending or descending based on the name attribute of the arrow image.
+ * sort the array list based on the temperature.
  * @params {}
  * @return {void} nothing
  */
@@ -1171,7 +1176,7 @@ function updateTheArrowImageAndtemperatureOrder() {
 }
 
 /**
- * Create a tile and populate the continent details to the tile container
+ * Create a tile and populate the continent details to the tile container.
  * @param {array} Weather_list
  * @return {void} nothing
  */
@@ -1190,4 +1195,3 @@ function createTile(Weather_list) {
     }
   }
 }
-
