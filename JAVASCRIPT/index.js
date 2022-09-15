@@ -976,6 +976,8 @@ setInterval(hideTheScrollArrow, 1000);
  */
 var tile_container = document.getElementById("continent-wise-list");
 tile_container.replaceChildren();
+let continent_arrow = document.getElementById("sort-by-continent");
+let temperature_arrow = document.getElementById("sort-by-temperature");
 var weather_details = Object.entries(weather_data).map((element) => element[1]);
 
 /**
@@ -984,19 +986,18 @@ var weather_details = Object.entries(weather_data).map((element) => element[1]);
  * @param {string} criteria the criteria based on sort happens
  * @param {string} sorting_order sorting order of the array
  */
-function sortTheArrayBasedOnTheGivenPreference(criteria, sorting_order) {
+function sortTheArrayBasedOnTheGivenPreference() {
   weather_details.sort((a, b) => {
-    if (criteria == "temperature") {
-      if (a.timeZone.split("/")[0] === b.timeZone.split("/")[0])
-        return sorting_order == "ascend"
-          ? parseInt(a.temperature) > parseInt(b.temperature)
-            ? 1
-            : -1
-          : parseInt(a.temperature) > parseInt(b.temperature)
-          ? -1
-          : 1;
+    if (a.timeZone.split("/")[0] === b.timeZone.split("/")[0]) {
+      return temperature_arrow.name == "temperature-arrow-up"
+        ? parseInt(a.temperature) < parseInt(b.temperature)
+          ? 1
+          : -1
+        : parseInt(a.temperature) < parseInt(b.temperature)
+        ? -1
+        : 1;
     } else
-      return sorting_order == "ascend"
+      return continent_arrow.name == "continent-arrow-down"
         ? a.timeZone.split("/")[0] > b.timeZone.split("/")[0]
           ? 1
           : -1
@@ -1103,7 +1104,7 @@ document.getElementById("continent-wise-list").onload = createTileOnLoad();
  * @return{void} nothing
  */
 function createTileOnLoad() {
-  sortTheArrayBasedOnTheGivenPreference("name", "descend");
+  sortTheArrayBasedOnTheGivenPreference();
   createTile(weather_details);
 }
 
@@ -1124,25 +1125,24 @@ document.getElementById("sort-by-temperature").addEventListener("click", () => {
  * @return {void} nothing
  */
 function updateTheArrowImageAndContinentOrder() {
-  let continent_arrow = document.getElementById("sort-by-continent");
   if (continent_arrow.name == "continent-arrow-down") {
-    sortTheArrayBasedOnTheGivenPreference("name", "ascend");
-    createTile(weather_details);
     continent_arrow.name = "continent-arrow-up";
     updateUIElementAttributeWithTheGivenValue(
       "sort-by-continent",
       "src",
       "/ASSETS/arrowUp.svg"
     );
-  } else {
-    sortTheArrayBasedOnTheGivenPreference("name", "descend");
+    sortTheArrayBasedOnTheGivenPreference();
     createTile(weather_details);
+  } else {
     continent_arrow.name = "continent-arrow-down";
     updateUIElementAttributeWithTheGivenValue(
       "sort-by-continent",
       "src",
       "/ASSETS/arrowDown.svg"
     );
+    sortTheArrayBasedOnTheGivenPreference();
+    createTile(weather_details);
   }
 }
 
@@ -1153,25 +1153,24 @@ function updateTheArrowImageAndContinentOrder() {
  * @return {void} nothing
  */
 function updateTheArrowImageAndtemperatureOrder() {
-  let temperature_arrow = document.getElementById("sort-by-temperature");
   if (temperature_arrow.name == "temperature-arrow-up") {
-    sortTheArrayBasedOnTheGivenPreference("temperature", "descend");
-    createTile(weather_details);
     temperature_arrow.name = "temperature-arrow-down";
     updateUIElementAttributeWithTheGivenValue(
       "sort-by-temperature",
       "src",
       "/ASSETS/arrowDown.svg"
     );
-  } else {
-    sortTheArrayBasedOnTheGivenPreference("temperature", "ascend");
+    sortTheArrayBasedOnTheGivenPreference();
     createTile(weather_details);
+  } else {
     temperature_arrow.name = "temperature-arrow-up";
     updateUIElementAttributeWithTheGivenValue(
       "sort-by-temperature",
       "src",
       "/ASSETS/arrowUp.svg"
     );
+    sortTheArrayBasedOnTheGivenPreference();
+    createTile(weather_details);
   }
 }
 
