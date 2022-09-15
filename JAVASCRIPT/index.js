@@ -483,21 +483,18 @@ var rainy_list = Object.values(weather_data).filter(
  * @params {}
  * @return {void} nothing
  */
-(function sortTheArrayBasedOnParticularCategory()
+function sortTheArrayBasedOnParticularCategory(array_list,weather_condition)
 {
 /** Sort the sunny list data based on temperature */ 
-sunny_list.sort((a, b) =>
-  parseInt(a.temperature) < parseInt(b.temperature) ? 1 : -1
+array_list.sort((a, b) =>
+  parseInt(a[weather_condition]) < parseInt(b[weather_condition]) ? 1 : -1
 );
-/** Sort the snow list data based on precipitation */
-snow_list.sort((a, b) =>
-  parseInt(a.precipitation) < parseInt(b.precipitation) ? 1 : -1
-);
-/** Sort the rainy list data based on humidity */
-rainy_list.sort((a, b) =>
-  parseInt(a.humidity) < parseInt(b.humidity) ? 1 : -1
-);
-})();
+};
+sortTheArrayBasedOnParticularCategory(sunny_list,"temperature");
+sortTheArrayBasedOnParticularCategory(snow_list,"precipitation");
+sortTheArrayBasedOnParticularCategory(rainy_list,"humidity");
+
+
 // card container's object reference
 const card_container = document.getElementById("city-card");
 
