@@ -539,8 +539,8 @@ body {
   .continent-name {
     font-size: 1.1em;
   }
-  #continent-temp {
-    font-size: 1.3em;
+  .continent-temp {
+    font-size: 1.1em;
   }
   .heading-sort-content {
     margin-right: 0.8em;

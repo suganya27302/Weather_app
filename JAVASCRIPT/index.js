@@ -276,21 +276,20 @@ function updateUIElementAttributeWithTheGivenValue(
   UIAttribute,
   value_To_Update
 ) {
-  if (UIAttribute == "src") 
+  if (UIAttribute == "src")
     document.getElementById(UIElementID).src = value_To_Update;
-  else if (UIAttribute == "innerHTML") 
+  else if (UIAttribute == "innerHTML")
     document.getElementById(UIElementID).innerHTML = value_To_Update;
-  else if(UIAttribute=='value')
-    document.getElementById(UIElementID).value=value_To_Update;
-  else if(UIAttribute=='borderBottom')
-    document.getElementById(UIElementID).style.borderBottom=value_To_Update;
-  else if(UIAttribute=='paddingBottom')
-    document.getElementById(UIElementID).style.paddingBottom=value_To_Update;
-  else if(UIAttribute=='display')
-  document.getElementById(UIElementID).style.display=value_To_Update;
-  else if(UIAttribute=='max')
-  document.getElementById(UIElementID).max=value_To_Update;
-
+  else if (UIAttribute == "value")
+    document.getElementById(UIElementID).value = value_To_Update;
+  else if (UIAttribute == "borderBottom")
+    document.getElementById(UIElementID).style.borderBottom = value_To_Update;
+  else if (UIAttribute == "paddingBottom")
+    document.getElementById(UIElementID).style.paddingBottom = value_To_Update;
+  else if (UIAttribute == "display")
+    document.getElementById(UIElementID).style.display = value_To_Update;
+  else if (UIAttribute == "max")
+    document.getElementById(UIElementID).max = value_To_Update;
 }
 /**
  *
@@ -377,7 +376,7 @@ function updateUIWithNil(date_of_a_city) {
       "./ASSETS/warning.svg"
     );
   }
-  alert('Invalid Cityname!, Please enter a valid cityname.')
+  alert("Invalid Cityname!, Please enter a valid cityname.");
 }
 
 /**
@@ -399,7 +398,7 @@ function updateDataOnCityname() {
       let temperature_celsius = weather_data[selected_city].temperature;
       temperature_celsius = temperature_celsius.split("°");
 
-      updateIconImageSource(selected_city,'null');
+      updateIconImageSource(selected_city, "null");
       updateDateBasedOnCity(selected_city, date_of_a_city, "null");
       updateTemperature(selected_city, temperature_celsius);
 
@@ -475,29 +474,24 @@ var rainy_list = Object.values(weather_data).filter(
   (value) => parseInt(value.temperature) < 20 && parseInt(value.humidity) >= 50
 );
 /**
- * The function which is used to sort the three array based on the particular 
+ * The function which is used to sort the three array based on the particular
  * category.
  * 1.Sort Sunny list based on temperature.
  * 2.Sort Snow list based on precipitation.
- * 3.Sort Rainy list based on humidity. 
+ * 3.Sort Rainy list based on humidity.
  * @params {}
  * @return {void} nothing
  */
-(function sortTheArrayBasedOnParticularCategory()
-{
-/** Sort the sunny list data based on temperature */ 
-sunny_list.sort((a, b) =>
-  parseInt(a.temperature) < parseInt(b.temperature) ? 1 : -1
-);
-/** Sort the snow list data based on precipitation */
-snow_list.sort((a, b) =>
-  parseInt(a.precipitation) < parseInt(b.precipitation) ? 1 : -1
-);
-/** Sort the rainy list data based on humidity */
-rainy_list.sort((a, b) =>
-  parseInt(a.humidity) < parseInt(b.humidity) ? 1 : -1
-);
-})();
+function sortTheArrayBasedOnParticularCategory(array_list, weather_condition) {
+  /** Sort the sunny list data based on temperature */
+  array_list.sort((a, b) =>
+    parseInt(a[weather_condition]) < parseInt(b[weather_condition]) ? 1 : -1
+  );
+}
+sortTheArrayBasedOnParticularCategory(sunny_list, "temperature");
+sortTheArrayBasedOnParticularCategory(snow_list, "precipitation");
+sortTheArrayBasedOnParticularCategory(rainy_list, "humidity");
+
 // card container's object reference
 const card_container = document.getElementById("city-card");
 
@@ -523,18 +517,21 @@ var rainy_data_list = {
   icon_image: "./ASSETS/rainyIcon.svg",
 };
 
-
 /**
  *
- * The function will create elements and populate the city name,temperature value to it and append  
+ * The function will create elements and populate the city name,temperature value to it and append
  * it to the card.
  * @param {object reference} card_division Object reference of the card division
  * @param {string} cityname name of the city
- * @param {string} icon_image_path weather Icon image source  
+ * @param {string} icon_image_path weather Icon image source
  * @param {string} temperature_celsius temperature value of a city
  */
-function updateCitynameAndTemperatureInTheCard(card_division,cityname,icon_image_path,temperature_celsius)
-{
+function updateCitynameAndTemperatureInTheCard(
+  card_division,
+  cityname,
+  icon_image_path,
+  temperature_celsius
+) {
   let city_content_division = document.createElement("div");
   let name_of_city = document.createElement("p");
   let icon_temp_division = document.createElement("div");
@@ -557,51 +554,45 @@ function updateCitynameAndTemperatureInTheCard(card_division,cityname,icon_image
   icon_temp_division.appendChild(temperature_in_celsius);
 }
 
-
 /**
  *
- * The function will create elements and populate the live date and time to it and append  
+ * The function will create elements and populate the live date and time to it and append
  * it to the card.
  * @param {object reference} card_division
  * @param {string} live_date_of_city
  * @param {string} cityname
  */
-function updateDateAndTimeInTheCard(card_division,live_date_of_city,cityname)
-{
+function updateDateAndTimeInTheCard(
+  card_division,
+  live_date_of_city,
+  cityname
+) {
   let time = document.createElement("p");
   let date = document.createElement("p");
   date.setAttribute("class", "card-date-time");
   date.innerHTML = live_date_of_city;
   time.setAttribute("class", "card-date-time");
-  setInterval(
-    displayLiveTimeToTheCity,
-    10,
-    cityname.toLowerCase(),
-    time
-  );
+  setInterval(displayLiveTimeToTheCity, 10, cityname.toLowerCase(), time);
   card_division.appendChild(time);
   card_division.appendChild(date);
 }
 
-
 /**
  *
- * Whenever this function is invoked, it will set the background image as the City icon and 
+ * Whenever this function is invoked, it will set the background image as the City icon and
  * add styles to it.
  * @param {object reference} card_division
  * @param {string} city_image
  */
-function updateCityIconInTheCard(card_division,city_image)
-{
+function updateCityIconInTheCard(card_division, city_image) {
   card_division.style.backgroundImage = "url(" + city_image + ")";
   card_division.style.backgroundRepeat = "no-repeat";
   card_division.style.backgroundPosition = "bottom right";
   card_division.style.backgroundSize = "65%";
 }
 
-
 /**
- * The function will create elements and populate the humidity and precipitation to it and append  
+ * The function will create elements and populate the humidity and precipitation to it and append
  * it to the card.
  * @param {object reference} card_division
  * @param {string} humidity_icon_img_path
@@ -609,8 +600,13 @@ function updateCityIconInTheCard(card_division,city_image)
  * @param {string} precipitation_icon_img_path
  * @param {string} precipitation_value
  */
-function updateHumidityAndPrecipitationInTheCard(card_division,humidity_icon_img_path,humidity_value,precipitation_icon_img_path,precipitation_value)
-{
+function updateHumidityAndPrecipitationInTheCard(
+  card_division,
+  humidity_icon_img_path,
+  humidity_value,
+  precipitation_icon_img_path,
+  precipitation_value
+) {
   let humidity_division = document.createElement("div");
   let precipitation_division = document.createElement("div");
   let humidity_icon = document.createElement("img");
@@ -634,9 +630,9 @@ function updateHumidityAndPrecipitationInTheCard(card_division,humidity_icon_img
 }
 /**
  *
- * whenever The function is invoked , it will create card and 
+ * whenever The function is invoked , it will create card and
  * populate the given values with respect to the weather icon selected.
- * All styles are added to the element 
+ * All styles are added to the element
  * @param {string} cityname name of the city
  * @param {string} icon_image_path weather icon image source
  * @param {string} temperature_celsius  temperature value in celsius for the city
@@ -660,72 +656,105 @@ function createCardAndUpdateDataWithTheGivenValue(
   city_image
 ) {
   let card_division = document.createElement("div");
-  updateCitynameAndTemperatureInTheCard(card_division,cityname,icon_image_path,temperature_celsius);
-  updateDateAndTimeInTheCard(card_division,live_date_of_city,cityname);
-  updateCityIconInTheCard(card_division,city_image);
-  updateHumidityAndPrecipitationInTheCard(card_division,humidity_icon_img_path,humidity_value,precipitation_icon_img_path,precipitation_value);
+  updateCitynameAndTemperatureInTheCard(
+    card_division,
+    cityname,
+    icon_image_path,
+    temperature_celsius
+  );
+  updateDateAndTimeInTheCard(card_division, live_date_of_city, cityname);
+  updateCityIconInTheCard(card_division, city_image);
+  updateHumidityAndPrecipitationInTheCard(
+    card_division,
+    humidity_icon_img_path,
+    humidity_value,
+    precipitation_icon_img_path,
+    precipitation_value
+  );
 }
-
 
 /**
  *
  * whenever the Icon is selected , there will be appearing of blue line under the Icon.
- * From DOM event listener the idname of the weather icon is passed to this function based on that, 
+ * From DOM event listener the idname of the weather icon is passed to this function based on that,
  * it functions
  * @param {string} weathericon_idname Id name of the weather icon ,it is used to change values
  * @return {void} nothing
  */
 function selectTheIconWhichIsClicked(weathericon_idname) {
   if (weathericon_idname == "sunny-icon") {
-    updateUIElementAttributeWithTheGivenValue('sun-image','borderBottom','2px solid skyblue');
-    updateUIElementAttributeWithTheGivenValue('snow-image','borderBottom',0);
-    updateUIElementAttributeWithTheGivenValue('rainy-image','borderBottom',0);
-    updateUIElementAttributeWithTheGivenValue('sun-image','paddingBottom','3px');
+    updateUIElementAttributeWithTheGivenValue(
+      "sun-image",
+      "borderBottom",
+      "2px solid skyblue"
+    );
+    updateUIElementAttributeWithTheGivenValue("snow-image", "borderBottom", 0);
+    updateUIElementAttributeWithTheGivenValue("rainy-image", "borderBottom", 0);
+    updateUIElementAttributeWithTheGivenValue(
+      "sun-image",
+      "paddingBottom",
+      "3px"
+    );
   } else if (weathericon_idname == "snow-icon") {
-    updateUIElementAttributeWithTheGivenValue('snow-image','borderBottom','2px solid skyblue');
-    updateUIElementAttributeWithTheGivenValue('sun-image','borderBottom',0);
-    updateUIElementAttributeWithTheGivenValue('rainy-image','borderBottom',0);
-    updateUIElementAttributeWithTheGivenValue('snow-image','paddingBottom','3px');
+    updateUIElementAttributeWithTheGivenValue(
+      "snow-image",
+      "borderBottom",
+      "2px solid skyblue"
+    );
+    updateUIElementAttributeWithTheGivenValue("sun-image", "borderBottom", 0);
+    updateUIElementAttributeWithTheGivenValue("rainy-image", "borderBottom", 0);
+    updateUIElementAttributeWithTheGivenValue(
+      "snow-image",
+      "paddingBottom",
+      "3px"
+    );
   } else if (weathericon_idname == "rainy-icon") {
-    updateUIElementAttributeWithTheGivenValue('rainy-image','borderBottom','2px solid skyblue');
-    updateUIElementAttributeWithTheGivenValue('sun-image','borderBottom',0);
-    updateUIElementAttributeWithTheGivenValue('snow-image','borderBottom',0);
-    updateUIElementAttributeWithTheGivenValue('rainy-image','paddingBottom','3px');
+    updateUIElementAttributeWithTheGivenValue(
+      "rainy-image",
+      "borderBottom",
+      "2px solid skyblue"
+    );
+    updateUIElementAttributeWithTheGivenValue("sun-image", "borderBottom", 0);
+    updateUIElementAttributeWithTheGivenValue("snow-image", "borderBottom", 0);
+    updateUIElementAttributeWithTheGivenValue(
+      "rainy-image",
+      "paddingBottom",
+      "3px"
+    );
   }
 }
 
- /**
-  *
-  * The function will set the value of the spinner based on the condition provided for
-  * the particular weather.
-  * @param {Array} weather_list array of objects
-  * @param {number} no_of_cities_to_display number of city to display in the UI
-  * @return {number} no_of_cities_to_display -number of city to display in the UI
-  */
- function updateSpinnerValueBasedOnTheGivenCondition(weather_list,no_of_cities_to_display)
-{
+/**
+ *
+ * The function will set the value of the spinner based on the condition provided for
+ * the particular weather.
+ * @param {Array} weather_list array of objects
+ * @param {number} no_of_cities_to_display number of city to display in the UI
+ * @return {number} no_of_cities_to_display -number of city to display in the UI
+ */
+function updateSpinnerValueBasedOnTheGivenCondition(
+  weather_list,
+  no_of_cities_to_display
+) {
   let length_of_list = weather_list.length;
   if (length_of_list < no_of_cities_to_display) {
     no_of_cities_to_display = length_of_list;
   }
-  if(length_of_list<=3)
-  {
-    spinner=3;
-    updateUIElementAttributeWithTheGivenValue('numberofcities','max',3);
-    updateUIElementAttributeWithTheGivenValue('numberofcities','value',3);
-  }
-  else
-  {
-    updateUIElementAttributeWithTheGivenValue('numberofcities','max',10);
+  if (length_of_list <= 3) {
+    spinner = 3;
+    updateUIElementAttributeWithTheGivenValue("numberofcities", "max", 3);
+    updateUIElementAttributeWithTheGivenValue("numberofcities", "value", 3);
+  } else {
+    updateUIElementAttributeWithTheGivenValue("numberofcities", "max", 10);
   }
   return no_of_cities_to_display;
 }
 /**
  *
- * This function will decides, how many card to display on UI and 
+ * This function will decides, how many card to display on UI and
  * create the card and populate data and display it in UI based on the selected Weather Icon
  * @param {string} weathericon_idname Id name of the weather icon ,it is used to change values
- * @param {Array} weather_list Array list to display data to the UI 
+ * @param {Array} weather_list Array list to display data to the UI
  * @param {string} weathericon_img_path weather icon image source
  * @param {number} no_of_cities_to_display count of the city to display in UI
  * @return {void} nothing
@@ -736,20 +765,19 @@ function createCardToTheSelectedCityAndPopulateCityDetails(
   weathericon_img_path,
   no_of_cities_to_display
 ) {
-  no_of_cities_to_display=updateSpinnerValueBasedOnTheGivenCondition(weather_list,no_of_cities_to_display);
+  no_of_cities_to_display = updateSpinnerValueBasedOnTheGivenCondition(
+    weather_list,
+    no_of_cities_to_display
+  );
   let count = 0;
   for (let city of weather_list) {
     if (count < no_of_cities_to_display) {
-      
       let live_date_of_city = updateDateBasedOnCity(
         city.cityName.toLowerCase(),
         "null",
         weathericon_idname
       );
-      let city_image = updateIconImageSource(
-        city.cityName,
-        weathericon_idname
-      );
+      let city_image = updateIconImageSource(city.cityName, weathericon_idname);
       createCardAndUpdateDataWithTheGivenValue(
         city.cityName,
         weathericon_img_path,
@@ -767,13 +795,12 @@ function createCardToTheSelectedCityAndPopulateCityDetails(
   }
 }
 
-
 /**
  *
  * To update the Live time of the city in the card.
  * By using date object and its methods live date is fetched and  using hour value am or pm is decided.
  * setinterval used to repeatedly call the display_live_time function
- * @param {string} nameOfThe_city name of the city 
+ * @param {string} nameOfThe_city name of the city
  * @param {object reference} time object reference
  */
 function displayLiveTimeToTheCity(nameOfThe_city, time) {
@@ -794,17 +821,16 @@ function displayLiveTimeToTheCity(nameOfThe_city, time) {
     ? (part_of_time = "PM")
     : ((part_of_time = "PM"), (hour = hour - 12));
 
-  (hour < 10) ? (hour = "0" + hour + ": "): (hour = hour + ": ");
-  (minute < 10)? (minute = "0" + minute): (minute = minute);
+  hour < 10 ? (hour = "0" + hour + ": ") : (hour = hour + ": ");
+  minute < 10 ? (minute = "0" + minute) : (minute = minute);
 
   date_time = hour + minute + " " + part_of_time;
   time.innerHTML = date_time;
 }
 
-
 /**
  * While changing the values in spinner,createCardToTheSelectedCityAndPopulateCityDetails function will
- * be called , which will create card and populate values in it. 
+ * be called , which will create card and populate values in it.
  * Based on the value in spinner , the cards will display
  * @params {}
  * @return {void}
@@ -824,12 +850,11 @@ function noOfCitiesToDisplayInUI() {
   );
 }
 
-
 /**
- * whenever the particular Icon is clicked, this function is invoked. 
- * this further calls two functions , it select the weather icon and create cards and populate details. 
+ * whenever the particular Icon is clicked, this function is invoked.
+ * this further calls two functions , it select the weather icon and create cards and populate details.
  *@params {}
- * @return {function} 
+ * @return {function}
  */
 function updateContainerWithCitiesInformationBasedOnWeatherIconSelected() {
   return (function () {
@@ -843,7 +868,6 @@ function updateContainerWithCitiesInformationBasedOnWeatherIconSelected() {
     );
   })();
 }
-
 
 /**
  * It is used to populate the Idname, arraylist , Image source to the variable
@@ -882,7 +906,6 @@ createCardToTheSelectedCityAndPopulateCityDetails(
   spinner
 );
 
-
 document.getElementById("left-scroll").addEventListener("click", () => {
   setTimeout(() => (card_container.scrollLeft -= 530), 200);
 });
@@ -894,7 +917,6 @@ document
   .getElementById("numberofcities")
   .addEventListener("input", validateTheSpinner);
 
-
 /**
  * It allows only the value between 3 and 10 , it restricts
  * If it exceeds 10, it automatically changes to 10
@@ -902,15 +924,18 @@ document
  * @params {}
  * @return {void}
  */
- 
+
 function validateTheSpinner() {
   parseInt(this.value) < 3
-    ? (updateUIElementAttributeWithTheGivenValue('numberofcities','value',3))
+    ? updateUIElementAttributeWithTheGivenValue("numberofcities", "value", 3)
     : parseInt(this.value) > 10
-    ? (updateUIElementAttributeWithTheGivenValue('numberofcities','value',10))
-    : (updateUIElementAttributeWithTheGivenValue('numberofcities','value',parseInt(this.value)));
+    ? updateUIElementAttributeWithTheGivenValue("numberofcities", "value", 10)
+    : updateUIElementAttributeWithTheGivenValue(
+        "numberofcities",
+        "value",
+        parseInt(this.value)
+      );
 }
-
 
 /**
  * It will hide the carousel button , when the card is less than or equal to 4.
@@ -921,19 +946,251 @@ function validateTheSpinner() {
 function hideTheScrollArrow() {
   let length_of_container = card_container.clientWidth;
   let length_of_Whole_city = card_container.scrollWidth;
-  let carousel_division=document.getElementsByClassName('carousel-div');
+  let carousel_division = document.getElementsByClassName("carousel-div");
   if (length_of_Whole_city <= length_of_container) {
-    carousel_division[0].style.display='none';
-    carousel_division[1].style.display='none';
-    updateUIElementAttributeWithTheGivenValue('left-scroll','display',"none");
-    updateUIElementAttributeWithTheGivenValue('right-scroll','display',"none");
+    carousel_division[0].style.display = "none";
+    carousel_division[1].style.display = "none";
+    updateUIElementAttributeWithTheGivenValue("left-scroll", "display", "none");
+    updateUIElementAttributeWithTheGivenValue(
+      "right-scroll",
+      "display",
+      "none"
+    );
   } else {
-    carousel_division[0].style.display='flex';
-    carousel_division[1].style.display='flex';
-    updateUIElementAttributeWithTheGivenValue('left-scroll','display',"flex");
-    updateUIElementAttributeWithTheGivenValue('right-scroll','display',"flex");
+    carousel_division[0].style.display = "flex";
+    carousel_division[1].style.display = "flex";
+    updateUIElementAttributeWithTheGivenValue("left-scroll", "display", "flex");
+    updateUIElementAttributeWithTheGivenValue(
+      "right-scroll",
+      "display",
+      "flex"
+    );
   }
 }
-setInterval(hideTheScrollArrow,1000);
+setInterval(hideTheScrollArrow, 1000);
 
+// bottom section
+/**
+ * Bottom tile container's object reference
+ * Weather details is an array, that contains the city weather information
+ */
+var tile_container = document.getElementById("continent-wise-list");
+tile_container.replaceChildren();
+let continent_arrow = document.getElementById("sort-by-continent");
+let temperature_arrow = document.getElementById("sort-by-temperature");
+var weather_details = Object.entries(weather_data).map((element) => element[1]);
 
+/**
+ *
+ * This function will sort the array based on the criteria and sorting order.
+ * @param {string} criteria the criteria based on sort happens
+ * @param {string} sorting_order sorting order of the array
+ */
+function sortTheArrayBasedOnTheGivenPreference() {
+  weather_details.sort((a, b) => {
+    if (a.timeZone.split("/")[0] === b.timeZone.split("/")[0]) {
+      return temperature_arrow.name == "temperature-arrow-up"
+        ? parseInt(a.temperature) < parseInt(b.temperature)
+          ? 1
+          : -1
+        : parseInt(a.temperature) < parseInt(b.temperature)
+        ? -1
+        : 1;
+    } else
+      return continent_arrow.name == "continent-arrow-down"
+        ? a.timeZone.split("/")[0] > b.timeZone.split("/")[0]
+          ? 1
+          : -1
+        : a.timeZone.split("/")[0] > b.timeZone.split("/")[0]
+        ? -1
+        : 1;
+  });
+}
+
+/**
+ *
+ * The funtion will create elements and populate continent name and temperature to the tile.
+ * @param {object reference} tile_content_division Object reference of the tile division
+ * @param {string} timezone Timezone of the city
+ * @param {string} temperature_celsius temperature of the city
+ */
+function updateContinentnameAndTemperatureInTheTile(
+  tile_content_division,
+  timezone,
+  temperature_celsius
+) {
+  let continent_name = document.createElement("p");
+  let temperature_of_continent = document.createElement("p");
+  tile_container.setAttribute("class", "cities-with-temp-info");
+  tile_content_division.setAttribute("class", "tile-content");
+  continent_name.setAttribute("class", "continent-name");
+  continent_name.innerHTML = timezone.split("/")[0];
+  temperature_of_continent.setAttribute("class", "continent-temp");
+  temperature_of_continent.innerHTML = temperature_celsius;
+  tile_container.appendChild(tile_content_division);
+  tile_content_division.appendChild(continent_name);
+  tile_content_division.appendChild(temperature_of_continent);
+}
+
+/**
+ *
+ * The function will create elements and populate state name and live time to the tile.
+ * @param {object reference} tile_content_division  Object reference of the tile division
+ * @param {string} cityname name of the city
+ */
+function updateStatenameAndTimeInTheTile(tile_content_division, cityname) {
+  let state_name = document.createElement("p");
+  let live_time = document.createElement("span");
+  state_name.setAttribute("class", "state-name");
+  state_name.innerHTML = cityname + ",";
+  setInterval(displayLiveTimeToTheCity, 10, cityname.toLowerCase(), live_time);
+  tile_content_division.appendChild(state_name);
+  state_name.appendChild(live_time);
+}
+
+/**
+ *
+ * The function will create elements and populate humidity value to the tile.
+ * @param {object reference} tile_content_division  Object reference of the tile division
+ * @param {string} humidity_value humidity of the city
+ */
+function updateHumidityInTheTile(tile_content_division, humidity_value) {
+  let humidity_division = document.createElement("p");
+  let humidity_icon = document.createElement("img");
+  let humidity_in_percentage = document.createElement("span");
+  humidity_division.setAttribute("class", "humidity-representation");
+  humidity_icon.src = "./ASSETS/humidityIcon.svg";
+  humidity_icon.setAttribute("id", "humidity-img");
+  humidity_in_percentage.setAttribute("class", "humidity-per");
+  humidity_in_percentage.innerHTML = humidity_value;
+  tile_content_division.appendChild(humidity_division);
+  humidity_division.appendChild(humidity_icon);
+  humidity_division.appendChild(humidity_in_percentage);
+}
+
+/**
+ * This will create the elements for the tile and set style attributes and
+ * populate the given values to it
+ * @param {string} cityname name of the city
+ * @param {string} timezone timezone of the city
+ * @param {string} temperature_celsius temperature in celsius format of the city
+ * @param {string} humidity_value humidity in percentage of the city
+ */
+function createTileAndPopulateCityDetails(
+  cityname,
+  timezone,
+  temperature_celsius,
+  humidity_value
+) {
+  let tile_content_division = document.createElement("div");
+  updateContinentnameAndTemperatureInTheTile(
+    tile_content_division,
+    timezone,
+    temperature_celsius
+  );
+  updateStatenameAndTimeInTheTile(tile_content_division, cityname);
+  updateHumidityInTheTile(tile_content_division, humidity_value);
+}
+
+/**
+ * Whenever the page is loaded,the DOM event triggers and calls
+ * createTileOnLoad function to create tiles with continent details.
+ */
+document.getElementById("continent-wise-list").onload = createTileOnLoad();
+
+/**
+ * The function is called whenever the page loads.
+ * @params{}
+ * @return{void} nothing
+ */
+function createTileOnLoad() {
+  sortTheArrayBasedOnTheGivenPreference();
+  createTile(weather_details);
+}
+
+/**
+ * Whenever the arrow is clicked, the dom event triggers and calls the function.
+ */
+document.getElementById("sort-by-continent").addEventListener("click", () => {
+  updateTheArrowImageAndContinentOrder();
+});
+document.getElementById("sort-by-temperature").addEventListener("click", () => {
+  updateTheArrowImageAndtemperatureOrder();
+});
+
+/**
+ * Update the image source of the arrow and name attribute,
+ * sort the array list based on the continent name.
+ * @params {}
+ * @return {void} nothing
+ */
+function updateTheArrowImageAndContinentOrder() {
+  if (continent_arrow.name == "continent-arrow-down") {
+    continent_arrow.name = "continent-arrow-up";
+    updateUIElementAttributeWithTheGivenValue(
+      "sort-by-continent",
+      "src",
+      "/ASSETS/arrowUp.svg"
+    );
+    sortTheArrayBasedOnTheGivenPreference();
+    createTile(weather_details);
+  } else {
+    continent_arrow.name = "continent-arrow-down";
+    updateUIElementAttributeWithTheGivenValue(
+      "sort-by-continent",
+      "src",
+      "/ASSETS/arrowDown.svg"
+    );
+    sortTheArrayBasedOnTheGivenPreference();
+    createTile(weather_details);
+  }
+}
+
+/**
+ * Update the image source of the arrow and name attribute,
+ * sort the array list based on the temperature.
+ * @params {}
+ * @return {void} nothing
+ */
+function updateTheArrowImageAndtemperatureOrder() {
+  if (temperature_arrow.name == "temperature-arrow-up") {
+    temperature_arrow.name = "temperature-arrow-down";
+    updateUIElementAttributeWithTheGivenValue(
+      "sort-by-temperature",
+      "src",
+      "/ASSETS/arrowDown.svg"
+    );
+    sortTheArrayBasedOnTheGivenPreference();
+    createTile(weather_details);
+  } else {
+    temperature_arrow.name = "temperature-arrow-up";
+    updateUIElementAttributeWithTheGivenValue(
+      "sort-by-temperature",
+      "src",
+      "/ASSETS/arrowUp.svg"
+    );
+    sortTheArrayBasedOnTheGivenPreference();
+    createTile(weather_details);
+  }
+}
+
+/**
+ * Create a tile and populate the continent details to the tile container.
+ * @param {array} Weather_list
+ * @return {void} nothing
+ */
+function createTile(Weather_list) {
+  tile_container.replaceChildren();
+  let count = 1;
+  for (let city of Weather_list) {
+    if (count <= 12) {
+      createTileAndPopulateCityDetails(
+        city.cityName,
+        city.timeZone,
+        city.temperature,
+        city.humidity
+      );
+      count++;
+    }
+  }
+}
