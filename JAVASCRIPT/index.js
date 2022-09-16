@@ -6,6 +6,7 @@ const at_present = "NOW";
 const empty_value = "NIL";
 let cityname_list = [];
 let timeout;
+let city_data;
 document
   .getElementById("city_list")
   .addEventListener("change", updateDataOnCityname);
@@ -13,6 +14,23 @@ document
    Create a array of citynames.
    This is a self invoking function.
  */
+
+ 
+   function populateCityInformation (
+  ) {
+    this.setDetails=function( selected_city,weather_info){
+    this.cityName = weather_info[selected_city].cityName;
+    this.dateAndTime = weather_info[selected_city].dateAndTime;
+    this.timeZone =weather_info[selected_city].timeZone;
+    this.temperature =weather_info[selected_city].temperature;
+    this.humidity =weather_info[selected_city].humidity;
+    this.precipitation = weather_info[selected_city].precipitation;
+    this.nextFiveHrs = weather_info[selected_city].nextFiveHrs;
+} 
+  };
+  
+  
+  
 (function () {
   const cities_list = document.getElementById("city_lists");
   for (let city in weather_data) {
@@ -30,11 +48,11 @@ document
  * @param {string} cityname name of the  selected city
  * @return {boolean} cityname is valid or not
  */
-let checkCitynameIsValid = (cityname) => {
+ let checkCitynameIsValid = (cityname) => {
   if (cityname_list.includes(cityname)) return true;
   return false;
 };
-updateDataOnCityname();
+
 
 /**
  *
@@ -42,8 +60,8 @@ updateDataOnCityname();
  * @param {string} cityname name of the  selected city
  * @return {void} nothing
  */
-function updateIconImageSource(cityname, weathericon_idname) {
-  const image_path = "./ASSETS/" + cityname + ".svg";
+ populateCityInformation.prototype.updateIconImageSource=function(selected_city,weathericon_idname) {
+  const image_path = "./ASSETS/" + selected_city + ".svg";
   if (weathericon_idname == "null") {
     updateUIElementAttributeWithTheGivenValue("icon", "src", image_path);
   } else {
@@ -51,6 +69,7 @@ function updateIconImageSource(cityname, weathericon_idname) {
   }
 }
 
+ 
 /**
  *
  * To update the Live date of the selected city in the top section
@@ -60,13 +79,12 @@ function updateIconImageSource(cityname, weathericon_idname) {
  * @param {reference} date_of_a_city Object reference
  * @return {string} city_date  live date of the city
  */
-function updateDateBasedOnCity(
-  selected_city,
+ populateCityInformation.prototype.updateDateBasedOnCity=function(
   date_of_a_city,
   weathericon_idname
 ) {
   var date_time = new Date().toLocaleString("en-US", {
-    timeZone: weather_data[selected_city].timeZone,
+    timeZone: this.timeZone,
   });
   let date = new Date(date_time).getDate();
   let month = new Date(date_time).toLocaleString("en-US", {
@@ -79,6 +97,7 @@ function updateDateBasedOnCity(
       ? `0${date}- ${month}- ${year}`
       : `${date}-${month}-${year}`;
   })();
+ 
   if (weathericon_idname == "null") {
     date_of_a_city[0].innerHTML = city_date;
   } else {
@@ -95,10 +114,10 @@ function updateDateBasedOnCity(
  * @param {string} selected_city name of the  selected city
  * @return {void} nothing
  */
-function updateLiveTimeBasedOnTimezone(selected_city) {
-  function display_Live_Time() {
+ populateCityInformation.prototype.updateLiveTimeBasedOnTimezone=function(selected_city) {
+  function display_Live_Time(obj) {
     let date_time = new Date().toLocaleString("en-US", {
-      timeZone: weather_data[selected_city].timeZone,
+      timeZone: obj.timeZone,
     });
 
     let part_of_time;
@@ -163,10 +182,10 @@ function updateLiveTimeBasedOnTimezone(selected_city) {
           "src",
           "./ASSETS/amState.png"
         );
-    UpdateAmpmForNextfivehrs(hour, part_of_time);
+    city_data.UpdateAmpmForNextfivehrs(hour, part_of_time);
   }
   clearInterval(timeout);
-  timeout = setInterval(display_Live_Time, 1000);
+  timeout = setInterval(display_Live_Time, 1000,this);
 }
 /**
  *
@@ -176,11 +195,11 @@ function updateLiveTimeBasedOnTimezone(selected_city) {
  * @param {Array.<string>} temperature_celsius city temperature
  * @return {void} nothing
  */
-function updateTemperature(cityname, temperature_celsius) {
+ populateCityInformation.prototype.updateTemperature=function(temperature_celsius) {
   document.getElementById("temp-celsius").innerHTML =
     temperature_celsius[0] + " " + temperature_celsius[1];
 
-  let temperature_farenheit = weather_data[cityname].temperature;
+  let temperature_farenheit =this.temperature;
   temperature_farenheit = temperature_farenheit.split("°");
   temperature_farenheit[0] = ((temperature_farenheit[0] * 9) / 5 + 32).toFixed(
     1
@@ -188,11 +207,11 @@ function updateTemperature(cityname, temperature_celsius) {
   document.getElementById("temp-farenheit").innerHTML =
     temperature_farenheit[0] + " F";
 
-  let humidity_value = weather_data[cityname].humidity;
+  let humidity_value = this.humidity;
   document.getElementById("humidity_percentage").innerHTML =
     humidity_value.slice(0, humidity_value.length - 1) + " %";
 
-  let precipitation_value = weather_data[cityname].precipitation;
+  let precipitation_value =this.precipitation;
   document.getElementById("precipitation_percentage").innerHTML =
     precipitation_value.slice(0, precipitation_value.length - 1) + " %";
 }
@@ -208,7 +227,7 @@ function updateTemperature(cityname, temperature_celsius) {
  * @param {string} temp_icon id name of the image source
  * @return {void} nothing
  */
-function updateImageSource(temp_after_every_hour, temp_icon) {
+ populateCityInformation.prototype.updateImageSource=function(temp_after_every_hour, temp_icon) {
   if (temp_after_every_hour >= 23 && temp_after_every_hour <= 29)
     updateUIElementAttributeWithTheGivenValue(
       temp_icon,
@@ -244,8 +263,8 @@ function updateImageSource(temp_after_every_hour, temp_icon) {
  * @param {string} cityname name of the selected city
  * @return {void} nothing
  */
-function fetchAndUpdateTemperatureForNextfivehrs(cityname) {
-  let temp_list = weather_data[cityname].nextFiveHrs;
+ populateCityInformation.prototype.fetchAndUpdateTemperatureForNextfivehrs=function() {
+  let temp_list = this.nextFiveHrs;
   for (var count = 1; count <= 5; count++) {
     let celsius_temperature = `temp-after-${count}hour`;
     let temp_icon = `icon_based_tempafter-${count}hour`;
@@ -259,7 +278,7 @@ function fetchAndUpdateTemperatureForNextfivehrs(cityname) {
       "innerHTML",
       temp_after_every_hour
     );
-    updateImageSource(temp_after_every_hour, temp_icon);
+    city_data.updateImageSource(temp_after_every_hour, temp_icon);
   }
 }
 
@@ -299,7 +318,7 @@ function updateUIElementAttributeWithTheGivenValue(
  * @param {reference} date_of_a_city Object reference
  * @return {void} nothing
  */
-function updateUIWithNil(date_of_a_city) {
+ populateCityInformation.prototype.updateUIWithNil=function(date_of_a_city) {
   clearInterval(timeout);
   updateUIElementAttributeWithTheGivenValue(
     "icon",
@@ -378,45 +397,6 @@ function updateUIWithNil(date_of_a_city) {
   }
   alert("Invalid Cityname!, Please enter a valid cityname.");
 }
-
-/**
- *
- * event listener function to update data for the city.
- * A closure function is used check the entered city name is valid or not.
- * If valid the function will call all other functions to update live date, live time,
- * city icon, temperature, humitidy, precipitation, temperature for next five hours from current time and weather
- * icons according to the temperature value.
- * If it is invalid the invalid_Cityname function is called to display Nil value
- * @params {} nothing
- * @return {Function}function to update all data for the selected city and for invalid cityname.
- */
-function updateDataOnCityname() {
-  let selected_city = document.getElementById("city_list").value.toLowerCase();
-  const date_of_a_city = document.getElementsByClassName("date-style");
-  return (function () {
-    if (checkCitynameIsValid(selected_city)) {
-      let temperature_celsius = weather_data[selected_city].temperature;
-      temperature_celsius = temperature_celsius.split("°");
-
-      updateIconImageSource(selected_city, "null");
-      updateDateBasedOnCity(selected_city, date_of_a_city, "null");
-      updateTemperature(selected_city, temperature_celsius);
-
-      document.getElementById("present_time").innerHTML = at_present;
-      updateUIElementAttributeWithTheGivenValue(
-        "present_temperature",
-        "innerHTML",
-        temperature_celsius[0]
-      );
-      updateImageSource(temperature_celsius[0], "icon_based_present_temp");
-      fetchAndUpdateTemperatureForNextfivehrs(selected_city);
-      updateLiveTimeBasedOnTimezone(selected_city, "null");
-    } else {
-      updateUIWithNil(date_of_a_city);
-    }
-  })();
-}
-
 /**
  *
  * Update source of the weather images based on the temperature
@@ -425,7 +405,7 @@ function updateDataOnCityname() {
  * @param {string} part_of_time
  * @return {void} nothing
  */
-function UpdateAmpmForNextfivehrs(hour, part_of_time) {
+ populateCityInformation.prototype.UpdateAmpmForNextfivehrs=function(hour, part_of_time) {
   let time_iterator = hour;
   for (var count = 1; count <= 5; count++) {
     let id_name = `time-after-${count}hour`;
@@ -448,6 +428,60 @@ function UpdateAmpmForNextfivehrs(hour, part_of_time) {
       time_value + " " + part_of_time;
   }
 }
+
+function createObjectForPopulateCityData(selected_city)
+  {
+    this.weather_info=weather_data;
+    let city_object=new populateCityInformation(
+   );
+    city_object.setDetails( selected_city,this.weather_info);
+    console.log("city-object",city_object);
+    this.__proto__.__proto__=city_object;
+  }
+
+/**
+ *
+ * event listener function to update data for the city.
+ * A closure function is used check the entered city name is valid or not.
+ * If valid the function will call all other functions to update live date, live time,
+ * city icon, temperature, humitidy, precipitation, temperature for next five hours from current time and weather
+ * icons according to the temperature value.
+ * If it is invalid the invalid_Cityname function is called to display Nil value
+ * @params {} nothing
+ * @return {Function}function to update all data for the selected city and for invalid cityname.
+ */
+function updateDataOnCityname() {
+  let selected_city = document.getElementById("city_list").value.toLowerCase();
+  const date_of_a_city = document.getElementsByClassName("date-style");
+  return (function () {
+    if (checkCitynameIsValid(selected_city)) {
+      city_data=new createObjectForPopulateCityData(selected_city);
+  
+      console.log('city_data: ', city_data);
+     
+      let temperature_celsius = city_data.temperature;
+      temperature_celsius = temperature_celsius.split("°");
+
+       city_data.updateIconImageSource(selected_city,'null');
+       city_data.updateDateBasedOnCity(date_of_a_city, "null");
+       city_data.updateTemperature(temperature_celsius);
+
+       document.getElementById("present_time").innerHTML = at_present;
+      updateUIElementAttributeWithTheGivenValue(
+        "present_temperature",
+        "innerHTML",
+        temperature_celsius[0]
+      );
+      city_data.updateImageSource(temperature_celsius[0], "icon_based_present_temp");
+      city_data.fetchAndUpdateTemperatureForNextfivehrs(selected_city);
+      city_data.updateLiveTimeBasedOnTimezone("null");
+    } else {
+      city_data.updateUIWithNil(date_of_a_city);
+    }
+  })();
+}
+updateDataOnCityname();
+
 
 // middle section javascript
 /* A variable to keep on update with the value of number of cities */
@@ -772,12 +806,11 @@ function createCardToTheSelectedCityAndPopulateCityDetails(
   let count = 0;
   for (let city of weather_list) {
     if (count < no_of_cities_to_display) {
-      let live_date_of_city = updateDateBasedOnCity(
-        city.cityName.toLowerCase(),
+      let live_date_of_city = city_data.updateDateBasedOnCity(
         "null",
         weathericon_idname
       );
-      let city_image = updateIconImageSource(city.cityName, weathericon_idname);
+      let city_image = city_data.updateIconImageSource(city.cityName, weathericon_idname);
       createCardAndUpdateDataWithTheGivenValue(
         city.cityName,
         weathericon_img_path,
