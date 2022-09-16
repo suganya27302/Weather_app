@@ -27,6 +27,34 @@ document
     this.precipitation = weather_info[selected_city].precipitation;
     this.nextFiveHrs = weather_info[selected_city].nextFiveHrs;
 } 
+   this.getCityname=function()
+   {
+    return this.cityName;
+   }
+   this.getdateAndTime=function()
+   {
+    return this.dateAndTime;
+   }
+   this.gettimeZone =function()
+   {
+    return this.timeZone;
+   }
+   this.gettemperature=function()
+   {
+    return this.temperature;
+   }
+   this.gethumidity=function()
+   {
+    return this.humidity;
+   }
+   this.getprecipitation=function()
+   {
+    return this.precipitation;
+   }
+   this.getCityname=function()
+   {
+    return this.nextFiveHrs;
+   }
   };
   
   
@@ -84,7 +112,7 @@ document
   weathericon_idname
 ) {
   var date_time = new Date().toLocaleString("en-US", {
-    timeZone: this.timeZone,
+    timeZone: this.gettimeZone(),
   });
   let date = new Date(date_time).getDate();
   let month = new Date(date_time).toLocaleString("en-US", {
@@ -117,7 +145,7 @@ document
  populateCityInformation.prototype.updateLiveTimeBasedOnTimezone=function(selected_city) {
   function display_Live_Time(obj) {
     let date_time = new Date().toLocaleString("en-US", {
-      timeZone: obj.timeZone,
+      timeZone: obj.gettimeZone(),
     });
 
     let part_of_time;
@@ -199,7 +227,7 @@ document
   document.getElementById("temp-celsius").innerHTML =
     temperature_celsius[0] + " " + temperature_celsius[1];
 
-  let temperature_farenheit =this.temperature;
+  let temperature_farenheit =this.gettemperature();
   temperature_farenheit = temperature_farenheit.split("°");
   temperature_farenheit[0] = ((temperature_farenheit[0] * 9) / 5 + 32).toFixed(
     1
@@ -207,11 +235,11 @@ document
   document.getElementById("temp-farenheit").innerHTML =
     temperature_farenheit[0] + " F";
 
-  let humidity_value = this.humidity;
+  let humidity_value = this.gethumidity();
   document.getElementById("humidity_percentage").innerHTML =
     humidity_value.slice(0, humidity_value.length - 1) + " %";
 
-  let precipitation_value =this.precipitation;
+  let precipitation_value =this.getprecipitation();
   document.getElementById("precipitation_percentage").innerHTML =
     precipitation_value.slice(0, precipitation_value.length - 1) + " %";
 }
@@ -458,8 +486,8 @@ function updateDataOnCityname() {
       city_data=new createObjectForPopulateCityData(selected_city);
   
       console.log('city_data: ', city_data);
-     
-      let temperature_celsius = city_data.temperature;
+    
+      let temperature_celsius = city_data.gettemperature();
       temperature_celsius = temperature_celsius.split("°");
 
        city_data.updateIconImageSource(selected_city,'null');
