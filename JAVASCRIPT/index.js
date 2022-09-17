@@ -10,11 +10,12 @@ let city_data;
 document
   .getElementById("city_list")
   .addEventListener("change", updateDataOnCityname);
-/* Import cityname from json to the datalist,
-   Create a array of citynames.
-   This is a self invoking function.
- */
 
+   /**
+ * A constructor function , which will set current city details and
+ * the prototypic functions will be used to populate values to the top section.
+ * @return {void} nothing
+ */
 function populateCityInformation() {
   this.setDetails = function (selected_city, weather_info) {
     this.cityName = weather_info[selected_city].cityName;
@@ -48,6 +49,10 @@ function populateCityInformation() {
   };
 }
 
+/* Import cityname from json to the datalist,
+   Create a array of citynames.
+   This is a self invoking function.
+ */
 (function () {
   const cities_list = document.getElementById("city_lists");
   for (let city in weather_data) {
@@ -205,6 +210,7 @@ populateCityInformation.prototype.updateLiveTimeBasedOnTimezone = function () {
   clearInterval(timeout);
   timeout = setInterval(display_Live_Time, 1000, this);
 };
+
 /**
  *
  * Update the Temperature in celsius ,in farenheit and humidity ,precipitation for the selected city
@@ -462,6 +468,14 @@ populateCityInformation.prototype.UpdateAmpmForNextfivehrs = function (
   }
 };
 
+
+/**
+ *
+ * A constructor function, which will inherit populateCityInformation constructor,
+ * which is used to access all functions, to update data in the UI.
+ * @param {string} selected_city
+ * @return {void} nothing
+ */
 function createObjectForPopulateCityData(selected_city) {
   this.weather_info = weather_data;
   let city_object = new populateCityInformation();
@@ -518,6 +532,12 @@ function updateDataOnCityname() {
 updateDataOnCityname();
 
 // middle section javascript
+
+/**
+ * A constructor function ,which will inherit populateCityInformation and 
+ * the prototypic functions will be used to populate values to card and perform actions.  
+ * @return {void} nothing
+ */
 function cardContainerDetails() {
   this.__proto__.__proto__ = city_data;
 }
@@ -526,8 +546,7 @@ function cardContainerDetails() {
 
 var spinner = 4;
 let cardObj;
-// cardObj = new cardContainerDetails();
-// console.log("cardObj: ", cardObj);
+
 /* Filter the data based on the condition and forms new list */
 var sunny_list = Object.values(weather_data).filter(
   (value) =>
@@ -1030,7 +1049,6 @@ document
  * @params {}
  * @return {void}
  */
-
 cardContainerDetails.prototype.validateTheSpinner = function () {
   parseInt(this.value) < 3
     ? this.updateUIElementAttributeWithTheGivenValue(
@@ -1102,6 +1120,12 @@ function createCardToTheSelectedCityAndPopulateCityDetails(
 }
 setInterval(cardObj.hideTheScrollArrow, 1000);
 // bottom section
+
+/**
+ * A constructor function ,which will inherit cardContainerDetails and 
+ * the prototypic functions will be used to populate values to tile  
+ * @return {void} nothing
+ */
 function tileContainerDetails()
 {
   this.__proto__.__proto__=cardObj;
