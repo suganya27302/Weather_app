@@ -466,7 +466,6 @@ function createObjectForPopulateCityData(selected_city) {
   this.weather_info = weather_data;
   let city_object = new populateCityInformation();
   city_object.setDetails(selected_city, this.weather_info);
-  console.log("city-object", city_object);
   this.__proto__.__proto__ = city_object;
 }
 
@@ -487,8 +486,6 @@ function updateDataOnCityname() {
   return (function () {
     if (checkCitynameIsValid(selected_city)) {
       city_data = new createObjectForPopulateCityData(selected_city);
-
-      console.log("city_data: ", city_data);
 
       let temperature_celsius = city_data.gettemperature();
       temperature_celsius = temperature_celsius.split("°");
@@ -1071,7 +1068,7 @@ function createCardToTheSelectedCityAndPopulateCityDetails(
   no_of_cities_to_display
 ) {
   cardObj = new cardContainerDetails();
-  console.log("cardObj: ", cardObj);
+  
   no_of_cities_to_display = cardObj.updateSpinnerValueBasedOnTheGivenCondition(
     weather_list,
     no_of_cities_to_display
@@ -1098,7 +1095,6 @@ function createCardToTheSelectedCityAndPopulateCityDetails(
         city.precipitation,
         city_image
       );
-      console.dir(cardContainerDetails);
       cardObj.hideTheScrollArrow();
       count++;
     }
@@ -1106,6 +1102,12 @@ function createCardToTheSelectedCityAndPopulateCityDetails(
 }
 setInterval(cardObj.hideTheScrollArrow, 1000);
 // bottom section
+function tileContainerDetails()
+{
+  this.__proto__.__proto__=cardObj;
+}
+let tileObj=new tileContainerDetails();
+
  /*
  * Bottom tile container's object reference
  * Weather details is an array, that contains the city weather information
@@ -1114,7 +1116,7 @@ var tile_container = document.getElementById("continent-wise-list");
 tile_container.replaceChildren();
 let continent_arrow = document.getElementById("sort-by-continent");
 let temperature_arrow = document.getElementById("sort-by-temperature");
-var weather_details = Object.entries(weather_data).map(
+var weather_details = Object.entries(tileObj.weather_info).map(
   (element) => element[1]
 );
 
@@ -1124,7 +1126,7 @@ var weather_details = Object.entries(weather_data).map(
  * @param {string} criteria the criteria based on sort happens
  * @param {string} sorting_order sorting order of the array
  */
- function sortTheArrayBasedOnTheGivenPreference 
+ tileContainerDetails.prototype.sortTheArrayBasedOnTheGivenPreference=function 
   () {
     weather_details.sort((a, b) => {
       if (a.timeZone.split("/")[0] === b.timeZone.split("/")[0]) {
@@ -1153,7 +1155,7 @@ var weather_details = Object.entries(weather_data).map(
  * @param {string} timezone Timezone of the city
  * @param {string} temperature_celsius temperature of the city
  */
- function updateContinentnameAndTemperatureInTheTile 
+ tileContainerDetails.prototype.updateContinentnameAndTemperatureInTheTile=function 
    (tile_content_division, timezone, temperature_celsius) {
     let continent_name = document.createElement("p");
     let temperature_of_continent = document.createElement("p");
@@ -1174,7 +1176,7 @@ var weather_details = Object.entries(weather_data).map(
  * @param {object reference} tile_content_division  Object reference of the tile division
  * @param {string} cityname name of the city
  */
- function updateStatenameAndTimeInTheTile  (
+ tileContainerDetails.prototype.updateStatenameAndTimeInTheTile=function  (
   tile_content_division,
   cityname
 ) {
@@ -1198,7 +1200,7 @@ var weather_details = Object.entries(weather_data).map(
  * @param {object reference} tile_content_division  Object reference of the tile division
  * @param {string} humidity_value humidity of the city
  */
- function  updateHumidityInTheTile (
+ tileContainerDetails.prototype.updateHumidityInTheTile=function (
   tile_content_division,
   humidity_value
 ) {
@@ -1223,21 +1225,41 @@ var weather_details = Object.entries(weather_data).map(
  * @param {string} temperature_celsius temperature in celsius format of the city
  * @param {string} humidity_value humidity in percentage of the city
  */
- function createTileAndPopulateCityDetails (
+ tileContainerDetails.prototype.createTileAndPopulateCityDetails=function (
   cityname,
   timezone,
   temperature_celsius,
   humidity_value
 ) {
   let tile_content_division = document.createElement("div");
-  updateContinentnameAndTemperatureInTheTile(
+  this.updateContinentnameAndTemperatureInTheTile(
     tile_content_division,
     timezone,
     temperature_celsius
   );
- updateStatenameAndTimeInTheTile(tile_content_division, cityname);
- updateHumidityInTheTile(tile_content_division, humidity_value);
+  this.updateStatenameAndTimeInTheTile(tile_content_division, cityname);
+  this.updateHumidityInTheTile(tile_content_division, humidity_value);
 };
+/**
+ * Create a tile and populate the continent details to the tile container.
+ * @param {array} Weather_list
+ * @return {void} nothing
+ */
+ tileContainerDetails.prototype.createTile=function(Weather_list) {
+  tile_container.replaceChildren();
+  let count = 1;
+  for (let city of Weather_list) {
+    if (count <= 12) {
+      this.createTileAndPopulateCityDetails(
+        city.cityName,
+        city.timeZone,
+        city.temperature,
+        city.humidity
+      );
+      count++;
+    }
+  }
+}
 
 /**
  * Whenever the page is loaded,the DOM event triggers and calls
@@ -1251,18 +1273,18 @@ document.getElementById("continent-wise-list").onload = createTileOnLoad();
  * @return{void} nothing
  */
 function createTileOnLoad() {
-  sortTheArrayBasedOnTheGivenPreference();
-  createTile(weather_details);
+  tileObj.sortTheArrayBasedOnTheGivenPreference();
+  tileObj.createTile(weather_details);
 }
 
 /**
  * Whenever the arrow is clicked, the dom event triggers and calls the function.
  */
 document.getElementById("sort-by-continent").addEventListener("click", () => {
-  updateTheArrowImageAndContinentOrder();
+  tileObj.updateTheArrowImageAndContinentOrder();
 });
 document.getElementById("sort-by-temperature").addEventListener("click", () => {
-  updateTheArrowImageAndtemperatureOrder();
+  tileObj.updateTheArrowImageAndtemperatureOrder();
 });
 
 /**
@@ -1271,7 +1293,7 @@ document.getElementById("sort-by-temperature").addEventListener("click", () => {
  * @params {}
  * @return {void} nothing
  */
- function updateTheArrowImageAndContinentOrder 
+ tileContainerDetails.prototype.updateTheArrowImageAndContinentOrder=function 
   () {
     if (continent_arrow.name == "continent-arrow-down") {
       continent_arrow.name = "continent-arrow-up";
@@ -1281,7 +1303,7 @@ document.getElementById("sort-by-temperature").addEventListener("click", () => {
         "/ASSETS/arrowUp.svg"
       );
       this.sortTheArrayBasedOnTheGivenPreference();
-      createTile(weather_details);
+      this.createTile(weather_details);
     } else {
       continent_arrow.name = "continent-arrow-down";
       this.updateUIElementAttributeWithTheGivenValue(
@@ -1290,7 +1312,7 @@ document.getElementById("sort-by-temperature").addEventListener("click", () => {
         "/ASSETS/arrowDown.svg"
       );
       this.sortTheArrayBasedOnTheGivenPreference();
-      createTile(weather_details);
+      this.createTile(weather_details);
     }
   };
 
@@ -1300,7 +1322,7 @@ document.getElementById("sort-by-temperature").addEventListener("click", () => {
  * @params {}
  * @return {void} nothing
  */
- function updateTheArrowImageAndtemperatureOrder 
+ tileContainerDetails.prototype.updateTheArrowImageAndtemperatureOrder=function 
    () {
     if (temperature_arrow.name == "temperature-arrow-up") {
       temperature_arrow.name = "temperature-arrow-down";
@@ -1310,7 +1332,7 @@ document.getElementById("sort-by-temperature").addEventListener("click", () => {
         "/ASSETS/arrowDown.svg"
       );
       this.sortTheArrayBasedOnTheGivenPreference();
-      createTile(weather_details);
+      this.createTile(weather_details);
     } else {
       temperature_arrow.name = "temperature-arrow-up";
       this.updateUIElementAttributeWithTheGivenValue(
@@ -1319,27 +1341,7 @@ document.getElementById("sort-by-temperature").addEventListener("click", () => {
         "/ASSETS/arrowUp.svg"
       );
       this.sortTheArrayBasedOnTheGivenPreference();
-      createTile(weather_details);
+      this.createTile(weather_details);
     }
   };
 
-/**
- * Create a tile and populate the continent details to the tile container.
- * @param {array} Weather_list
- * @return {void} nothing
- */
-function createTile(Weather_list) {
-  tile_container.replaceChildren();
-  let count = 1;
-  for (let city of Weather_list) {
-    if (count <= 12) {
-      createTileAndPopulateCityDetails(
-        city.cityName,
-        city.timeZone,
-        city.temperature,
-        city.humidity
-      );
-      count++;
-    }
-  }
-}
