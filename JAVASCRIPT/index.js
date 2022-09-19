@@ -11,20 +11,20 @@ document
   .getElementById("city_list")
   .addEventListener("change", updateDataOnCityname);
 
-   /**
+/**
  * A constructor function , which will set current city details and
  * the prototypic functions will be used to populate values to the top section.
  * @return {void} nothing
  */
 function populateCityInformation() {
-  this.setDetails = function (selected_city, weather_info) {
-    this.cityName = weather_info[selected_city].cityName;
-    this.dateAndTime = weather_info[selected_city].dateAndTime;
-    this.timeZone = weather_info[selected_city].timeZone;
-    this.temperature = weather_info[selected_city].temperature;
-    this.humidity = weather_info[selected_city].humidity;
-    this.precipitation = weather_info[selected_city].precipitation;
-    this.nextFiveHrs = weather_info[selected_city].nextFiveHrs;
+  this.setDetails = function (selected_city) {
+    this.cityName = weather_data[selected_city].cityName;
+    this.dateAndTime = weather_data[selected_city].dateAndTime;
+    this.timeZone = weather_data[selected_city].timeZone;
+    this.temperature = weather_data[selected_city].temperature;
+    this.humidity = weather_data[selected_city].humidity;
+    this.precipitation = weather_data[selected_city].precipitation;
+    this.nextFiveHrs = weather_data[selected_city].nextFiveHrs;
   };
   this.getCityname = function () {
     return this.cityName;
@@ -468,21 +468,6 @@ populateCityInformation.prototype.UpdateAmpmForNextfivehrs = function (
   }
 };
 
-
-/**
- *
- * A constructor function, which will inherit populateCityInformation constructor,
- * which is used to access all functions, to update data in the UI.
- * @param {string} selected_city
- * @return {void} nothing
- */
-function createObjectForPopulateCityData(selected_city) {
-  this.weather_info = weather_data;
-  let city_object = new populateCityInformation();
-  city_object.setDetails(selected_city, this.weather_info);
-  this.__proto__.__proto__ = city_object;
-}
-
 /**
  *
  * event listener function to update data for the city.
@@ -499,7 +484,9 @@ function updateDataOnCityname() {
   const date_of_a_city = document.getElementsByClassName("date-style");
   return (function () {
     if (checkCitynameIsValid(selected_city)) {
-      city_data = new createObjectForPopulateCityData(selected_city);
+      city_data = new populateCityInformation();
+      city_data.setDetails(selected_city);
+      //console.log("city_data: ", city_data);
 
       let temperature_celsius = city_data.gettemperature();
       temperature_celsius = temperature_celsius.split("°");
@@ -534,81 +521,93 @@ updateDataOnCityname();
 // middle section javascript
 
 /**
- * A constructor function ,which will inherit populateCityInformation and 
- * the prototypic functions will be used to populate values to card and perform actions.  
+ * A constructor function ,which will inherit populateCityInformation and
+ * the prototypic functions will be used to populate values to card and perform actions.
  * @return {void} nothing
  */
 function cardContainerDetails() {
-  this.__proto__.__proto__ = city_data;
+  this.sunny_list = Object.values(weather_data).filter(
+    (value) =>
+      parseInt(value.temperature) > 29 &&
+      parseInt(value.humidity) < 50 &&
+      parseInt(value.precipitation) >= 50
+  );
+
+  this.snow_list = Object.values(weather_data).filter(
+    (value) =>
+      parseInt(value.temperature) >= 20 &&
+      parseInt(value.temperature) <= 28 &&
+      parseInt(value.humidity) > 50 &&
+      parseInt(value.precipitation) < 50
+  );
+
+  this.rainy_list = Object.values(weather_data).filter(
+    (value) =>
+      parseInt(value.temperature) < 20 && parseInt(value.humidity) >= 50
+  );
+  this.sortTheArrayBasedOnParticularCategory = function (
+    array_list,
+    weather_condition
+  ) {
+    /** Sort the sunny list data based on temperature */
+    array_list.sort((a, b) =>
+      parseInt(a[weather_condition]) < parseInt(b[weather_condition]) ? 1 : -1
+    );
+  };
+  this.getSunnylist = function () {
+    return this.sunny_list;
+  };
+  this.getSnowlist = function () {
+    return this.snow_list;
+  };
+  this.getRainylist = function () {
+    return this.rainy_list;
+  };
+  this.sunny_data_list = {
+    weathericon_idname: "sunny-icon",
+    list_of_city: this.getSunnylist(),
+    icon_image: "./ASSETS/sunnyIcon.svg",
+  };
+  this.snow_data_list = {
+    weathericon_idname: "snow-icon",
+    list_of_city: this.getSnowlist(),
+    icon_image: "./ASSETS/snowflakeIcon.svg",
+  };
+  this.rainy_data_list = {
+    weathericon_idname: "rainy-icon",
+    list_of_city: this.getRainylist(),
+    icon_image: "./ASSETS/rainyIcon.svg",
+  };
 }
+
+cardContainerDetails.prototype = new populateCityInformation();
+let cardObj = new cardContainerDetails();
+console.log("cardObj: ", cardObj);
 
 /* A variable to keep on update with the value of number of cities */
-
 var spinner = 4;
-let cardObj;
+
+var weathericon_idname = "sunny-icon";
+var list_of_city = cardObj.getSunnylist();
+var icon_image = "./ASSETS/sunnyIcon.svg";
 
 /* Filter the data based on the condition and forms new list */
-var sunny_list = Object.values(weather_data).filter(
-  (value) =>
-    parseInt(value.temperature) > 29 &&
-    parseInt(value.humidity) < 50 &&
-    parseInt(value.precipitation) >= 50
+cardObj.sortTheArrayBasedOnParticularCategory(
+  cardObj.getSunnylist(),
+  "temperature"
 );
-
-var snow_list = Object.values(weather_data).filter(
-  (value) =>
-    parseInt(value.temperature) >= 20 &&
-    parseInt(value.temperature) <= 28 &&
-    parseInt(value.humidity) > 50 &&
-    parseInt(value.precipitation) < 50
+cardObj.sortTheArrayBasedOnParticularCategory(
+  cardObj.getSnowlist(),
+  "precipitation"
 );
-
-var rainy_list = Object.values(weather_data).filter(
-  (value) => parseInt(value.temperature) < 20 && parseInt(value.humidity) >= 50
+cardObj.sortTheArrayBasedOnParticularCategory(
+  cardObj.getRainylist(),
+  "humidity"
 );
-/**
- * The function which is used to sort the three array based on the particular
- * category.
- * 1.Sort Sunny list based on temperature.
- * 2.Sort Snow list based on precipitation.
- * 3.Sort Rainy list based on humidity.
- * @params {}
- * @return {void} nothing
- */
-function sortTheArrayBasedOnParticularCategory(array_list, weather_condition) {
-  /** Sort the sunny list data based on temperature */
-  array_list.sort((a, b) =>
-    parseInt(a[weather_condition]) < parseInt(b[weather_condition]) ? 1 : -1
-  );
-}
-sortTheArrayBasedOnParticularCategory(sunny_list, "temperature");
-sortTheArrayBasedOnParticularCategory(snow_list, "precipitation");
-sortTheArrayBasedOnParticularCategory(rainy_list, "humidity");
 
 // card container's object reference
 const card_container = document.getElementById("city-card");
-
-/*objects to populate value when the weather icon is clicked*/
 card_container.replaceChildren();
-var weathericon_idname = "sunny-icon";
-var list_of_city = [...sunny_list];
-var icon_image = "./ASSETS/sunnyIcon.svg";
-
-var sunny_data_list = {
-  weathericon_idname: "sunny-icon",
-  list_of_city: sunny_list,
-  icon_image: "./ASSETS/sunnyIcon.svg",
-};
-var snow_data_list = {
-  weathericon_idname: "snow-icon",
-  list_of_city: snow_list,
-  icon_image: "./ASSETS/snowflakeIcon.svg",
-};
-var rainy_data_list = {
-  weathericon_idname: "rainy-icon",
-  list_of_city: rainy_list,
-  icon_image: "./ASSETS/rainyIcon.svg",
-};
 
 /**
  *
@@ -721,6 +720,7 @@ cardContainerDetails.prototype.updateHumidityAndPrecipitationInTheCard =
     precipitation_division.appendChild(precipitation_icon);
     precipitation_division.appendChild(precipitation_in_percentage);
   };
+
 /**
  *
  * whenever The function is invoked , it will create card and
@@ -767,6 +767,55 @@ cardContainerDetails.prototype.createCardAndUpdateDataWithTheGivenValue =
     );
   };
 
+/**
+ *
+ * This function will decides, how many card to display on UI and
+ * create the card and populate data and display it in UI based on the selected Weather Icon
+ * @param {string} weathericon_idname Id name of the weather icon ,it is used to change values
+ * @param {Array} weather_list Array list to display data to the UI
+ * @param {string} weathericon_img_path weather icon image source
+ * @param {number} no_of_cities_to_display count of the city to display in UI
+ * @return {void} nothing
+ */
+cardContainerDetails.prototype.createCardToTheSelectedCityAndPopulateCityDetails =
+  function (
+    weathericon_idname,
+    weather_list,
+    weathericon_img_path,
+    no_of_cities_to_display
+  ) {
+    no_of_cities_to_display =
+      cardObj.updateSpinnerValueBasedOnTheGivenCondition(
+        weather_list,
+        no_of_cities_to_display
+      );
+    let count = 0;
+    for (let city of weather_list) {
+      if (count < no_of_cities_to_display) {
+        let live_date_of_city = city_data.updateDateBasedOnCity(
+          "null",
+          weathericon_idname
+        );
+        let city_image = city_data.updateIconImageSource(
+          city.cityName,
+          weathericon_idname
+        );
+        cardObj.createCardAndUpdateDataWithTheGivenValue(
+          city.cityName,
+          weathericon_img_path,
+          city.temperature,
+          live_date_of_city,
+          "./ASSETS/humidityIcon.svg",
+          city.humidity,
+          "./ASSETS/precipitationIcon.svg",
+          city.precipitation,
+          city_image
+        );
+        cardObj.hideTheScrollArrow();
+        count++;
+      }
+    }
+  };
 /**
  *
  * whenever the Icon is selected , there will be appearing of blue line under the Icon.
@@ -922,20 +971,20 @@ cardContainerDetails.prototype.displayLiveTimeToTheCity = function (
  * @params {}
  * @return {void}
  */
-function noOfCitiesToDisplayInUI() {
+cardContainerDetails.prototype.noOfCitiesToDisplayInUI = function () {
   let display_no_of_city = document.getElementById("numberofcities");
   spinner = display_no_of_city.value;
   if (spinner > 10) {
     spinner = 10;
   }
   card_container.replaceChildren();
-  createCardToTheSelectedCityAndPopulateCityDetails(
+  cardObj.createCardToTheSelectedCityAndPopulateCityDetails(
     weathericon_idname,
     list_of_city,
     icon_image,
     spinner
   );
-}
+};
 /**
  * It will hide the carousel button , when the card is less than or equal to 4.
  * It displays the button, when it card exceeds 4 and as well the screen size is small
@@ -985,7 +1034,7 @@ cardContainerDetails.prototype.updateContainerWithCitiesInformationBasedOnWeathe
     return (function (obj) {
       obj.selectTheIconWhichIsClicked(weathericon_idname);
       card_container.replaceChildren();
-      createCardToTheSelectedCityAndPopulateCityDetails(
+      cardObj.createCardToTheSelectedCityAndPopulateCityDetails(
         weathericon_idname,
         list_of_city,
         icon_image,
@@ -1007,24 +1056,25 @@ function populateDetailsBasedOnIconSelected() {
 }
 
 document.getElementById("sunny-icon").addEventListener("click", () => {
-  populateDetailsBasedOnIconSelected.call(sunny_data_list);
+  populateDetailsBasedOnIconSelected.call(cardObj.sunny_data_list);
+  console.log(cardObj.sunny_data_list);
   cardObj.updateContainerWithCitiesInformationBasedOnWeatherIconSelected();
 });
 
 document.getElementById("snow-icon").addEventListener("click", () => {
-  populateDetailsBasedOnIconSelected.call(snow_data_list);
+  populateDetailsBasedOnIconSelected.call(cardObj.snow_data_list);
   cardObj.updateContainerWithCitiesInformationBasedOnWeatherIconSelected();
 });
 
 document.getElementById("rainy-icon").addEventListener("click", () => {
-  populateDetailsBasedOnIconSelected.call(rainy_data_list);
+  populateDetailsBasedOnIconSelected.call(cardObj.rainy_data_list);
   cardObj.updateContainerWithCitiesInformationBasedOnWeatherIconSelected();
 });
 
 document
   .getElementById("numberofcities")
-  .addEventListener("change", noOfCitiesToDisplayInUI);
-createCardToTheSelectedCityAndPopulateCityDetails(
+  .addEventListener("change", cardObj.noOfCitiesToDisplayInUI);
+cardObj.createCardToTheSelectedCityAndPopulateCityDetails(
   weathericon_idname,
   list_of_city,
   icon_image,
@@ -1069,70 +1119,25 @@ cardContainerDetails.prototype.validateTheSpinner = function () {
       );
 };
 
-/**
- *
- * This function will decides, how many card to display on UI and
- * create the card and populate data and display it in UI based on the selected Weather Icon
- * @param {string} weathericon_idname Id name of the weather icon ,it is used to change values
- * @param {Array} weather_list Array list to display data to the UI
- * @param {string} weathericon_img_path weather icon image source
- * @param {number} no_of_cities_to_display count of the city to display in UI
- * @return {void} nothing
- */
-function createCardToTheSelectedCityAndPopulateCityDetails(
-  weathericon_idname,
-  weather_list,
-  weathericon_img_path,
-  no_of_cities_to_display
-) {
-  cardObj = new cardContainerDetails();
-  
-  no_of_cities_to_display = cardObj.updateSpinnerValueBasedOnTheGivenCondition(
-    weather_list,
-    no_of_cities_to_display
-  );
-  let count = 0;
-  for (let city of weather_list) {
-    if (count < no_of_cities_to_display) {
-      let live_date_of_city = city_data.updateDateBasedOnCity(
-        "null",
-        weathericon_idname
-      );
-      let city_image = city_data.updateIconImageSource(
-        city.cityName,
-        weathericon_idname
-      );
-      cardObj.createCardAndUpdateDataWithTheGivenValue(
-        city.cityName,
-        weathericon_img_path,
-        city.temperature,
-        live_date_of_city,
-        "./ASSETS/humidityIcon.svg",
-        city.humidity,
-        "./ASSETS/precipitationIcon.svg",
-        city.precipitation,
-        city_image
-      );
-      cardObj.hideTheScrollArrow();
-      count++;
-    }
-  }
-}
 setInterval(cardObj.hideTheScrollArrow, 1000);
+
 // bottom section
 
 /**
- * A constructor function ,which will inherit cardContainerDetails and 
- * the prototypic functions will be used to populate values to tile  
+ * A constructor function ,which will inherit cardContainerDetails and
+ * the prototypic functions will be used to populate values to tile
  * @return {void} nothing
  */
-function tileContainerDetails()
-{
-  this.__proto__.__proto__=cardObj;
+function tileContainerDetails() {
+  this.weather_details = Object.entries(weather_data).map(
+    (element) => element[1]
+  );
 }
-let tileObj=new tileContainerDetails();
+tileContainerDetails.prototype = new cardContainerDetails();
 
- /*
+let tileObj = new tileContainerDetails();
+
+/*
  * Bottom tile container's object reference
  * Weather details is an array, that contains the city weather information
  */
@@ -1140,9 +1145,6 @@ var tile_container = document.getElementById("continent-wise-list");
 tile_container.replaceChildren();
 let continent_arrow = document.getElementById("sort-by-continent");
 let temperature_arrow = document.getElementById("sort-by-temperature");
-var weather_details = Object.entries(tileObj.weather_info).map(
-  (element) => element[1]
-);
 
 /**
  *
@@ -1150,9 +1152,9 @@ var weather_details = Object.entries(tileObj.weather_info).map(
  * @param {string} criteria the criteria based on sort happens
  * @param {string} sorting_order sorting order of the array
  */
- tileContainerDetails.prototype.sortTheArrayBasedOnTheGivenPreference=function 
-  () {
-    weather_details.sort((a, b) => {
+tileContainerDetails.prototype.sortTheArrayBasedOnTheGivenPreference =
+  function () {
+    this.weather_details.sort((a, b) => {
       if (a.timeZone.split("/")[0] === b.timeZone.split("/")[0]) {
         return temperature_arrow.name == "temperature-arrow-up"
           ? parseInt(a.temperature) < parseInt(b.temperature)
@@ -1179,8 +1181,8 @@ var weather_details = Object.entries(tileObj.weather_info).map(
  * @param {string} timezone Timezone of the city
  * @param {string} temperature_celsius temperature of the city
  */
- tileContainerDetails.prototype.updateContinentnameAndTemperatureInTheTile=function 
-   (tile_content_division, timezone, temperature_celsius) {
+tileContainerDetails.prototype.updateContinentnameAndTemperatureInTheTile =
+  function (tile_content_division, timezone, temperature_celsius) {
     let continent_name = document.createElement("p");
     let temperature_of_continent = document.createElement("p");
     tile_container.setAttribute("class", "cities-with-temp-info");
@@ -1200,7 +1202,7 @@ var weather_details = Object.entries(tileObj.weather_info).map(
  * @param {object reference} tile_content_division  Object reference of the tile division
  * @param {string} cityname name of the city
  */
- tileContainerDetails.prototype.updateStatenameAndTimeInTheTile=function  (
+tileContainerDetails.prototype.updateStatenameAndTimeInTheTile = function (
   tile_content_division,
   cityname
 ) {
@@ -1224,7 +1226,7 @@ var weather_details = Object.entries(tileObj.weather_info).map(
  * @param {object reference} tile_content_division  Object reference of the tile division
  * @param {string} humidity_value humidity of the city
  */
- tileContainerDetails.prototype.updateHumidityInTheTile=function (
+tileContainerDetails.prototype.updateHumidityInTheTile = function (
   tile_content_division,
   humidity_value
 ) {
@@ -1249,7 +1251,7 @@ var weather_details = Object.entries(tileObj.weather_info).map(
  * @param {string} temperature_celsius temperature in celsius format of the city
  * @param {string} humidity_value humidity in percentage of the city
  */
- tileContainerDetails.prototype.createTileAndPopulateCityDetails=function (
+tileContainerDetails.prototype.createTileAndPopulateCityDetails = function (
   cityname,
   timezone,
   temperature_celsius,
@@ -1269,7 +1271,7 @@ var weather_details = Object.entries(tileObj.weather_info).map(
  * @param {array} Weather_list
  * @return {void} nothing
  */
- tileContainerDetails.prototype.createTile=function(Weather_list) {
+tileContainerDetails.prototype.createTile = function (Weather_list) {
   tile_container.replaceChildren();
   let count = 1;
   for (let city of Weather_list) {
@@ -1283,7 +1285,7 @@ var weather_details = Object.entries(tileObj.weather_info).map(
       count++;
     }
   }
-}
+};
 
 /**
  * Whenever the page is loaded,the DOM event triggers and calls
@@ -1298,7 +1300,7 @@ document.getElementById("continent-wise-list").onload = createTileOnLoad();
  */
 function createTileOnLoad() {
   tileObj.sortTheArrayBasedOnTheGivenPreference();
-  tileObj.createTile(weather_details);
+  tileObj.createTile(tileObj.weather_details);
 }
 
 /**
@@ -1317,8 +1319,8 @@ document.getElementById("sort-by-temperature").addEventListener("click", () => {
  * @params {}
  * @return {void} nothing
  */
- tileContainerDetails.prototype.updateTheArrowImageAndContinentOrder=function 
-  () {
+tileContainerDetails.prototype.updateTheArrowImageAndContinentOrder =
+  function () {
     if (continent_arrow.name == "continent-arrow-down") {
       continent_arrow.name = "continent-arrow-up";
       this.updateUIElementAttributeWithTheGivenValue(
@@ -1327,7 +1329,7 @@ document.getElementById("sort-by-temperature").addEventListener("click", () => {
         "/ASSETS/arrowUp.svg"
       );
       this.sortTheArrayBasedOnTheGivenPreference();
-      this.createTile(weather_details);
+      this.createTile(this.weather_details);
     } else {
       continent_arrow.name = "continent-arrow-down";
       this.updateUIElementAttributeWithTheGivenValue(
@@ -1336,7 +1338,7 @@ document.getElementById("sort-by-temperature").addEventListener("click", () => {
         "/ASSETS/arrowDown.svg"
       );
       this.sortTheArrayBasedOnTheGivenPreference();
-      this.createTile(weather_details);
+      this.createTile(this.weather_details);
     }
   };
 
@@ -1346,8 +1348,8 @@ document.getElementById("sort-by-temperature").addEventListener("click", () => {
  * @params {}
  * @return {void} nothing
  */
- tileContainerDetails.prototype.updateTheArrowImageAndtemperatureOrder=function 
-   () {
+tileContainerDetails.prototype.updateTheArrowImageAndtemperatureOrder =
+  function () {
     if (temperature_arrow.name == "temperature-arrow-up") {
       temperature_arrow.name = "temperature-arrow-down";
       this.updateUIElementAttributeWithTheGivenValue(
@@ -1356,7 +1358,7 @@ document.getElementById("sort-by-temperature").addEventListener("click", () => {
         "/ASSETS/arrowDown.svg"
       );
       this.sortTheArrayBasedOnTheGivenPreference();
-      this.createTile(weather_details);
+      this.createTile(this.weather_details);
     } else {
       temperature_arrow.name = "temperature-arrow-up";
       this.updateUIElementAttributeWithTheGivenValue(
@@ -1365,7 +1367,6 @@ document.getElementById("sort-by-temperature").addEventListener("click", () => {
         "/ASSETS/arrowUp.svg"
       );
       this.sortTheArrayBasedOnTheGivenPreference();
-      this.createTile(weather_details);
+      this.createTile(this.weather_details);
     }
   };
-
