@@ -36,12 +36,17 @@ let checkCitynameIsValid = (cityname) => {
   if (cityname_list.includes(cityname)) return true;
   return false;
 };
+
 /**
- * A constructor function , which will set current city details and
- * the prototypic functions will be used to populate values to the top section.
+ * A Class which contains constructor and methods to populate the current city details
+ * to the UI.
  * @return {void} nothing
  */
 class CurrentCityInformation {
+  /**
+   * A constructor function , which will set current city details.
+   * @return {void} nothing
+   */
   constructor() {
     this.setDetails = function (selected_city) {
       this.cityName = weather_data[selected_city].cityName;
@@ -91,8 +96,8 @@ class CurrentCityInformation {
   /**
    *
    * To update the Live date of the selected city in the top section
-   * By using date object and its predefined method live date is updated and citydate function is used to
-   * append prefix as zero to the date.
+   * Live date is updated and citydate function is used to
+   * append prefix as zero to the date as it satisfies the condition.
    * @param {string} selected_city name of the  selected city
    * @param {reference} date_of_a_city Object reference
    * @return {string} city_date  live date of the city
@@ -205,7 +210,6 @@ class CurrentCityInformation {
    *
    * Update the Temperature in celsius ,in farenheit and humidity ,precipitation for the selected city
    * Display the temperature values as per the format for the selected city
-   * @param {string} cityname  name of the  selected city
    * @param {Array.<string>} temperature_celsius city temperature
    * @return {void} nothing
    */
@@ -271,9 +275,7 @@ class CurrentCityInformation {
    *
    * Update the temperature in celsius for the next five hours from the current time for the
    * selected city
-   * Using for loop , time is incremented by 1 and temperature value is fetched from the object for the selected city
-   * and by using object reference , the value is assigned.
-   * @param {string} cityname name of the selected city
+   * @params {} nothing
    * @return {void} nothing
    */
   fetchAndUpdateTemperatureForNextfivehrs() {
@@ -296,11 +298,11 @@ class CurrentCityInformation {
   }
   /**
    *
-   * Update the UI with Nil and warning image ,the element id,
-   * element attribute and its value is taken as parameter.
+   * This function is used to update the UI Element with the given value.
    * @param {string} UIElementID  ID name of the element
    * @param {string} UIAttribute  Atrribute need to be change
    * @param {string} value_To_Update value to change
+   * @return {void} nothing
    */
   updateUIElementAttributeWithTheGivenValue(
     UIElementID,
@@ -326,7 +328,7 @@ class CurrentCityInformation {
   /**
    *
    * validate the cityname , if not it will display Nil and warning image.
-   * By fetching the id and by using the object reference , Nil value is assigned.
+   * By using the object reference , Nil value is assigned.
    * Warning image replaces with the all image sources.
    * @param {reference} date_of_a_city Object reference
    * @return {void} nothing
@@ -420,8 +422,8 @@ class CurrentCityInformation {
   }
   /**
    *
-   * Update source of the weather images based on the temperature
-   * By using for loop, am ,pm value for the time is updated
+   * Update source of the weather images based on the temperature value
+   * am ,pm value for the time is updated.
    * @param {number} hour
    * @param {string} part_of_time
    * @return {void} nothing
@@ -453,9 +455,9 @@ class CurrentCityInformation {
 
 /**
  *
- * event listener function to update data for the city.
+ * A event listener function to update data for the city.
  * A closure function is used check the entered city name is valid or not.
- * If valid the function will call all other functions to update live date, live time,
+ * If valid, the function will call all other functions to update live date, live time,
  * city icon, temperature, humitidy, precipitation, temperature for next five hours from current time and weather
  * icons according to the temperature value.
  * If it is invalid the invalid_Cityname function is called to display Nil value
@@ -504,11 +506,14 @@ updateDataOnCityname();
 // middle section javascript
 
 /**
- * A constructor function ,which will inherit populateCityInformation and
- * the prototypic functions will be used to populate values to card and perform actions.
+ * A Class which contains constructor and methods to populate the card details.
  * @return {void} nothing
  */
 class CardContainerDetails extends CurrentCityInformation {
+  /**
+   * A constructor function, in which the Object will be filtered and sorted.
+   * @return {void} nothing
+   */
   constructor() {
     super();
     this.sunny_list = Object.values(weather_data).filter(
@@ -1010,7 +1015,7 @@ class CardContainerDetails extends CurrentCityInformation {
         );
   }
 }
-
+// Object creation
 let cardObj = new CardContainerDetails();
 //console.log("cardObj: ", cardObj);
 
@@ -1092,11 +1097,14 @@ setInterval(cardObj.hideTheScrollArrow, 1000);
 // bottom section
 
 /**
- * A constructor function ,which will inherit cardContainerDetails and
- * the prototypic functions will be used to populate values to tile
+ * A Class which contains constructor and methods to populate the tile details.
  * @return {void} nothing
  */
 class TileContainerDetails extends CardContainerDetails {
+  /**
+   * A constructor function ,in which data is extracted.
+   * @return {void} nothing
+   */
   constructor() {
     super();
     this.weather_details = Object.entries(weather_data).map(
@@ -1290,7 +1298,7 @@ class TileContainerDetails extends CardContainerDetails {
     }
   }
 }
-
+// Object creation
 let tileObj = new TileContainerDetails();
 
 /*
