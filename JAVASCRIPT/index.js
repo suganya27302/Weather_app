@@ -1129,12 +1129,13 @@ setInterval(cardObj.hideTheScrollArrow, 1000);
  * @return {void} nothing
  */
 function tileContainerDetails() {
-  this.weather_details = Object.entries(weather_data).map((element) => element[1]);
+  this.weather_details = Object.entries(weather_data).map(
+    (element) => element[1]
+  );
 }
 tileContainerDetails.prototype = new cardContainerDetails();
 
 let tileObj = new tileContainerDetails();
-// console.log("tileObj: ", tileObj);
 
 /*
  * Bottom tile container's object reference
@@ -1144,7 +1145,6 @@ var tile_container = document.getElementById("continent-wise-list");
 tile_container.replaceChildren();
 let continent_arrow = document.getElementById("sort-by-continent");
 let temperature_arrow = document.getElementById("sort-by-temperature");
-
 
 /**
  *
@@ -1291,7 +1291,7 @@ tileContainerDetails.prototype.createTile = function (Weather_list) {
  * Whenever the page is loaded,the DOM event triggers and calls
  * createTileOnLoad function to create tiles with continent details.
  */
-document.getElementById("continent-wise-list").onload =createTileOnLoad();
+document.getElementById("continent-wise-list").onload = createTileOnLoad();
 
 /**
  * The function is called whenever the page loads.
