@@ -469,7 +469,7 @@ function updateDataOnCityname() {
     if (checkCitynameIsValid(selected_city)) {
       city_data = new CurrentCityInformation();
       city_data.setDetails(selected_city);
-      console.log("city_data: ", city_data);
+      //console.log("city_data: ", city_data);
 
       let temperature_celsius = city_data.gettemperature();
       temperature_celsius = temperature_celsius.split("°");
@@ -733,23 +733,22 @@ class CardContainerDetails extends CurrentCityInformation {
     weathericon_img_path,
     no_of_cities_to_display
   ) {
-    no_of_cities_to_display =
-      cardObj.updateSpinnerValueBasedOnTheGivenCondition(
-        weather_list,
-        no_of_cities_to_display
-      );
+    no_of_cities_to_display = this.updateSpinnerValueBasedOnTheGivenCondition(
+      weather_list,
+      no_of_cities_to_display
+    );
     let count = 0;
     for (let city of weather_list) {
       if (count < no_of_cities_to_display) {
-        let live_date_of_city = city_data.updateDateBasedOnCity(
+        let live_date_of_city = this.updateDateBasedOnCity(
           "null",
           weathericon_idname
         );
-        let city_image = city_data.updateIconImageSource(
+        let city_image = this.updateIconImageSource(
           city.cityName,
           weathericon_idname
         );
-        cardObj.createCardAndUpdateDataWithTheGivenValue(
+        this.createCardAndUpdateDataWithTheGivenValue(
           city.cityName,
           weathericon_img_path,
           city.temperature,
@@ -760,7 +759,7 @@ class CardContainerDetails extends CurrentCityInformation {
           city.precipitation,
           city_image
         );
-        cardObj.hideTheScrollArrow();
+        this.hideTheScrollArrow();
         count++;
       }
     }
@@ -1013,7 +1012,7 @@ class CardContainerDetails extends CurrentCityInformation {
 }
 
 let cardObj = new CardContainerDetails();
-console.log("cardObj: ", cardObj);
+//console.log("cardObj: ", cardObj);
 
 /* A variable to keep on update with the value of number of cities */
 var spinner = 4;
@@ -1097,8 +1096,9 @@ setInterval(cardObj.hideTheScrollArrow, 1000);
  * the prototypic functions will be used to populate values to tile
  * @return {void} nothing
  */
-class tileContainerDetails {
+class TileContainerDetails extends CardContainerDetails {
   constructor() {
+    super();
     this.weather_details = Object.entries(weather_data).map(
       (element) => element[1]
     );
@@ -1290,9 +1290,8 @@ class tileContainerDetails {
     }
   }
 }
-tileContainerDetails.prototype = new cardContainerDetails();
 
-let tileObj = new tileContainerDetails();
+let tileObj = new TileContainerDetails();
 
 /*
  * Bottom tile container's object reference
