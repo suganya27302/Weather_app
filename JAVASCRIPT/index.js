@@ -508,8 +508,9 @@ updateDataOnCityname();
  * the prototypic functions will be used to populate values to card and perform actions.
  * @return {void} nothing
  */
-class cardContainerDetails {
+class CardContainerDetails extends CurrentCityInformation {
   constructor() {
+    super();
     this.sunny_list = Object.values(weather_data).filter(
       (value) =>
         parseInt(value.temperature) > 29 &&
@@ -975,7 +976,7 @@ class cardContainerDetails {
     return (function (obj) {
       obj.selectTheIconWhichIsClicked(weathericon_idname);
       card_container.replaceChildren();
-      cardObj.createCardToTheSelectedCityAndPopulateCityDetails(
+      obj.createCardToTheSelectedCityAndPopulateCityDetails(
         weathericon_idname,
         list_of_city,
         icon_image,
@@ -992,18 +993,18 @@ class cardContainerDetails {
    */
   validateTheSpinner() {
     parseInt(this.value) < 3
-      ? this.updateUIElementAttributeWithTheGivenValue(
+      ? cardObj.updateUIElementAttributeWithTheGivenValue(
           "numberofcities",
           "value",
           3
         )
       : parseInt(this.value) > 10
-      ? this.updateUIElementAttributeWithTheGivenValue(
+      ? cardObj.updateUIElementAttributeWithTheGivenValue(
           "numberofcities",
           "value",
           10
         )
-      : this.updateUIElementAttributeWithTheGivenValue(
+      : cardObj.updateUIElementAttributeWithTheGivenValue(
           "numberofcities",
           "value",
           parseInt(this.value)
@@ -1011,8 +1012,7 @@ class cardContainerDetails {
   }
 }
 
-cardContainerDetails.prototype = new populateCityInformation();
-let cardObj = new cardContainerDetails();
+let cardObj = new CardContainerDetails();
 console.log("cardObj: ", cardObj);
 
 /* A variable to keep on update with the value of number of cities */
