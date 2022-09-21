@@ -31,7 +31,6 @@ function fetchCityName(selectedCity) {
 }
 
 function fetchNextFivehrs(nameOfCity) {
-  console.log(nameOfCity);
   let response = new Promise(async (resolve, reject) => {
     let weatherData = await fetch(`https://soliton.glitch.me/hourly-forecast`, {
       method: "POST",
@@ -46,26 +45,35 @@ function fetchNextFivehrs(nameOfCity) {
 }
 
 let weatherData;
+let liveDataOfCities;
 let nameOfCity;
 let cityName;
 let nextFiveHrs;
 
+function updateKeyValue(array, key) {
+  return array.reduce((object, item) => {
+    object[item[key].toLowerCase()] = item;
+    return object;
+  }, {});
+}
 async function getWeatherData() {
   let response = await fetchweatherData();
-  weatherData = await response.json();
-  console.log("weatherData: ", weatherData);
-  for (let city of weatherData) {
+  liveDataOfCities = await response.json();
+
+  for (let city of liveDataOfCities) {
     nameOfCity = city.cityName;
     let response_of_city = await fetchCityName(nameOfCity);
     cityName = await response_of_city.json();
     cityName.hours = 6;
-    console.log("cityName: ", cityName);
     let response_of_nextFivehrs = await fetchNextFivehrs(cityName);
     nextFiveHrs = await response_of_nextFivehrs.json();
-    console.log("nextFiveHrs: ", nextFiveHrs);
+    city.nextFiveHrs = nextFiveHrs.temperature;
+    weatherData = await updateKeyValue(liveDataOfCities, "cityName");
+    console.log(weatherData);
   }
 }
-getWeatherData();
+
+getWeatherData().then();
 
 // fetchweatherData()
 //   .then(
