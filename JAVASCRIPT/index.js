@@ -1,41 +1,13 @@
 //Top section Javscript functions
+//import files
 import { weatherData } from "/DATA/data.js";
-
-/** @type {Array,number} */
-const atPresent = "NOW";
+import * as global from "/JAVASCRIPT/utility.js";
+/** @type {string,reference} */
 const emptyValue = "NIL";
-let cityNameList = [];
 let timeout;
-let cityData;
 document
   .getElementById("city_list")
-  .addEventListener("change", updateDataOnCityname);
-
-/* Import cityname from json to the datalist,
-   Create a array of citynames.
-   This is a self invoking function.
- */
-(function () {
-  const citiesList = document.getElementById("city_lists");
-  for (let city in weatherData) {
-    const options = document.createElement("OPTION");
-    options.setAttribute("value", weatherData[city].cityName);
-    citiesList.appendChild(options);
-    cityNameList.push(weatherData[city].cityName.toLowerCase());
-  }
-})();
-
-/**
- *
- * Validating the entered cityname is valid or not
- * return true if it is valid or return false.
- * @param {string} cityname name of the  selected city
- * @return {boolean} cityname is valid or not
- */
-let checkCitynameIsValid = (cityName) => {
-  if (cityNameList.includes(cityName)) return true;
-  return false;
-};
+  .addEventListener("change", global.updateDataOnCityname);
 
 /**
  * A Class which contains constructor and methods to populate the current city details
@@ -450,55 +422,7 @@ class CurrentCityInformation {
   }
 }
 
-/**
- *
- * A event listener function to update data for the city.
- * A closure function is used check the entered city name is valid or not.
- * If valid, the function will call all other functions to update live date, live time,
- * city icon, temperature, humitidy, precipitation, temperature for next five hours from current time and weather
- * icons according to the temperature value.
- * If it is invalid the invalid_Cityname function is called to display Nil value
- * @params {} nothing
- * @return {Function}function to update all data for the selected city and for invalid cityname.
- */
-function updateDataOnCityname() {
-  let selectedCity = document.getElementById("city_list").value.toLowerCase();
-  const dateOfaCity = document.getElementsByClassName("date-style");
-  return (function () {
-    if (checkCitynameIsValid(selectedCity)) {
-      cityData = new CurrentCityInformation();
-      cityData.setCityDetails(selectedCity);
-      //console.log("cityData: ", cityData);
-
-      let temperatureCelsius = cityData.gettemperature();
-      temperatureCelsius = temperatureCelsius.split("°");
-
-      cityData.updateIconImageSource(selectedCity, "null");
-      cityData.updateDateBasedOnCity(dateOfaCity, "null");
-      cityData.updateTemperature(temperatureCelsius);
-
-      cityData.updateUIElementAttributeWithTheGivenValue(
-        "present_time",
-        "innerHTML",
-        atPresent
-      );
-      cityData.updateUIElementAttributeWithTheGivenValue(
-        "present_temperature",
-        "innerHTML",
-        temperatureCelsius[0]
-      );
-      cityData.updateImageSource(
-        temperatureCelsius[0],
-        "icon_based_present_temp"
-      );
-      cityData.fetchAndUpdateTemperatureForNextfivehrs(selectedCity);
-      cityData.updateLiveTimeBasedOnTimezone();
-    } else {
-      cityData.updateUIWithNil(dateOfaCity);
-    }
-  })();
-}
-updateDataOnCityname();
+global.updateDataOnCityname();
 
 // middle section javascript
 
@@ -564,6 +488,11 @@ class CardContainerDetails extends CurrentCityInformation {
       weathericonIdname: "rainy-icon",
       listOfCity: this.getRainylist(),
       iconImage: "./ASSETS/rainyIcon.svg",
+    };
+    this.populateDetailsBasedOnIconSelected = function () {
+      weathericonIdname = this.weathericonIdname;
+      listOfCity = this.listOfCity;
+      iconImage = this.iconImage;
     };
   }
   /**
@@ -1038,30 +967,18 @@ cardObj.sortTheArrayBasedOnParticularCategory(
 const cardContainer = document.getElementById("city-card");
 cardContainer.replaceChildren();
 
-/**
- * It is used to populate the Idname, arraylist , Image source to the variable
- * based on the weather icon selected
- * @params {}
- * @return {void}
- */
-function populateDetailsBasedOnIconSelected() {
-  weathericonIdname = this.weathericonIdname;
-  listOfCity = this.listOfCity;
-  iconImage = this.iconImage;
-}
-
 document.getElementById("sunny-icon").addEventListener("click", () => {
-  populateDetailsBasedOnIconSelected.call(cardObj.sunnyDataList);
+  cardObj.populateDetailsBasedOnIconSelected.call(cardObj.sunnyDataList);
   cardObj.updateContainerWithCitiesInformationBasedOnWeatherIconSelected();
 });
 
 document.getElementById("snow-icon").addEventListener("click", () => {
-  populateDetailsBasedOnIconSelected.call(cardObj.snowDataList);
+  cardObj.populateDetailsBasedOnIconSelected.call(cardObj.snowDataList);
   cardObj.updateContainerWithCitiesInformationBasedOnWeatherIconSelected();
 });
 
 document.getElementById("rainy-icon").addEventListener("click", () => {
-  populateDetailsBasedOnIconSelected.call(cardObj.rainyDataList);
+  cardObj.populateDetailsBasedOnIconSelected.call(cardObj.rainyDataList);
   cardObj.updateContainerWithCitiesInformationBasedOnWeatherIconSelected();
 });
 
@@ -1308,17 +1225,8 @@ let temperatureArrow = document.getElementById("sort-by-temperature");
  * Whenever the page is loaded,the DOM event triggers and calls
  * createTileOnLoad function to create tiles with continent details.
  */
-document.getElementById("continent-wise-list").onload = createTileOnLoad();
-
-/**
- * The function is called whenever the page loads.
- * @params{}
- * @return{void} nothing
- */
-function createTileOnLoad() {
-  tileObj.sortTheArrayBasedOnTheGivenPreference();
-  tileObj.createTile(tileObj.weatherDetails);
-}
+document.getElementById("continent-wise-list").onload =
+  global.createTileOnLoad();
 
 /**
  * Whenever the arrow is clicked, the dom event triggers and calls the function.
@@ -1329,3 +1237,5 @@ document.getElementById("sort-by-continent").addEventListener("click", () => {
 document.getElementById("sort-by-temperature").addEventListener("click", () => {
   tileObj.updateTheArrowImageAndtemperatureOrder();
 });
+export { tileObj };
+export { CurrentCityInformation };
