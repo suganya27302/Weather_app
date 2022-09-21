@@ -1,913 +1,788 @@
 //Top section Javscript functions
-import { weather_data } from "/DATA/data.js";
-
-/** @type {Array,number} */
-const at_present = "NOW";
-const empty_value = "NIL";
-let cityname_list = [];
+//import files
+import { weatherData } from "/DATA/data.js";
+import * as global from "/JAVASCRIPT/utility.js";
+/** @type {string,reference} */
+const emptyValue = "NIL";
 let timeout;
-let city_data;
 document
   .getElementById("city_list")
-  .addEventListener("change", updateDataOnCityname);
+  .addEventListener("change", global.updateDataOnCityname);
 
 /**
- * A constructor function , which will set current city details and
- * the prototypic functions will be used to populate values to the top section.
+ * A Class which contains constructor and methods to populate the current city details
+ * to the UI.
  * @return {void} nothing
  */
-function populateCityInformation() {
-  this.setDetails = function (selected_city) {
-    this.cityName = weather_data[selected_city].cityName;
-    this.dateAndTime = weather_data[selected_city].dateAndTime;
-    this.timeZone = weather_data[selected_city].timeZone;
-    this.temperature = weather_data[selected_city].temperature;
-    this.humidity = weather_data[selected_city].humidity;
-    this.precipitation = weather_data[selected_city].precipitation;
-    this.nextFiveHrs = weather_data[selected_city].nextFiveHrs;
-  };
-  this.getCityname = function () {
-    return this.cityName;
-  };
-  this.getdateAndTime = function () {
-    return this.dateAndTime;
-  };
-  this.gettimeZone = function () {
-    return this.timeZone;
-  };
-  this.gettemperature = function () {
-    return this.temperature;
-  };
-  this.gethumidity = function () {
-    return this.humidity;
-  };
-  this.getprecipitation = function () {
-    return this.precipitation;
-  };
-  this.getnextFiveHrs = function () {
-    return this.nextFiveHrs;
-  };
-}
-
-/* Import cityname from json to the datalist,
-   Create a array of citynames.
-   This is a self invoking function.
- */
-(function () {
-  const cities_list = document.getElementById("city_lists");
-  for (let city in weather_data) {
-    const options = document.createElement("OPTION");
-    options.setAttribute("value", weather_data[city].cityName);
-    cities_list.appendChild(options);
-    cityname_list.push(weather_data[city].cityName.toLowerCase());
+class CurrentCityInformation {
+  /**
+   * A constructor function , which will set current city details.
+   * @return {void} nothing
+   */
+  constructor() {
+    this.setCityDetails = function (selectedCity) {
+      this.cityName = weatherData[selectedCity].cityName;
+      this.dateAndTime = weatherData[selectedCity].dateAndTime;
+      this.timeZone = weatherData[selectedCity].timeZone;
+      this.temperature = weatherData[selectedCity].temperature;
+      this.humidity = weatherData[selectedCity].humidity;
+      this.precipitation = weatherData[selectedCity].precipitation;
+      this.nextFiveHrs = weatherData[selectedCity].nextFiveHrs;
+    };
+    this.getCityname = function () {
+      return this.cityName;
+    };
+    this.getdateAndTime = function () {
+      return this.dateAndTime;
+    };
+    this.gettimeZone = function () {
+      return this.timeZone;
+    };
+    this.gettemperature = function () {
+      return this.temperature;
+    };
+    this.gethumidity = function () {
+      return this.humidity;
+    };
+    this.getprecipitation = function () {
+      return this.precipitation;
+    };
+    this.getnextFiveHrs = function () {
+      return this.nextFiveHrs;
+    };
   }
-})();
-
-/**
- *
- * Validating the entered cityname is valid or not
- * return true if it is valid or return false.
- * @param {string} cityname name of the  selected city
- * @return {boolean} cityname is valid or not
- */
-let checkCitynameIsValid = (cityname) => {
-  if (cityname_list.includes(cityname)) return true;
-  return false;
-};
-
-/**
- *
- * Manipulates the image source based on the cityname
- * @param {string} cityname name of the  selected city
- * @return {void} nothing
- */
-populateCityInformation.prototype.updateIconImageSource = function (
-  selected_city,
-  weathericon_idname
-) {
-  const image_path = "./ASSETS/" + selected_city + ".svg";
-  if (weathericon_idname == "null") {
-    this.updateUIElementAttributeWithTheGivenValue("icon", "src", image_path);
-  } else {
-    return image_path;
+  /**
+   *
+   * Manipulates the image source based on the cityname
+   * @param {string} cityname name of the  selected city
+   * @return {void} nothing
+   */
+  updateIconImageSource(selectedCity, weathericonIdname) {
+    const imagePath = "./ASSETS/" + selectedCity + ".svg";
+    if (weathericonIdname == "null") {
+      this.updateUIElementAttributeWithTheGivenValue("icon", "src", imagePath);
+    } else {
+      return imagePath;
+    }
   }
-};
-
-/**
- *
- * To update the Live date of the selected city in the top section
- * By using date object and its predefined method live date is updated and citydate function is used to
- * append prefix as zero to the date.
- * @param {string} selected_city name of the  selected city
- * @param {reference} date_of_a_city Object reference
- * @return {string} city_date  live date of the city
- */
-populateCityInformation.prototype.updateDateBasedOnCity = function (
-  date_of_a_city,
-  weathericon_idname
-) {
-  var date_time = new Date().toLocaleString("en-US", {
-    timeZone: this.gettimeZone(),
-  });
-  let date = new Date(date_time).getDate();
-  let month = new Date(date_time).toLocaleString("en-US", {
-    month: "short",
-  });
-  let year = new Date(date_time).getFullYear();
-
-  let city_date = (function () {
-    return date >= 1 && date <= 9
-      ? `0${date}- ${month}- ${year}`
-      : `${date}-${month}-${year}`;
-  })();
-
-  if (weathericon_idname == "null") {
-    date_of_a_city[0].innerHTML = city_date;
-  } else {
-    return city_date;
-  }
-};
-
-/**
- *
- * To update the Live time of the selected city in the top section
- * By using date object and its methods live date is fetched and  using hour value am or pm is decided.
- * if the second , minute , hour is less than 10 append zero to the beginning.
- * setinterval used to repeatedly call the display_live_time function
- * @param {string} selected_city name of the  selected city
- * @return {void} nothing
- */
-populateCityInformation.prototype.updateLiveTimeBasedOnTimezone = function () {
-  function display_Live_Time(obj) {
-    let date_time = new Date().toLocaleString("en-US", {
-      timeZone: obj.gettimeZone(),
+  /**
+   *
+   * To update the Live date of the selected city in the top section
+   * Live date is updated and citydate function is used to
+   * append prefix as zero to the date as it satisfies the condition.
+   * @param {string} selectedCity name of the  selected city
+   * @param {reference} dateOfaCity Object reference
+   * @return {string} cityDate  live date of the city
+   */
+  updateDateBasedOnCity(dateOfaCity, weathericonIdname) {
+    var dateTime = new Date().toLocaleString("en-US", {
+      timeZone: this.gettimeZone(),
     });
+    let date = new Date(dateTime).getDate();
+    let month = new Date(dateTime).toLocaleString("en-US", {
+      month: "short",
+    });
+    let year = new Date(dateTime).getFullYear();
 
-    let part_of_time;
-    var hour = new Date(date_time).getHours();
-    var minute = new Date(date_time).getMinutes();
-    var second = new Date(date_time).getSeconds();
+    let cityDate = (function () {
+      return date >= 1 && date <= 9
+        ? `0${date}- ${month}- ${year}`
+        : `${date}-${month}-${year}`;
+    })();
 
-    hour == 0
-      ? ((hour = 12), (part_of_time = "AM"))
-      : hour < 12
-      ? (part_of_time = "AM")
-      : hour == 12
-      ? (part_of_time = "PM")
-      : ((part_of_time = "PM"), (hour = hour - 12));
-    if (second < 10)
-      obj.updateUIElementAttributeWithTheGivenValue(
-        "time_in_seconds",
-        "innerHTML",
-        "0" + second
-      );
-    else
-      obj.updateUIElementAttributeWithTheGivenValue(
-        "time_in_seconds",
-        "innerHTML",
-        second
-      );
-
-    if (minute < 10)
-      obj.updateUIElementAttributeWithTheGivenValue(
-        "time_in_minutes",
-        "innerHTML",
-        "0" + minute + ": "
-      );
-    else
-      obj.updateUIElementAttributeWithTheGivenValue(
-        "time_in_minutes",
-        "innerHTML",
-        minute + ": "
-      );
-
-    if (hour < 10)
-      obj.updateUIElementAttributeWithTheGivenValue(
-        "time_in_hour",
-        "innerHTML",
-        "0" + hour + ": "
-      );
-    else
-      obj.updateUIElementAttributeWithTheGivenValue(
-        "time_in_hour",
-        "innerHTML",
-        hour + ": "
-      );
-
-    part_of_time == "PM"
-      ? obj.updateUIElementAttributeWithTheGivenValue(
-          "amimg",
-          "src",
-          "./ASSETS/pmState.svg"
-        )
-      : obj.updateUIElementAttributeWithTheGivenValue(
-          "amimg",
-          "src",
-          "./ASSETS/amState.png"
-        );
-    city_data.UpdateAmpmForNextfivehrs(hour, part_of_time);
+    if (weathericonIdname == "null") {
+      dateOfaCity[0].innerHTML = cityDate;
+    } else {
+      return cityDate;
+    }
   }
-  clearInterval(timeout);
-  timeout = setInterval(display_Live_Time, 1000, this);
-};
+  /**
+   *
+   * To update the Live time of the selected city in the top section
+   * By using date object and its methods live date is fetched and  using hour value am or pm is decided.
+   * if the second , minute , hour is less than 10 append zero to the beginning.
+   * setinterval used to repeatedly call the displayLiveTime function
+   * @param {string} selectedCity name of the  selected city
+   * @return {void} nothing
+   */
+  updateLiveTimeBasedOnTimezone() {
+    function displayLiveTime(obj) {
+      let dateTime = new Date().toLocaleString("en-US", {
+        timeZone: obj.gettimeZone(),
+      });
 
-/**
- *
- * Update the Temperature in celsius ,in farenheit and humidity ,precipitation for the selected city
- * Display the temperature values as per the format for the selected city
- * @param {string} cityname  name of the  selected city
- * @param {Array.<string>} temperature_celsius city temperature
- * @return {void} nothing
- */
-populateCityInformation.prototype.updateTemperature = function (
-  temperature_celsius
-) {
-  document.getElementById("temp-celsius").innerHTML =
-    temperature_celsius[0] + " " + temperature_celsius[1];
+      let partOfTime;
+      var hour = new Date(dateTime).getHours();
+      var minute = new Date(dateTime).getMinutes();
+      var second = new Date(dateTime).getSeconds();
 
-  let temperature_farenheit = this.gettemperature();
-  temperature_farenheit = temperature_farenheit.split("°");
-  temperature_farenheit[0] = ((temperature_farenheit[0] * 9) / 5 + 32).toFixed(
-    1
-  );
-  document.getElementById("temp-farenheit").innerHTML =
-    temperature_farenheit[0] + " F";
+      hour == 0
+        ? ((hour = 12), (partOfTime = "AM"))
+        : hour < 12
+        ? (partOfTime = "AM")
+        : hour == 12
+        ? (partOfTime = "PM")
+        : ((partOfTime = "PM"), (hour = hour - 12));
+      if (second < 10)
+        obj.updateUIElementAttributeWithTheGivenValue(
+          "time_in_seconds",
+          "innerHTML",
+          "0" + second
+        );
+      else
+        obj.updateUIElementAttributeWithTheGivenValue(
+          "time_in_seconds",
+          "innerHTML",
+          second
+        );
 
-  let humidity_value = this.gethumidity();
-  document.getElementById("humidity_percentage").innerHTML =
-    humidity_value.slice(0, humidity_value.length - 1) + " %";
+      if (minute < 10)
+        obj.updateUIElementAttributeWithTheGivenValue(
+          "time_in_minutes",
+          "innerHTML",
+          "0" + minute + ": "
+        );
+      else
+        obj.updateUIElementAttributeWithTheGivenValue(
+          "time_in_minutes",
+          "innerHTML",
+          minute + ": "
+        );
 
-  let precipitation_value = this.getprecipitation();
-  document.getElementById("precipitation_percentage").innerHTML =
-    precipitation_value.slice(0, precipitation_value.length - 1) + " %";
-};
+      if (hour < 10)
+        obj.updateUIElementAttributeWithTheGivenValue(
+          "time_in_hour",
+          "innerHTML",
+          "0" + hour + ": "
+        );
+      else
+        obj.updateUIElementAttributeWithTheGivenValue(
+          "time_in_hour",
+          "innerHTML",
+          hour + ": "
+        );
 
-/**
- *
- * Update the source of the weather images based the temperature and its condition
- * If the temperature value is between 23 and 29, update source with cloud image
- * If the temperature value is less than 18, update source with rainy image
- * If the temperature value is  between 23 and 29, update source with windy image
- * If the temperature value is greater than 29, update source with sunny image
- * @param {number} temp_after_every_hour temperature of the city for every one hour
- * @param {string} temp_icon id name of the image source
- * @return {void} nothing
- */
-populateCityInformation.prototype.updateImageSource = function (
-  temp_after_every_hour,
-  temp_icon
-) {
-  if (temp_after_every_hour >= 23 && temp_after_every_hour <= 29)
-    this.updateUIElementAttributeWithTheGivenValue(
-      temp_icon,
-      "src",
-      "./ASSETS/cloudyIcon.svg"
+      partOfTime == "PM"
+        ? obj.updateUIElementAttributeWithTheGivenValue(
+            "amimg",
+            "src",
+            "./ASSETS/pmState.svg"
+          )
+        : obj.updateUIElementAttributeWithTheGivenValue(
+            "amimg",
+            "src",
+            "./ASSETS/amState.png"
+          );
+      obj.UpdateAmpmForNextfivehrs(hour, partOfTime);
+    }
+    clearInterval(timeout);
+    timeout = setInterval(displayLiveTime, 1000, this);
+  }
+  /**
+   *
+   * Update the Temperature in celsius ,in farenheit and humidity ,precipitation for the selected city
+   * Display the temperature values as per the format for the selected city
+   * @param {Array.<string>} temperatureCelsius city temperature
+   * @return {void} nothing
+   */
+  updateTemperature(temperatureCelsius) {
+    document.getElementById("temp-celsius").innerHTML =
+      temperatureCelsius[0] + " " + temperatureCelsius[1];
+
+    let temperatureFarenheit = this.gettemperature();
+    temperatureFarenheit = temperatureFarenheit.split("°");
+    temperatureFarenheit[0] = ((temperatureFarenheit[0] * 9) / 5 + 32).toFixed(
+      1
     );
-  else if (temp_after_every_hour < 18)
-    this.updateUIElementAttributeWithTheGivenValue(
-      temp_icon,
-      "src",
-      "./ASSETS/rainyIconBlack.svg"
-    );
-  else if (temp_after_every_hour >= 18 && temp_after_every_hour <= 22)
-    this.updateUIElementAttributeWithTheGivenValue(
-      temp_icon,
-      "src",
-      "./ASSETS/windyIcon.svg"
-    );
-  else if (temp_after_every_hour > 29)
-    this.updateUIElementAttributeWithTheGivenValue(
-      temp_icon,
-      "src",
-      "./ASSETS/sunnyIconBlack.svg"
-    );
-};
+    document.getElementById("temp-farenheit").innerHTML =
+      temperatureFarenheit[0] + " F";
 
-/**
- *
- * Update the temperature in celsius for the next five hours from the current time for the
- * selected city
- * Using for loop , time is incremented by 1 and temperature value is fetched from the object for the selected city
- * and by using object reference , the value is assigned.
- * @param {string} cityname name of the selected city
- * @return {void} nothing
- */
-populateCityInformation.prototype.fetchAndUpdateTemperatureForNextfivehrs =
-  function () {
-    let temp_list = this.getnextFiveHrs();
+    let humidityValue = this.gethumidity();
+    document.getElementById("humidity_percentage").innerHTML =
+      humidityValue.slice(0, humidityValue.length - 1) + " %";
+
+    let precipitationValue = this.getprecipitation();
+    document.getElementById("precipitation_percentage").innerHTML =
+      precipitationValue.slice(0, precipitationValue.length - 1) + " %";
+  }
+  /**
+   *
+   * Update the source of the weather images based the temperature and its condition
+   * If the temperature value is between 23 and 29, update source with cloud image
+   * If the temperature value is less than 18, update source with rainy image
+   * If the temperature value is  between 23 and 29, update source with windy image
+   * If the temperature value is greater than 29, update source with sunny image
+   * @param {number} tempAfterEveryHour temperature of the city for every one hour
+   * @param {string} tempIcon id name of the image source
+   * @return {void} nothing
+   */
+  updateImageSource(tempAfterEveryHour, tempIcon) {
+    if (tempAfterEveryHour >= 23 && tempAfterEveryHour <= 29)
+      this.updateUIElementAttributeWithTheGivenValue(
+        tempIcon,
+        "src",
+        "./ASSETS/cloudyIcon.svg"
+      );
+    else if (tempAfterEveryHour < 18)
+      this.updateUIElementAttributeWithTheGivenValue(
+        tempIcon,
+        "src",
+        "./ASSETS/rainyIconBlack.svg"
+      );
+    else if (tempAfterEveryHour >= 18 && tempAfterEveryHour <= 22)
+      this.updateUIElementAttributeWithTheGivenValue(
+        tempIcon,
+        "src",
+        "./ASSETS/windyIcon.svg"
+      );
+    else if (tempAfterEveryHour > 29)
+      this.updateUIElementAttributeWithTheGivenValue(
+        tempIcon,
+        "src",
+        "./ASSETS/sunnyIconBlack.svg"
+      );
+  }
+  /**
+   *
+   * Update the temperature in celsius for the next five hours from the current time for the
+   * selected city
+   * @params {} nothing
+   * @return {void} nothing
+   */
+  fetchAndUpdateTemperatureForNextfivehrs() {
+    let tempList = this.getnextFiveHrs();
     for (var count = 1; count <= 5; count++) {
-      let celsius_temperature = `temp-after-${count}hour`;
-      let temp_icon = `icon_based_tempafter-${count}hour`;
+      let celsiusTemperature = `temp-after-${count}hour`;
+      let tempIcon = `icon_based_tempafter-${count}hour`;
 
-      let temp_after_every_hour = temp_list[count - 1].slice(
+      let tempAfterEveryHour = tempList[count - 1].slice(
         0,
-        temp_list[count - 1].length - 2
+        tempList[count - 1].length - 2
       );
       this.updateUIElementAttributeWithTheGivenValue(
-        celsius_temperature,
+        celsiusTemperature,
         "innerHTML",
-        temp_after_every_hour
+        tempAfterEveryHour
       );
-      city_data.updateImageSource(temp_after_every_hour, temp_icon);
+      this.updateImageSource(tempAfterEveryHour, tempIcon);
     }
-  };
-
-/**
- *
- * Update the UI with Nil and warning image ,the element id,
- * element attribute and its value is taken as parameter.
- * @param {string} UIElementID  ID name of the element
- * @param {string} UIAttribute  Atrribute need to be change
- * @param {string} value_To_Update value to change
- */
-populateCityInformation.prototype.updateUIElementAttributeWithTheGivenValue =
-  function (UIElementID, UIAttribute, value_To_Update) {
-    if (UIAttribute == "src")
-      document.getElementById(UIElementID).src = value_To_Update;
-    else if (UIAttribute == "innerHTML")
-      document.getElementById(UIElementID).innerHTML = value_To_Update;
-    else if (UIAttribute == "value")
-      document.getElementById(UIElementID).value = value_To_Update;
-    else if (UIAttribute == "borderBottom")
-      document.getElementById(UIElementID).style.borderBottom = value_To_Update;
-    else if (UIAttribute == "paddingBottom")
-      document.getElementById(UIElementID).style.paddingBottom =
-        value_To_Update;
-    else if (UIAttribute == "display")
-      document.getElementById(UIElementID).style.display = value_To_Update;
-    else if (UIAttribute == "max")
-      document.getElementById(UIElementID).max = value_To_Update;
-  };
-/**
- *
- * validate the cityname , if not it will display Nil and warning image.
- * By fetching the id and by using the object reference , Nil value is assigned.
- * Warning image replaces with the all image sources.
- * @param {reference} date_of_a_city Object reference
- * @return {void} nothing
- */
-populateCityInformation.prototype.updateUIWithNil = function (date_of_a_city) {
-  clearInterval(timeout);
-  this.updateUIElementAttributeWithTheGivenValue(
-    "icon",
-    "src",
-    "./ASSETS/warning.svg"
-  );
-  date_of_a_city[0].innerHTML = empty_value;
-  this.updateUIElementAttributeWithTheGivenValue(
-    "time_in_seconds",
-    "innerHTML",
-    ""
-  );
-  this.updateUIElementAttributeWithTheGivenValue(
-    "time_in_minutes",
-    "innerHTML",
-    ""
-  );
-  this.updateUIElementAttributeWithTheGivenValue(
-    "time_in_hour",
-    "innerHTML",
-    empty_value
-  );
-  this.updateUIElementAttributeWithTheGivenValue(
-    "amimg",
-    "src",
-    "./ASSETS/warning.svg"
-  );
-  this.updateUIElementAttributeWithTheGivenValue(
-    "temp-celsius",
-    "innerHTML",
-    empty_value
-  );
-  this.updateUIElementAttributeWithTheGivenValue(
-    "temp-farenheit",
-    "innerHTML",
-    empty_value
-  );
-  this.updateUIElementAttributeWithTheGivenValue(
-    "humidity_percentage",
-    "innerHTML",
-    empty_value
-  );
-  this.updateUIElementAttributeWithTheGivenValue(
-    "precipitation_percentage",
-    "innerHTML",
-    empty_value
-  );
-  this.updateUIElementAttributeWithTheGivenValue(
-    "present_temperature",
-    "innerHTML",
-    empty_value
-  );
-  this.updateUIElementAttributeWithTheGivenValue(
-    "present_time",
-    "innerHTML",
-    empty_value
-  );
-  this.updateUIElementAttributeWithTheGivenValue(
-    "icon_based_present_temp",
-    "src",
-    "./ASSETS/warning.svg"
-  );
-  for (var count = 1; count <= 5; count++) {
-    let id_name = `time-after-${count}hour`;
-    this.updateUIElementAttributeWithTheGivenValue(
-      id_name,
-      "innerHTML",
-      empty_value
-    );
   }
-  for (var count = 1; count <= 5; count++) {
-    let celsius_temperature = `temp-after-${count}hour`;
-    let temp_icon = `icon_based_tempafter-${count}hour`;
+  /**
+   *
+   * This function is used to update the UI Element with the given value.
+   * @param {string} UIElementID  ID name of the element
+   * @param {string} UIAttribute  Atrribute need to be change
+   * @param {string} valueToUpdate value to change
+   * @return {void} nothing
+   */
+  updateUIElementAttributeWithTheGivenValue(
+    UIElementID,
+    UIAttribute,
+    valueToUpdate
+  ) {
+    if (UIAttribute == "src")
+      document.getElementById(UIElementID).src = valueToUpdate;
+    else if (UIAttribute == "innerHTML")
+      document.getElementById(UIElementID).innerHTML = valueToUpdate;
+    else if (UIAttribute == "value")
+      document.getElementById(UIElementID).value = valueToUpdate;
+    else if (UIAttribute == "borderBottom")
+      document.getElementById(UIElementID).style.borderBottom = valueToUpdate;
+    else if (UIAttribute == "paddingBottom")
+      document.getElementById(UIElementID).style.paddingBottom = valueToUpdate;
+    else if (UIAttribute == "display")
+      document.getElementById(UIElementID).style.display = valueToUpdate;
+    else if (UIAttribute == "max")
+      document.getElementById(UIElementID).max = valueToUpdate;
+  }
+  /**
+   *
+   * validate the cityname , if not it will display Nil and warning image.
+   * By using the object reference , Nil value is assigned.
+   * Warning image replaces with the all image sources.
+   * @param {reference} dateOfaCity Object reference
+   * @return {void} nothing
+   */
+  updateUIWithNil(dateOfaCity) {
+    clearInterval(timeout);
     this.updateUIElementAttributeWithTheGivenValue(
-      celsius_temperature,
-      "innerHTML",
-      empty_value
-    );
-    this.updateUIElementAttributeWithTheGivenValue(
-      temp_icon,
+      "icon",
       "src",
       "./ASSETS/warning.svg"
     );
-  }
-  alert("Invalid Cityname!, Please enter a valid cityname.");
-};
-/**
- *
- * Update source of the weather images based on the temperature
- * By using for loop, am ,pm value for the time is updated
- * @param {number} hour
- * @param {string} part_of_time
- * @return {void} nothing
- */
-populateCityInformation.prototype.UpdateAmpmForNextfivehrs = function (
-  hour,
-  part_of_time
-) {
-  let time_iterator = hour;
-  for (var count = 1; count <= 5; count++) {
-    let id_name = `time-after-${count}hour`;
-    time_iterator++;
-    var time_value = time_iterator;
-
-    time_value == 12 && part_of_time == "PM"
-      ? (part_of_time = "AM")
-      : time_value == 12 && part_of_time == "AM"
-      ? (part_of_time = "PM")
-      : time_value > 12 && part_of_time == "PM"
-      ? ((time_value = time_value - 12), (part_of_time = "PM"))
-      : time_value > 12 && part_of_time == "AM"
-      ? ((time_value = time_value - 12), (part_of_time = "AM"))
-      : time_value < 12 && part_of_time == "PM"
-      ? (part_of_time = "PM")
-      : (part_of_time = "AM");
-
-    document.getElementById(id_name).innerHTML =
-      time_value + " " + part_of_time;
-  }
-};
-
-/**
- *
- * event listener function to update data for the city.
- * A closure function is used check the entered city name is valid or not.
- * If valid the function will call all other functions to update live date, live time,
- * city icon, temperature, humitidy, precipitation, temperature for next five hours from current time and weather
- * icons according to the temperature value.
- * If it is invalid the invalid_Cityname function is called to display Nil value
- * @params {} nothing
- * @return {Function}function to update all data for the selected city and for invalid cityname.
- */
-function updateDataOnCityname() {
-  let selected_city = document.getElementById("city_list").value.toLowerCase();
-  const date_of_a_city = document.getElementsByClassName("date-style");
-  return (function () {
-    if (checkCitynameIsValid(selected_city)) {
-      city_data = new populateCityInformation();
-      city_data.setDetails(selected_city);
-      //console.log("city_data: ", city_data);
-
-      let temperature_celsius = city_data.gettemperature();
-      temperature_celsius = temperature_celsius.split("°");
-
-      city_data.updateIconImageSource(selected_city, "null");
-      city_data.updateDateBasedOnCity(date_of_a_city, "null");
-      city_data.updateTemperature(temperature_celsius);
-
-      city_data.updateUIElementAttributeWithTheGivenValue(
-        "present_time",
+    dateOfaCity[0].innerHTML = emptyValue;
+    this.updateUIElementAttributeWithTheGivenValue(
+      "time_in_seconds",
+      "innerHTML",
+      ""
+    );
+    this.updateUIElementAttributeWithTheGivenValue(
+      "time_in_minutes",
+      "innerHTML",
+      ""
+    );
+    this.updateUIElementAttributeWithTheGivenValue(
+      "time_in_hour",
+      "innerHTML",
+      emptyValue
+    );
+    this.updateUIElementAttributeWithTheGivenValue(
+      "amimg",
+      "src",
+      "./ASSETS/warning.svg"
+    );
+    this.updateUIElementAttributeWithTheGivenValue(
+      "temp-celsius",
+      "innerHTML",
+      emptyValue
+    );
+    this.updateUIElementAttributeWithTheGivenValue(
+      "temp-farenheit",
+      "innerHTML",
+      emptyValue
+    );
+    this.updateUIElementAttributeWithTheGivenValue(
+      "humidity_percentage",
+      "innerHTML",
+      emptyValue
+    );
+    this.updateUIElementAttributeWithTheGivenValue(
+      "precipitation_percentage",
+      "innerHTML",
+      emptyValue
+    );
+    this.updateUIElementAttributeWithTheGivenValue(
+      "present_temperature",
+      "innerHTML",
+      emptyValue
+    );
+    this.updateUIElementAttributeWithTheGivenValue(
+      "present_time",
+      "innerHTML",
+      emptyValue
+    );
+    this.updateUIElementAttributeWithTheGivenValue(
+      "icon_based_present_temp",
+      "src",
+      "./ASSETS/warning.svg"
+    );
+    for (var count = 1; count <= 5; count++) {
+      let idName = `time-after-${count}hour`;
+      this.updateUIElementAttributeWithTheGivenValue(
+        idName,
         "innerHTML",
-        at_present
+        emptyValue
       );
-      city_data.updateUIElementAttributeWithTheGivenValue(
-        "present_temperature",
-        "innerHTML",
-        temperature_celsius[0]
-      );
-      city_data.updateImageSource(
-        temperature_celsius[0],
-        "icon_based_present_temp"
-      );
-      city_data.fetchAndUpdateTemperatureForNextfivehrs(selected_city);
-      city_data.updateLiveTimeBasedOnTimezone();
-    } else {
-      city_data.updateUIWithNil(date_of_a_city);
     }
-  })();
+    for (var count = 1; count <= 5; count++) {
+      let celsiusTemperature = `temp-after-${count}hour`;
+      let tempIcon = `icon_based_tempafter-${count}hour`;
+      this.updateUIElementAttributeWithTheGivenValue(
+        celsiusTemperature,
+        "innerHTML",
+        emptyValue
+      );
+      this.updateUIElementAttributeWithTheGivenValue(
+        tempIcon,
+        "src",
+        "./ASSETS/warning.svg"
+      );
+    }
+    alert("Invalid Cityname!, Please enter a valid cityname.");
+  }
+  /**
+   *
+   * Update source of the weather images based on the temperature value
+   * am ,pm value for the time is updated.
+   * @param {number} hour
+   * @param {string} partOfTime
+   * @return {void} nothing
+   */
+  UpdateAmpmForNextfivehrs(hour, partOfTime) {
+    let timeIterator = hour;
+    for (var count = 1; count <= 5; count++) {
+      let idName = `time-after-${count}hour`;
+      timeIterator++;
+      let timeValue = timeIterator;
+
+      timeValue == 12 && partOfTime == "PM"
+        ? (partOfTime = "AM")
+        : timeValue == 12 && partOfTime == "AM"
+        ? (partOfTime = "PM")
+        : timeValue > 12 && partOfTime == "PM"
+        ? ((timeValue = timeValue - 12), (partOfTime = "PM"))
+        : timeValue > 12 && partOfTime == "AM"
+        ? ((timeValue = timeValue - 12), (partOfTime = "AM"))
+        : timeValue < 12 && partOfTime == "PM"
+        ? (partOfTime = "PM")
+        : (partOfTime = "AM");
+
+      document.getElementById(idName).innerHTML = timeValue + " " + partOfTime;
+    }
+  }
 }
-updateDataOnCityname();
+
+global.updateDataOnCityname();
 
 // middle section javascript
 
 /**
- * A constructor function ,which will inherit populateCityInformation and
- * the prototypic functions will be used to populate values to card and perform actions.
+ * A Class which contains constructor and methods to populate the card details.
  * @return {void} nothing
  */
-function cardContainerDetails() {
-  this.sunny_list = Object.values(weather_data).filter(
-    (value) =>
-      parseInt(value.temperature) > 29 &&
-      parseInt(value.humidity) < 50 &&
-      parseInt(value.precipitation) >= 50
-  );
-
-  this.snow_list = Object.values(weather_data).filter(
-    (value) =>
-      parseInt(value.temperature) >= 20 &&
-      parseInt(value.temperature) <= 28 &&
-      parseInt(value.humidity) > 50 &&
-      parseInt(value.precipitation) < 50
-  );
-
-  this.rainy_list = Object.values(weather_data).filter(
-    (value) =>
-      parseInt(value.temperature) < 20 && parseInt(value.humidity) >= 50
-  );
-  this.sortTheArrayBasedOnParticularCategory = function (
-    array_list,
-    weather_condition
-  ) {
-    /** Sort the sunny list data based on temperature */
-    array_list.sort((a, b) =>
-      parseInt(a[weather_condition]) < parseInt(b[weather_condition]) ? 1 : -1
+class CardContainerDetails extends CurrentCityInformation {
+  /**
+   * A constructor function, in which the Object will be filtered and sorted.
+   * @return {void} nothing
+   */
+  constructor() {
+    super();
+    this.sunnyList = Object.values(weatherData).filter(
+      (value) =>
+        parseInt(value.temperature) > 29 &&
+        parseInt(value.humidity) < 50 &&
+        parseInt(value.precipitation) >= 50
     );
-  };
-  this.getSunnylist = function () {
-    return this.sunny_list;
-  };
-  this.getSnowlist = function () {
-    return this.snow_list;
-  };
-  this.getRainylist = function () {
-    return this.rainy_list;
-  };
-  this.sunny_data_list = {
-    weathericon_idname: "sunny-icon",
-    list_of_city: this.getSunnylist(),
-    icon_image: "./ASSETS/sunnyIcon.svg",
-  };
-  this.snow_data_list = {
-    weathericon_idname: "snow-icon",
-    list_of_city: this.getSnowlist(),
-    icon_image: "./ASSETS/snowflakeIcon.svg",
-  };
-  this.rainy_data_list = {
-    weathericon_idname: "rainy-icon",
-    list_of_city: this.getRainylist(),
-    icon_image: "./ASSETS/rainyIcon.svg",
-  };
-}
 
-cardContainerDetails.prototype = new populateCityInformation();
-let cardObj = new cardContainerDetails();
-console.log("cardObj: ", cardObj);
-
-/* A variable to keep on update with the value of number of cities */
-var spinner = 4;
-
-var weathericon_idname = "sunny-icon";
-var list_of_city = cardObj.getSunnylist();
-var icon_image = "./ASSETS/sunnyIcon.svg";
-
-/* Filter the data based on the condition and forms new list */
-cardObj.sortTheArrayBasedOnParticularCategory(
-  cardObj.getSunnylist(),
-  "temperature"
-);
-cardObj.sortTheArrayBasedOnParticularCategory(
-  cardObj.getSnowlist(),
-  "precipitation"
-);
-cardObj.sortTheArrayBasedOnParticularCategory(
-  cardObj.getRainylist(),
-  "humidity"
-);
-
-// card container's object reference
-const card_container = document.getElementById("city-card");
-card_container.replaceChildren();
-
-/**
- *
- * The function will create elements and populate the city name,temperature value to it and append
- * it to the card.
- * @param {object reference} card_division Object reference of the card division
- * @param {string} cityname name of the city
- * @param {string} icon_image_path weather Icon image source
- * @param {string} temperature_celsius temperature value of a city
- */
-cardContainerDetails.prototype.updateCitynameAndTemperatureInTheCard =
-  function (card_division, cityname, icon_image_path, temperature_celsius) {
-    let city_content_division = document.createElement("div");
-    let name_of_city = document.createElement("p");
-    let icon_temp_division = document.createElement("div");
-    let weather_icon = document.createElement("img");
-    let temperature_in_celsius = document.createElement("span");
-    card_division.setAttribute("class", "card");
-    city_content_division.setAttribute("class", "continent-content");
-    name_of_city.setAttribute("class", "city-name");
-    name_of_city.innerHTML = cityname;
-    icon_temp_division.setAttribute("class", "temp-cardstyle");
-    weather_icon.src = icon_image_path;
-    weather_icon.style.width = "25px";
-    temperature_in_celsius.setAttribute("class", "card-temp");
-    temperature_in_celsius.innerHTML = temperature_celsius;
-    card_container.appendChild(card_division);
-    card_division.appendChild(city_content_division);
-    city_content_division.appendChild(name_of_city);
-    city_content_division.appendChild(icon_temp_division);
-    icon_temp_division.appendChild(weather_icon);
-    icon_temp_division.appendChild(temperature_in_celsius);
-  };
-
-/**
- *
- * The function will create elements and populate the live date and time to it and append
- * it to the card.
- * @param {object reference} card_division
- * @param {string} live_date_of_city
- * @param {string} cityname
- */
-cardContainerDetails.prototype.updateDateAndTimeInTheCard = function (
-  card_division,
-  live_date_of_city,
-  cityname
-) {
-  let time = document.createElement("p");
-  let date = document.createElement("p");
-  date.setAttribute("class", "card-date-time");
-  date.innerHTML = live_date_of_city;
-  time.setAttribute("class", "card-date-time");
-  setInterval(this.displayLiveTimeToTheCity, 10, cityname.toLowerCase(), time);
-  card_division.appendChild(time);
-  card_division.appendChild(date);
-};
-
-/**
- *
- * Whenever this function is invoked, it will set the background image as the City icon and
- * add styles to it.
- * @param {object reference} card_division
- * @param {string} city_image
- */
-cardContainerDetails.prototype.updateCityIconInTheCard = function (
-  card_division,
-  city_image
-) {
-  card_division.style.backgroundImage = "url(" + city_image + ")";
-  card_division.style.backgroundRepeat = "no-repeat";
-  card_division.style.backgroundPosition = "bottom right";
-  card_division.style.backgroundSize = "65%";
-};
-
-/**
- * The function will create elements and populate the humidity and precipitation to it and append
- * it to the card.
- * @param {object reference} card_division
- * @param {string} humidity_icon_img_path
- * @param {string} humidity_value
- * @param {string} precipitation_icon_img_path
- * @param {string} precipitation_value
- */
-cardContainerDetails.prototype.updateHumidityAndPrecipitationInTheCard =
-  function (
-    card_division,
-    humidity_icon_img_path,
-    humidity_value,
-    precipitation_icon_img_path,
-    precipitation_value
-  ) {
-    let humidity_division = document.createElement("div");
-    let precipitation_division = document.createElement("div");
-    let humidity_icon = document.createElement("img");
-    let humidity_in_percentage = document.createElement("span");
-    let precipitation_icon = document.createElement("img");
-    let precipitation_in_percentage = document.createElement("span");
-    humidity_icon.src = humidity_icon_img_path;
-    humidity_icon.style.width = "16px";
-    humidity_in_percentage.innerHTML = humidity_value;
-    humidity_in_percentage.setAttribute("class", "rainy-temp");
-    precipitation_icon.src = precipitation_icon_img_path;
-    precipitation_icon.style.width = "16px";
-    precipitation_in_percentage.innerHTML = precipitation_value;
-    precipitation_in_percentage.setAttribute("class", "rainy-temp");
-    card_division.appendChild(humidity_division);
-    card_division.appendChild(precipitation_division);
-    humidity_division.appendChild(humidity_icon);
-    humidity_division.appendChild(humidity_in_percentage);
-    precipitation_division.appendChild(precipitation_icon);
-    precipitation_division.appendChild(precipitation_in_percentage);
-  };
-
-/**
- *
- * whenever The function is invoked , it will create card and
- * populate the given values with respect to the weather icon selected.
- * All styles are added to the element
- * @param {string} cityname name of the city
- * @param {string} icon_image_path weather icon image source
- * @param {string} temperature_celsius  temperature value in celsius for the city
- * @param {string} live_date_of_city    live date of the city
- * @param {string} humidity_icon_img_path  humidity icon image source
- * @param {string} humidity_value humidity value in percentage
- * @param {string} precipitation_icon_img_path  precipitation icon image source
- * @param {string} precipitation_value precipitation value in percentage
- * @param {string} city_image city image source
- * @return {void} nothing
- */
-cardContainerDetails.prototype.createCardAndUpdateDataWithTheGivenValue =
-  function (
-    cityname,
-    icon_image_path,
-    temperature_celsius,
-    live_date_of_city,
-    humidity_icon_img_path,
-    humidity_value,
-    precipitation_icon_img_path,
-    precipitation_value,
-    city_image
-  ) {
-    let card_division = document.createElement("div");
-    this.updateCitynameAndTemperatureInTheCard(
-      card_division,
-      cityname,
-      icon_image_path,
-      temperature_celsius
+    this.snowList = Object.values(weatherData).filter(
+      (value) =>
+        parseInt(value.temperature) >= 20 &&
+        parseInt(value.temperature) <= 28 &&
+        parseInt(value.humidity) > 50 &&
+        parseInt(value.precipitation) < 50
     );
-    this.updateDateAndTimeInTheCard(card_division, live_date_of_city, cityname);
-    this.updateCityIconInTheCard(card_division, city_image);
-    this.updateHumidityAndPrecipitationInTheCard(
-      card_division,
-      humidity_icon_img_path,
-      humidity_value,
-      precipitation_icon_img_path,
-      precipitation_value
-    );
-  };
 
-/**
- *
- * This function will decides, how many card to display on UI and
- * create the card and populate data and display it in UI based on the selected Weather Icon
- * @param {string} weathericon_idname Id name of the weather icon ,it is used to change values
- * @param {Array} weather_list Array list to display data to the UI
- * @param {string} weathericon_img_path weather icon image source
- * @param {number} no_of_cities_to_display count of the city to display in UI
- * @return {void} nothing
- */
-cardContainerDetails.prototype.createCardToTheSelectedCityAndPopulateCityDetails =
-  function (
-    weathericon_idname,
-    weather_list,
-    weathericon_img_path,
-    no_of_cities_to_display
-  ) {
-    no_of_cities_to_display =
-      cardObj.updateSpinnerValueBasedOnTheGivenCondition(
-        weather_list,
-        no_of_cities_to_display
+    this.rainyList = Object.values(weatherData).filter(
+      (value) =>
+        parseInt(value.temperature) < 20 && parseInt(value.humidity) >= 50
+    );
+    this.sortTheArrayBasedOnParticularCategory = function (
+      arrayList,
+      weatherCondition
+    ) {
+      /** Sort the sunny list data based on temperature */
+      arrayList.sort((a, b) =>
+        parseInt(a[weatherCondition]) < parseInt(b[weatherCondition]) ? 1 : -1
       );
+    };
+    this.getSunnylist = function () {
+      return this.sunnyList;
+    };
+    this.getSnowlist = function () {
+      return this.snowList;
+    };
+    this.getRainylist = function () {
+      return this.rainyList;
+    };
+    this.sunnyDataList = {
+      weathericonIdname: "sunny-icon",
+      listOfCity: this.getSunnylist(),
+      iconImage: "./ASSETS/sunnyIcon.svg",
+    };
+    this.snowDataList = {
+      weathericonIdname: "snow-icon",
+      listOfCity: this.getSnowlist(),
+      iconImage: "./ASSETS/snowflakeIcon.svg",
+    };
+    this.rainyDataList = {
+      weathericonIdname: "rainy-icon",
+      listOfCity: this.getRainylist(),
+      iconImage: "./ASSETS/rainyIcon.svg",
+    };
+    this.populateDetailsBasedOnIconSelected = function () {
+      weathericonIdname = this.weathericonIdname;
+      listOfCity = this.listOfCity;
+      iconImage = this.iconImage;
+    };
+  }
+  /**
+   *
+   * The function will create elements and populate the city name,temperature value to it and append
+   * it to the card.
+   * @param {object reference} cardDivision Object reference of the card division
+   * @param {string} cityname name of the city
+   * @param {string} iconImagePath weather Icon image source
+   * @param {string} temperatureCelsius temperature value of a city
+   */
+  updateCitynameAndTemperatureInTheCard(
+    cardDivision,
+    cityname,
+    iconImagePath,
+    temperatureCelsius
+  ) {
+    let cityContentDivision = document.createElement("div");
+    let nameOfCity = document.createElement("p");
+    let iconTempDivision = document.createElement("div");
+    let weatherIcon = document.createElement("img");
+    let temperatureInCelsius = document.createElement("span");
+    cardDivision.setAttribute("class", "card");
+    cityContentDivision.setAttribute("class", "continent-content");
+    nameOfCity.setAttribute("class", "city-name");
+    nameOfCity.innerHTML = cityname;
+    iconTempDivision.setAttribute("class", "temp-cardstyle");
+    weatherIcon.src = iconImagePath;
+    weatherIcon.style.width = "25px";
+    temperatureInCelsius.setAttribute("class", "card-temp");
+    temperatureInCelsius.innerHTML = temperatureCelsius;
+    cardContainer.appendChild(cardDivision);
+    cardDivision.appendChild(cityContentDivision);
+    cityContentDivision.appendChild(nameOfCity);
+    cityContentDivision.appendChild(iconTempDivision);
+    iconTempDivision.appendChild(weatherIcon);
+    iconTempDivision.appendChild(temperatureInCelsius);
+  }
+  /**
+   *
+   * The function will create elements and populate the live date and time to it and append
+   * it to the card.
+   * @param {object reference} cardDivision
+   * @param {string} liveDateOfCity
+   * @param {string} cityname
+   */
+  updateDateAndTimeInTheCard(cardDivision, liveDateOfCity, cityname) {
+    let time = document.createElement("p");
+    let date = document.createElement("p");
+    date.setAttribute("class", "card-date-time");
+    date.innerHTML = liveDateOfCity;
+    time.setAttribute("class", "card-date-time");
+    setInterval(
+      this.displayLiveTimeToTheCity,
+      10,
+      cityname.toLowerCase(),
+      time
+    );
+    cardDivision.appendChild(time);
+    cardDivision.appendChild(date);
+  }
+  /**
+   *
+   * Whenever this function is invoked, it will set the background image as the City icon and
+   * add styles to it.
+   * @param {object reference} cardDivision
+   * @param {string} cityImage
+   */
+  updateCityIconInTheCard(cardDivision, cityImage) {
+    cardDivision.style.backgroundImage = "url(" + cityImage + ")";
+    cardDivision.style.backgroundRepeat = "no-repeat";
+    cardDivision.style.backgroundPosition = "bottom right";
+    cardDivision.style.backgroundSize = "65%";
+  }
+  /**
+   * The function will create elements and populate the humidity and precipitation to it and append
+   * it to the card.
+   * @param {object reference} cardDivision
+   * @param {string} humidityIconImgPath
+   * @param {string} humidityValue
+   * @param {string} precipitationIconImgPath
+   * @param {string} precipitationValue
+   */
+  updateHumidityAndPrecipitationInTheCard(
+    cardDivision,
+    humidityIconImgPath,
+    humidityValue,
+    precipitationIconImgPath,
+    precipitationValue
+  ) {
+    let humidityDivision = document.createElement("div");
+    let precipitationDivision = document.createElement("div");
+    let humidityIcon = document.createElement("img");
+    let humidityInPercentage = document.createElement("span");
+    let precipitationIcon = document.createElement("img");
+    let precipitationInPercentage = document.createElement("span");
+    humidityIcon.src = humidityIconImgPath;
+    humidityIcon.style.width = "16px";
+    humidityInPercentage.innerHTML = humidityValue;
+    humidityInPercentage.setAttribute("class", "rainy-temp");
+    precipitationIcon.src = precipitationIconImgPath;
+    precipitationIcon.style.width = "16px";
+    precipitationInPercentage.innerHTML = precipitationValue;
+    precipitationInPercentage.setAttribute("class", "rainy-temp");
+    cardDivision.appendChild(humidityDivision);
+    cardDivision.appendChild(precipitationDivision);
+    humidityDivision.appendChild(humidityIcon);
+    humidityDivision.appendChild(humidityInPercentage);
+    precipitationDivision.appendChild(precipitationIcon);
+    precipitationDivision.appendChild(precipitationInPercentage);
+  }
+  /**
+   *
+   * whenever The function is invoked , it will create card and
+   * populate the given values with respect to the weather icon selected.
+   * All styles are added to the element
+   * @param {string} cityname name of the city
+   * @param {string} iconImagePath weather icon image source
+   * @param {string} temperatureCelsius  temperature value in celsius for the city
+   * @param {string} liveDateOfCity    live date of the city
+   * @param {string} humidityIconImgPath  humidity icon image source
+   * @param {string} humidityValue humidity value in percentage
+   * @param {string} precipitationIconImgPath  precipitation icon image source
+   * @param {string} precipitationValue precipitation value in percentage
+   * @param {string} cityImage city image source
+   * @return {void} nothing
+   */
+  createCardAndUpdateDataWithTheGivenValue(
+    cityname,
+    iconImagePath,
+    temperatureCelsius,
+    liveDateOfCity,
+    humidityIconImgPath,
+    humidityValue,
+    precipitationIconImgPath,
+    precipitationValue,
+    cityImage
+  ) {
+    let cardDivision = document.createElement("div");
+    this.updateCitynameAndTemperatureInTheCard(
+      cardDivision,
+      cityname,
+      iconImagePath,
+      temperatureCelsius
+    );
+    this.updateDateAndTimeInTheCard(cardDivision, liveDateOfCity, cityname);
+    this.updateCityIconInTheCard(cardDivision, cityImage);
+    this.updateHumidityAndPrecipitationInTheCard(
+      cardDivision,
+      humidityIconImgPath,
+      humidityValue,
+      precipitationIconImgPath,
+      precipitationValue
+    );
+  }
+  /**
+   *
+   * This function will decides, how many card to display on UI and
+   * create the card and populate data and display it in UI based on the selected Weather Icon
+   * @param {string} weathericonIdname Id name of the weather icon ,it is used to change values
+   * @param {Array} weatherList Array list to display data to the UI
+   * @param {string} weathericonImgPath weather icon image source
+   * @param {number} noOfCitiesToDisplay count of the city to display in UI
+   * @return {void} nothing
+   */
+  createCardToTheSelectedCityAndPopulateCityDetails(
+    weathericonIdname,
+    weatherList,
+    weathericonImgPath,
+    noOfCitiesToDisplay
+  ) {
+    noOfCitiesToDisplay = this.updateSpinnerValueBasedOnTheGivenCondition(
+      weatherList,
+      noOfCitiesToDisplay
+    );
     let count = 0;
-    for (let city of weather_list) {
-      if (count < no_of_cities_to_display) {
-        let live_date_of_city = city_data.updateDateBasedOnCity(
+    for (let city of weatherList) {
+      if (count < noOfCitiesToDisplay) {
+        let liveDateOfCity = this.updateDateBasedOnCity(
           "null",
-          weathericon_idname
+          weathericonIdname
         );
-        let city_image = city_data.updateIconImageSource(
+        let cityImage = this.updateIconImageSource(
           city.cityName,
-          weathericon_idname
+          weathericonIdname
         );
-        cardObj.createCardAndUpdateDataWithTheGivenValue(
+        this.createCardAndUpdateDataWithTheGivenValue(
           city.cityName,
-          weathericon_img_path,
+          weathericonImgPath,
           city.temperature,
-          live_date_of_city,
+          liveDateOfCity,
           "./ASSETS/humidityIcon.svg",
           city.humidity,
           "./ASSETS/precipitationIcon.svg",
           city.precipitation,
-          city_image
+          cityImage
         );
-        cardObj.hideTheScrollArrow();
+        this.hideTheScrollArrow();
         count++;
       }
     }
-  };
-/**
- *
- * whenever the Icon is selected , there will be appearing of blue line under the Icon.
- * From DOM event listener the idname of the weather icon is passed to this function based on that,
- * it functions
- * @param {string} weathericon_idname Id name of the weather icon ,it is used to change values
- * @return {void} nothing
- */
-cardContainerDetails.prototype.selectTheIconWhichIsClicked = function (
-  weathericon_idname
-) {
-  if (weathericon_idname == "sunny-icon") {
-    this.updateUIElementAttributeWithTheGivenValue(
-      "sun-image",
-      "borderBottom",
-      "2px solid skyblue"
-    );
-    this.updateUIElementAttributeWithTheGivenValue(
-      "snow-image",
-      "borderBottom",
-      0
-    );
-    this.updateUIElementAttributeWithTheGivenValue(
-      "rainy-image",
-      "borderBottom",
-      0
-    );
-    this.updateUIElementAttributeWithTheGivenValue(
-      "sun-image",
-      "paddingBottom",
-      "3px"
-    );
-  } else if (weathericon_idname == "snow-icon") {
-    this.updateUIElementAttributeWithTheGivenValue(
-      "snow-image",
-      "borderBottom",
-      "2px solid skyblue"
-    );
-    this.updateUIElementAttributeWithTheGivenValue(
-      "sun-image",
-      "borderBottom",
-      0
-    );
-    this.updateUIElementAttributeWithTheGivenValue(
-      "rainy-image",
-      "borderBottom",
-      0
-    );
-    this.updateUIElementAttributeWithTheGivenValue(
-      "snow-image",
-      "paddingBottom",
-      "3px"
-    );
-  } else if (weathericon_idname == "rainy-icon") {
-    this.updateUIElementAttributeWithTheGivenValue(
-      "rainy-image",
-      "borderBottom",
-      "2px solid skyblue"
-    );
-    this.updateUIElementAttributeWithTheGivenValue(
-      "sun-image",
-      "borderBottom",
-      0
-    );
-    this.updateUIElementAttributeWithTheGivenValue(
-      "snow-image",
-      "borderBottom",
-      0
-    );
-    this.updateUIElementAttributeWithTheGivenValue(
-      "rainy-image",
-      "paddingBottom",
-      "3px"
-    );
   }
-};
-
-/**
- *
- * The function will set the value of the spinner based on the condition provided for
- * the particular weather.
- * @param {Array} weather_list array of objects
- * @param {number} no_of_cities_to_display number of city to display in the UI
- * @return {number} no_of_cities_to_display -number of city to display in the UI
- */
-cardContainerDetails.prototype.updateSpinnerValueBasedOnTheGivenCondition =
-  function (weather_list, no_of_cities_to_display) {
-    let length_of_list = weather_list.length;
-    if (length_of_list < no_of_cities_to_display) {
-      no_of_cities_to_display = length_of_list;
+  /**
+   *
+   * whenever the Icon is selected , there will be appearing of blue line under the Icon.
+   * From DOM event listener the idname of the weather icon is passed to this function based on that,
+   * it functions
+   * @param {string} weathericonIdname Id name of the weather icon ,it is used to change values
+   * @return {void} nothing
+   */
+  selectTheIconWhichIsClicked(weathericonIdname) {
+    if (weathericonIdname == "sunny-icon") {
+      this.updateUIElementAttributeWithTheGivenValue(
+        "sun-image",
+        "borderBottom",
+        "2px solid skyblue"
+      );
+      this.updateUIElementAttributeWithTheGivenValue(
+        "snow-image",
+        "borderBottom",
+        0
+      );
+      this.updateUIElementAttributeWithTheGivenValue(
+        "rainy-image",
+        "borderBottom",
+        0
+      );
+      this.updateUIElementAttributeWithTheGivenValue(
+        "sun-image",
+        "paddingBottom",
+        "3px"
+      );
+    } else if (weathericonIdname == "snow-icon") {
+      this.updateUIElementAttributeWithTheGivenValue(
+        "snow-image",
+        "borderBottom",
+        "2px solid skyblue"
+      );
+      this.updateUIElementAttributeWithTheGivenValue(
+        "sun-image",
+        "borderBottom",
+        0
+      );
+      this.updateUIElementAttributeWithTheGivenValue(
+        "rainy-image",
+        "borderBottom",
+        0
+      );
+      this.updateUIElementAttributeWithTheGivenValue(
+        "snow-image",
+        "paddingBottom",
+        "3px"
+      );
+    } else if (weathericonIdname == "rainy-icon") {
+      this.updateUIElementAttributeWithTheGivenValue(
+        "rainy-image",
+        "borderBottom",
+        "2px solid skyblue"
+      );
+      this.updateUIElementAttributeWithTheGivenValue(
+        "sun-image",
+        "borderBottom",
+        0
+      );
+      this.updateUIElementAttributeWithTheGivenValue(
+        "snow-image",
+        "borderBottom",
+        0
+      );
+      this.updateUIElementAttributeWithTheGivenValue(
+        "rainy-image",
+        "paddingBottom",
+        "3px"
+      );
     }
-    if (length_of_list <= 3) {
+  }
+  /**
+   *
+   * The function will set the value of the spinner based on the condition provided for
+   * the particular weather.
+   * @param {Array} weatherList array of objects
+   * @param {number} noOfCitiesToDisplay number of city to display in the UI
+   * @return {number} noOfCitiesToDisplay -number of city to display in the UI
+   */
+  updateSpinnerValueBasedOnTheGivenCondition(weatherList, noOfCitiesToDisplay) {
+    let lengthOfList = weatherList.length;
+    if (lengthOfList < noOfCitiesToDisplay) {
+      noOfCitiesToDisplay = lengthOfList;
+    }
+    if (lengthOfList <= 3) {
       spinner = 3;
       this.updateUIElementAttributeWithTheGivenValue(
         "numberofcities",
@@ -926,148 +801,184 @@ cardContainerDetails.prototype.updateSpinnerValueBasedOnTheGivenCondition =
         10
       );
     }
-    return no_of_cities_to_display;
-  };
-
-/**
- *
- * To update the Live time of the city in the card.
- * By using date object and its methods live date is fetched and  using hour value am or pm is decided.
- * setinterval used to repeatedly call the display_live_time function
- * @param {string} nameOfThe_city name of the city
- * @param {object reference} time object reference
- */
-cardContainerDetails.prototype.displayLiveTimeToTheCity = function (
-  nameOfThe_city,
-  time
-) {
-  let date_time = new Date().toLocaleString("en-US", {
-    timeZone: weather_data[nameOfThe_city].timeZone,
-  });
-
-  let part_of_time;
-  var hour = new Date(date_time).getHours();
-  var minute = new Date(date_time).getMinutes();
-
-  hour == 0
-    ? ((hour = 12), (part_of_time = "AM"))
-    : hour < 12
-    ? (part_of_time = "AM")
-    : hour == 12
-    ? (part_of_time = "PM")
-    : ((part_of_time = "PM"), (hour = hour - 12));
-
-  hour < 10 ? (hour = "0" + hour + ": ") : (hour = hour + ": ");
-  minute < 10 ? (minute = "0" + minute) : (minute = minute);
-
-  date_time = hour + minute + " " + part_of_time;
-  time.innerHTML = date_time;
-};
-
-/**
- * While changing the values in spinner,createCardToTheSelectedCityAndPopulateCityDetails function will
- * be called , which will create card and populate values in it.
- * Based on the value in spinner , the cards will display
- * @params {}
- * @return {void}
- */
-cardContainerDetails.prototype.noOfCitiesToDisplayInUI = function () {
-  let display_no_of_city = document.getElementById("numberofcities");
-  spinner = display_no_of_city.value;
-  if (spinner > 10) {
-    spinner = 10;
+    return noOfCitiesToDisplay;
   }
-  card_container.replaceChildren();
-  cardObj.createCardToTheSelectedCityAndPopulateCityDetails(
-    weathericon_idname,
-    list_of_city,
-    icon_image,
-    spinner
-  );
-};
-/**
- * It will hide the carousel button , when the card is less than or equal to 4.
- * It displays the button, when it card exceeds 4 and as well the screen size is small
- *@params {}
- *@return {void}
- */
-cardContainerDetails.prototype.hideTheScrollArrow = function () {
-  let length_of_container = card_container.clientWidth;
-  let length_of_Whole_city = card_container.scrollWidth;
-  let carousel_division = document.getElementsByClassName("carousel-div");
-  if (length_of_Whole_city <= length_of_container) {
-    carousel_division[0].style.display = "none";
-    carousel_division[1].style.display = "none";
-    cardObj.updateUIElementAttributeWithTheGivenValue(
-      "left-scroll",
-      "display",
-      "none"
-    );
-    cardObj.updateUIElementAttributeWithTheGivenValue(
-      "right-scroll",
-      "display",
-      "none"
-    );
-  } else {
-    carousel_division[0].style.display = "flex";
-    carousel_division[1].style.display = "flex";
-    cardObj.updateUIElementAttributeWithTheGivenValue(
-      "left-scroll",
-      "display",
-      "flex"
-    );
-    cardObj.updateUIElementAttributeWithTheGivenValue(
-      "right-scroll",
-      "display",
-      "flex"
+  /**
+   *
+   * To update the Live time of the city in the card.
+   * By using date object and its methods live date is fetched and  using hour value am or pm is decided.
+   * setinterval used to repeatedly call the displayLiveTime function
+   * @param {string} nameOfTheCity name of the city
+   * @param {object reference} time object reference
+   */
+  displayLiveTimeToTheCity(nameOfTheCity, time) {
+    let dateTime = new Date().toLocaleString("en-US", {
+      timeZone: weatherData[nameOfTheCity].timeZone,
+    });
+
+    let partOfTime;
+    var hour = new Date(dateTime).getHours();
+    var minute = new Date(dateTime).getMinutes();
+
+    hour == 0
+      ? ((hour = 12), (partOfTime = "AM"))
+      : hour < 12
+      ? (partOfTime = "AM")
+      : hour == 12
+      ? (partOfTime = "PM")
+      : ((partOfTime = "PM"), (hour = hour - 12));
+
+    hour < 10 ? (hour = "0" + hour + ": ") : (hour = hour + ": ");
+    minute < 10 ? (minute = "0" + minute) : (minute = minute);
+
+    dateTime = hour + minute + " " + partOfTime;
+    time.innerHTML = dateTime;
+  }
+  /**
+   * While changing the values in spinner,createCardToTheSelectedCityAndPopulateCityDetails function will
+   * be called , which will create card and populate values in it.
+   * Based on the value in spinner , the cards will display
+   * @params {}
+   * @return {void}
+   */
+  noOfCitiesToDisplayInUI() {
+    let displayNoOfCity = document.getElementById("numberofcities");
+    spinner = displayNoOfCity.value;
+    if (spinner > 10) {
+      spinner = 10;
+    }
+    cardContainer.replaceChildren();
+    cardObj.createCardToTheSelectedCityAndPopulateCityDetails(
+      weathericonIdname,
+      listOfCity,
+      iconImage,
+      spinner
     );
   }
-};
-/**
- * whenever the particular Icon is clicked, this function is invoked.
- * this further calls two functions , it select the weather icon and create cards and populate details.
- *@params {}
- * @return {function}
- */
-cardContainerDetails.prototype.updateContainerWithCitiesInformationBasedOnWeatherIconSelected =
-  function () {
+  /**
+   * It will hide the carousel button , when the card is less than or equal to 4.
+   * It displays the button, when it card exceeds 4 and as well the screen size is small
+   *@params {}
+   *@return {void}
+   */
+  hideTheScrollArrow() {
+    let lengthOfContainer = cardContainer.clientWidth;
+    let lengthOfWholeCity = cardContainer.scrollWidth;
+    let carouselDivision = document.getElementsByClassName("carousel-div");
+    if (lengthOfWholeCity <= lengthOfContainer) {
+      carouselDivision[0].style.display = "none";
+      carouselDivision[1].style.display = "none";
+      cardObj.updateUIElementAttributeWithTheGivenValue(
+        "left-scroll",
+        "display",
+        "none"
+      );
+      cardObj.updateUIElementAttributeWithTheGivenValue(
+        "right-scroll",
+        "display",
+        "none"
+      );
+    } else {
+      carouselDivision[0].style.display = "flex";
+      carouselDivision[1].style.display = "flex";
+      cardObj.updateUIElementAttributeWithTheGivenValue(
+        "left-scroll",
+        "display",
+        "flex"
+      );
+      cardObj.updateUIElementAttributeWithTheGivenValue(
+        "right-scroll",
+        "display",
+        "flex"
+      );
+    }
+  }
+  /**
+   * whenever the particular Icon is clicked, this function is invoked.
+   * this further calls two functions , it select the weather icon and create cards and populate details.
+   *@params {}
+   * @return {function}
+   */
+  updateContainerWithCitiesInformationBasedOnWeatherIconSelected() {
     return (function (obj) {
-      obj.selectTheIconWhichIsClicked(weathericon_idname);
-      card_container.replaceChildren();
-      cardObj.createCardToTheSelectedCityAndPopulateCityDetails(
-        weathericon_idname,
-        list_of_city,
-        icon_image,
+      obj.selectTheIconWhichIsClicked(weathericonIdname);
+      cardContainer.replaceChildren();
+      obj.createCardToTheSelectedCityAndPopulateCityDetails(
+        weathericonIdname,
+        listOfCity,
+        iconImage,
         spinner
       );
     })(this);
-  };
-
-/**
- * It is used to populate the Idname, arraylist , Image source to the variable
- * based on the weather icon selected
- * @params {}
- * @return {void}
- */
-function populateDetailsBasedOnIconSelected() {
-  weathericon_idname = this.weathericon_idname;
-  list_of_city = this.list_of_city;
-  icon_image = this.icon_image;
+  }
+  /**
+   * It allows only the value between 3 and 10 , it restricts
+   * If it exceeds 10, it automatically changes to 10
+   * If it is less 3 , it automatically changes to 3
+   * @params {}
+   * @return {void}
+   */
+  validateTheSpinner() {
+    parseInt(this.value) < 3
+      ? cardObj.updateUIElementAttributeWithTheGivenValue(
+          "numberofcities",
+          "value",
+          3
+        )
+      : parseInt(this.value) > 10
+      ? cardObj.updateUIElementAttributeWithTheGivenValue(
+          "numberofcities",
+          "value",
+          10
+        )
+      : cardObj.updateUIElementAttributeWithTheGivenValue(
+          "numberofcities",
+          "value",
+          parseInt(this.value)
+        );
+  }
 }
+// Object creation
+let cardObj = new CardContainerDetails();
+//console.log("cardObj: ", cardObj);
+
+/* A variable to keep on update with the value of number of cities */
+var spinner = 4;
+
+var weathericonIdname = "sunny-icon";
+var listOfCity = cardObj.getSunnylist();
+var iconImage = "./ASSETS/sunnyIcon.svg";
+
+/* Filter the data based on the condition and forms new list */
+cardObj.sortTheArrayBasedOnParticularCategory(
+  cardObj.getSunnylist(),
+  "temperature"
+);
+cardObj.sortTheArrayBasedOnParticularCategory(
+  cardObj.getSnowlist(),
+  "precipitation"
+);
+cardObj.sortTheArrayBasedOnParticularCategory(
+  cardObj.getRainylist(),
+  "humidity"
+);
+
+// card container's object reference
+const cardContainer = document.getElementById("city-card");
+cardContainer.replaceChildren();
 
 document.getElementById("sunny-icon").addEventListener("click", () => {
-  populateDetailsBasedOnIconSelected.call(cardObj.sunny_data_list);
-  console.log(cardObj.sunny_data_list);
+  cardObj.populateDetailsBasedOnIconSelected.call(cardObj.sunnyDataList);
   cardObj.updateContainerWithCitiesInformationBasedOnWeatherIconSelected();
 });
 
 document.getElementById("snow-icon").addEventListener("click", () => {
-  populateDetailsBasedOnIconSelected.call(cardObj.snow_data_list);
+  cardObj.populateDetailsBasedOnIconSelected.call(cardObj.snowDataList);
   cardObj.updateContainerWithCitiesInformationBasedOnWeatherIconSelected();
 });
 
 document.getElementById("rainy-icon").addEventListener("click", () => {
-  populateDetailsBasedOnIconSelected.call(cardObj.rainy_data_list);
+  cardObj.populateDetailsBasedOnIconSelected.call(cardObj.rainyDataList);
   cardObj.updateContainerWithCitiesInformationBasedOnWeatherIconSelected();
 });
 
@@ -1075,88 +986,52 @@ document
   .getElementById("numberofcities")
   .addEventListener("change", cardObj.noOfCitiesToDisplayInUI);
 cardObj.createCardToTheSelectedCityAndPopulateCityDetails(
-  weathericon_idname,
-  list_of_city,
-  icon_image,
+  weathericonIdname,
+  listOfCity,
+  iconImage,
   spinner
 );
 
 document.getElementById("left-scroll").addEventListener("click", () => {
-  setTimeout(() => (card_container.scrollLeft -= 530), 200);
+  setTimeout(() => (cardContainer.scrollLeft -= 530), 200);
 });
 document.getElementById("right-scroll").addEventListener("click", () => {
-  setTimeout(() => (card_container.scrollLeft += 530), 200);
+  setTimeout(() => (cardContainer.scrollLeft += 530), 200);
 });
 
 document
   .getElementById("numberofcities")
   .addEventListener("input", cardObj.validateTheSpinner);
 
-/**
- * It allows only the value between 3 and 10 , it restricts
- * If it exceeds 10, it automatically changes to 10
- * If it is less 3 , it automatically changes to 3
- * @params {}
- * @return {void}
- */
-cardContainerDetails.prototype.validateTheSpinner = function () {
-  parseInt(this.value) < 3
-    ? this.updateUIElementAttributeWithTheGivenValue(
-        "numberofcities",
-        "value",
-        3
-      )
-    : parseInt(this.value) > 10
-    ? this.updateUIElementAttributeWithTheGivenValue(
-        "numberofcities",
-        "value",
-        10
-      )
-    : this.updateUIElementAttributeWithTheGivenValue(
-        "numberofcities",
-        "value",
-        parseInt(this.value)
-      );
-};
-
 setInterval(cardObj.hideTheScrollArrow, 1000);
 
 // bottom section
 
 /**
- * A constructor function ,which will inherit cardContainerDetails and
- * the prototypic functions will be used to populate values to tile
+ * A Class which contains constructor and methods to populate the tile details.
  * @return {void} nothing
  */
-function tileContainerDetails() {
-  this.weather_details = Object.entries(weather_data).map(
-    (element) => element[1]
-  );
-}
-tileContainerDetails.prototype = new cardContainerDetails();
-
-let tileObj = new tileContainerDetails();
-
-/*
- * Bottom tile container's object reference
- * Weather details is an array, that contains the city weather information
- */
-var tile_container = document.getElementById("continent-wise-list");
-tile_container.replaceChildren();
-let continent_arrow = document.getElementById("sort-by-continent");
-let temperature_arrow = document.getElementById("sort-by-temperature");
-
-/**
- *
- * This function will sort the array based on the criteria and sorting order.
- * @param {string} criteria the criteria based on sort happens
- * @param {string} sorting_order sorting order of the array
- */
-tileContainerDetails.prototype.sortTheArrayBasedOnTheGivenPreference =
-  function () {
-    this.weather_details.sort((a, b) => {
+class TileContainerDetails extends CardContainerDetails {
+  /**
+   * A constructor function ,in which data is extracted.
+   * @return {void} nothing
+   */
+  constructor() {
+    super();
+    this.weatherDetails = Object.entries(weatherData).map(
+      (element) => element[1]
+    );
+  }
+  /**
+   *
+   * This function will sort the array based on the criteria and sorting order.
+   * @params {}   nothing
+   * @return {void} nothing
+   */
+  sortTheArrayBasedOnTheGivenPreference() {
+    this.weatherDetails.sort((a, b) => {
       if (a.timeZone.split("/")[0] === b.timeZone.split("/")[0]) {
-        return temperature_arrow.name == "temperature-arrow-up"
+        return temperatureArrow.name == "temperature-arrow-up"
           ? parseInt(a.temperature) < parseInt(b.temperature)
             ? 1
             : -1
@@ -1164,7 +1039,7 @@ tileContainerDetails.prototype.sortTheArrayBasedOnTheGivenPreference =
           ? -1
           : 1;
       } else
-        return continent_arrow.name == "continent-arrow-down"
+        return continentArrow.name == "continent-arrow-down"
           ? a.timeZone.split("/")[0] > b.timeZone.split("/")[0]
             ? 1
             : -1
@@ -1172,136 +1047,186 @@ tileContainerDetails.prototype.sortTheArrayBasedOnTheGivenPreference =
           ? -1
           : 1;
     });
-  };
-
-/**
- *
- * The funtion will create elements and populate continent name and temperature to the tile.
- * @param {object reference} tile_content_division Object reference of the tile division
- * @param {string} timezone Timezone of the city
- * @param {string} temperature_celsius temperature of the city
- */
-tileContainerDetails.prototype.updateContinentnameAndTemperatureInTheTile =
-  function (tile_content_division, timezone, temperature_celsius) {
-    let continent_name = document.createElement("p");
-    let temperature_of_continent = document.createElement("p");
-    tile_container.setAttribute("class", "cities-with-temp-info");
-    tile_content_division.setAttribute("class", "tile-content");
-    continent_name.setAttribute("class", "continent-name");
-    continent_name.innerHTML = timezone.split("/")[0];
-    temperature_of_continent.setAttribute("class", "continent-temp");
-    temperature_of_continent.innerHTML = temperature_celsius;
-    tile_container.appendChild(tile_content_division);
-    tile_content_division.appendChild(continent_name);
-    tile_content_division.appendChild(temperature_of_continent);
-  };
-
-/**
- *
- * The function will create elements and populate state name and live time to the tile.
- * @param {object reference} tile_content_division  Object reference of the tile division
- * @param {string} cityname name of the city
- */
-tileContainerDetails.prototype.updateStatenameAndTimeInTheTile = function (
-  tile_content_division,
-  cityname
-) {
-  let state_name = document.createElement("p");
-  let live_time = document.createElement("span");
-  state_name.setAttribute("class", "state-name");
-  state_name.innerHTML = cityname + ",";
-  setInterval(
-    this.displayLiveTimeToTheCity,
-    10,
-    cityname.toLowerCase(),
-    live_time
-  );
-  tile_content_division.appendChild(state_name);
-  state_name.appendChild(live_time);
-};
-
-/**
- *
- * The function will create elements and populate humidity value to the tile.
- * @param {object reference} tile_content_division  Object reference of the tile division
- * @param {string} humidity_value humidity of the city
- */
-tileContainerDetails.prototype.updateHumidityInTheTile = function (
-  tile_content_division,
-  humidity_value
-) {
-  let humidity_division = document.createElement("p");
-  let humidity_icon = document.createElement("img");
-  let humidity_in_percentage = document.createElement("span");
-  humidity_division.setAttribute("class", "humidity-representation");
-  humidity_icon.src = "./ASSETS/humidityIcon.svg";
-  humidity_icon.setAttribute("id", "humidity-img");
-  humidity_in_percentage.setAttribute("class", "humidity-per");
-  humidity_in_percentage.innerHTML = humidity_value;
-  tile_content_division.appendChild(humidity_division);
-  humidity_division.appendChild(humidity_icon);
-  humidity_division.appendChild(humidity_in_percentage);
-};
-
-/**
- * This will create the elements for the tile and set style attributes and
- * populate the given values to it
- * @param {string} cityname name of the city
- * @param {string} timezone timezone of the city
- * @param {string} temperature_celsius temperature in celsius format of the city
- * @param {string} humidity_value humidity in percentage of the city
- */
-tileContainerDetails.prototype.createTileAndPopulateCityDetails = function (
-  cityname,
-  timezone,
-  temperature_celsius,
-  humidity_value
-) {
-  let tile_content_division = document.createElement("div");
-  this.updateContinentnameAndTemperatureInTheTile(
-    tile_content_division,
+  }
+  /**
+   *
+   * The funtion will create elements and populate continent name and temperature to the tile.
+   * @param {object reference} tileContentDivision Object reference of the tile division
+   * @param {string} timezone Timezone of the city
+   * @param {string} temperatureCelsius temperature of the city
+   */
+  updateContinentnameAndTemperatureInTheTile(
+    tileContentDivision,
     timezone,
-    temperature_celsius
-  );
-  this.updateStatenameAndTimeInTheTile(tile_content_division, cityname);
-  this.updateHumidityInTheTile(tile_content_division, humidity_value);
-};
-/**
- * Create a tile and populate the continent details to the tile container.
- * @param {array} Weather_list
- * @return {void} nothing
- */
-tileContainerDetails.prototype.createTile = function (Weather_list) {
-  tile_container.replaceChildren();
-  let count = 1;
-  for (let city of Weather_list) {
-    if (count <= 12) {
-      this.createTileAndPopulateCityDetails(
-        city.cityName,
-        city.timeZone,
-        city.temperature,
-        city.humidity
-      );
-      count++;
+    temperatureCelsius
+  ) {
+    let continentName = document.createElement("p");
+    let temperatureOfContinent = document.createElement("p");
+    tileContainer.setAttribute("class", "cities-with-temp-info");
+    tileContentDivision.setAttribute("class", "tile-content");
+    continentName.setAttribute("class", "continent-name");
+    continentName.innerHTML = timezone.split("/")[0];
+    temperatureOfContinent.setAttribute("class", "continent-temp");
+    temperatureOfContinent.innerHTML = temperatureCelsius;
+    tileContainer.appendChild(tileContentDivision);
+    tileContentDivision.appendChild(continentName);
+    tileContentDivision.appendChild(temperatureOfContinent);
+  }
+  /**
+   *
+   * The function will create elements and populate state name and live time to the tile.
+   * @param {object reference} tileContentDivision  Object reference of the tile division
+   * @param {string} cityname name of the city
+   */
+  updateStatenameAndTimeInTheTile(tileContentDivision, cityname) {
+    let stateName = document.createElement("p");
+    let liveTime = document.createElement("span");
+    stateName.setAttribute("class", "state-name");
+    stateName.innerHTML = cityname + ",";
+    setInterval(
+      this.displayLiveTimeToTheCity,
+      10,
+      cityname.toLowerCase(),
+      liveTime
+    );
+    tileContentDivision.appendChild(stateName);
+    stateName.appendChild(liveTime);
+  }
+  /**
+   *
+   * The function will create elements and populate humidity value to the tile.
+   * @param {object reference} tileContentDivision  Object reference of the tile division
+   * @param {string} humidityValue humidity of the city
+   */
+  updateHumidityInTheTile(tileContentDivision, humidityValue) {
+    let humidityDivision = document.createElement("p");
+    let humidityIcon = document.createElement("img");
+    let humidityInPercentage = document.createElement("span");
+    humidityDivision.setAttribute("class", "humidity-representation");
+    humidityIcon.src = "./ASSETS/humidityIcon.svg";
+    humidityIcon.setAttribute("id", "humidity-img");
+    humidityInPercentage.setAttribute("class", "humidity-per");
+    humidityInPercentage.innerHTML = humidityValue;
+    tileContentDivision.appendChild(humidityDivision);
+    humidityDivision.appendChild(humidityIcon);
+    humidityDivision.appendChild(humidityInPercentage);
+  }
+  /**
+   * This will create the elements for the tile and set style attributes and
+   * populate the given values to it
+   * @param {string} cityname name of the city
+   * @param {string} timezone timezone of the city
+   * @param {string} temperatureCelsius temperature in celsius format of the city
+   * @param {string} humidityValue humidity in percentage of the city
+   */
+  createTileAndPopulateCityDetails(
+    cityname,
+    timezone,
+    temperatureCelsius,
+    humidityValue
+  ) {
+    let tileContentDivision = document.createElement("div");
+    this.updateContinentnameAndTemperatureInTheTile(
+      tileContentDivision,
+      timezone,
+      temperatureCelsius
+    );
+    this.updateStatenameAndTimeInTheTile(tileContentDivision, cityname);
+    this.updateHumidityInTheTile(tileContentDivision, humidityValue);
+  }
+  /**
+   * Create a tile and populate the continent details to the tile container.
+   * @param {array} weatherList
+   * @return {void} nothing
+   */
+  createTile(weatherList) {
+    tileContainer.replaceChildren();
+    let count = 1;
+    for (let city of weatherList) {
+      if (count <= 12) {
+        this.createTileAndPopulateCityDetails(
+          city.cityName,
+          city.timeZone,
+          city.temperature,
+          city.humidity
+        );
+        count++;
+      }
     }
   }
-};
+  /**
+   * Update the image source of the arrow and name attribute,
+   * sort the array list based on the continent name.
+   * @params {}
+   * @return {void} nothing
+   */
+  updateTheArrowImageAndContinentOrder() {
+    if (continentArrow.name == "continent-arrow-down") {
+      continentArrow.name = "continent-arrow-up";
+      this.updateUIElementAttributeWithTheGivenValue(
+        "sort-by-continent",
+        "src",
+        "/ASSETS/arrowUp.svg"
+      );
+      this.sortTheArrayBasedOnTheGivenPreference();
+      this.createTile(this.weatherDetails);
+    } else {
+      continentArrow.name = "continent-arrow-down";
+      this.updateUIElementAttributeWithTheGivenValue(
+        "sort-by-continent",
+        "src",
+        "/ASSETS/arrowDown.svg"
+      );
+      this.sortTheArrayBasedOnTheGivenPreference();
+      this.createTile(this.weatherDetails);
+    }
+  }
+  /**
+   * Update the image source of the arrow and name attribute,
+   * sort the array list based on the temperature.
+   * @params {}
+   * @return {void} nothing
+   */
+  updateTheArrowImageAndtemperatureOrder() {
+    if (temperatureArrow.name == "temperature-arrow-up") {
+      temperatureArrow.name = "temperature-arrow-down";
+      this.updateUIElementAttributeWithTheGivenValue(
+        "sort-by-temperature",
+        "src",
+        "/ASSETS/arrowDown.svg"
+      );
+      this.sortTheArrayBasedOnTheGivenPreference();
+      this.createTile(this.weatherDetails);
+    } else {
+      temperatureArrow.name = "temperature-arrow-up";
+      this.updateUIElementAttributeWithTheGivenValue(
+        "sort-by-temperature",
+        "src",
+        "/ASSETS/arrowUp.svg"
+      );
+      this.sortTheArrayBasedOnTheGivenPreference();
+      this.createTile(this.weatherDetails);
+    }
+  }
+}
+// Object creation
+let tileObj = new TileContainerDetails();
+
+/*
+ * Bottom tile container's object reference
+ * Weather details is an array, that contains the city weather information
+ */
+var tileContainer = document.getElementById("continent-wise-list");
+tileContainer.replaceChildren();
+let continentArrow = document.getElementById("sort-by-continent");
+let temperatureArrow = document.getElementById("sort-by-temperature");
 
 /**
  * Whenever the page is loaded,the DOM event triggers and calls
  * createTileOnLoad function to create tiles with continent details.
  */
-document.getElementById("continent-wise-list").onload = createTileOnLoad();
-
-/**
- * The function is called whenever the page loads.
- * @params{}
- * @return{void} nothing
- */
-function createTileOnLoad() {
-  tileObj.sortTheArrayBasedOnTheGivenPreference();
-  tileObj.createTile(tileObj.weather_details);
-}
+document.getElementById("continent-wise-list").onload =
+  global.createTileOnLoad();
 
 /**
  * Whenever the arrow is clicked, the dom event triggers and calls the function.
@@ -1312,61 +1237,5 @@ document.getElementById("sort-by-continent").addEventListener("click", () => {
 document.getElementById("sort-by-temperature").addEventListener("click", () => {
   tileObj.updateTheArrowImageAndtemperatureOrder();
 });
-
-/**
- * Update the image source of the arrow and name attribute,
- * sort the array list based on the continent name.
- * @params {}
- * @return {void} nothing
- */
-tileContainerDetails.prototype.updateTheArrowImageAndContinentOrder =
-  function () {
-    if (continent_arrow.name == "continent-arrow-down") {
-      continent_arrow.name = "continent-arrow-up";
-      this.updateUIElementAttributeWithTheGivenValue(
-        "sort-by-continent",
-        "src",
-        "/ASSETS/arrowUp.svg"
-      );
-      this.sortTheArrayBasedOnTheGivenPreference();
-      this.createTile(this.weather_details);
-    } else {
-      continent_arrow.name = "continent-arrow-down";
-      this.updateUIElementAttributeWithTheGivenValue(
-        "sort-by-continent",
-        "src",
-        "/ASSETS/arrowDown.svg"
-      );
-      this.sortTheArrayBasedOnTheGivenPreference();
-      this.createTile(this.weather_details);
-    }
-  };
-
-/**
- * Update the image source of the arrow and name attribute,
- * sort the array list based on the temperature.
- * @params {}
- * @return {void} nothing
- */
-tileContainerDetails.prototype.updateTheArrowImageAndtemperatureOrder =
-  function () {
-    if (temperature_arrow.name == "temperature-arrow-up") {
-      temperature_arrow.name = "temperature-arrow-down";
-      this.updateUIElementAttributeWithTheGivenValue(
-        "sort-by-temperature",
-        "src",
-        "/ASSETS/arrowDown.svg"
-      );
-      this.sortTheArrayBasedOnTheGivenPreference();
-      this.createTile(this.weather_details);
-    } else {
-      temperature_arrow.name = "temperature-arrow-up";
-      this.updateUIElementAttributeWithTheGivenValue(
-        "sort-by-temperature",
-        "src",
-        "/ASSETS/arrowUp.svg"
-      );
-      this.sortTheArrayBasedOnTheGivenPreference();
-      this.createTile(this.weather_details);
-    }
-  };
+export { tileObj };
+export { CurrentCityInformation };
