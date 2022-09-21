@@ -1,4 +1,4 @@
-import { weatherData } from "/DATA/data.js";
+//import { weatherData } from "/DATA/data.js";
 import { CurrentCityInformation, tileObj } from "/JAVASCRIPT/index.js";
 /* Import cityname from json to the datalist,
    Create a array of citynames.
@@ -7,7 +7,7 @@ import { CurrentCityInformation, tileObj } from "/JAVASCRIPT/index.js";
 let cityData;
 const atPresent = "NOW";
 let cityNameList = [];
-export default (function () {
+function appendCitynameToDropdown(weatherData) {
   const citiesList = document.getElementById("city_lists");
   for (let city in weatherData) {
     const options = document.createElement("OPTION");
@@ -15,7 +15,7 @@ export default (function () {
     citiesList.appendChild(options);
     cityNameList.push(weatherData[city].cityName.toLowerCase());
   }
-})();
+}
 
 /**
  *
@@ -89,4 +89,9 @@ function createTileOnLoad() {
 }
 
 export { cityData, atPresent, cityNameList };
-export { checkCitynameIsValid, updateDataOnCityname, createTileOnLoad };
+export {
+  appendCitynameToDropdown,
+  checkCitynameIsValid,
+  updateDataOnCityname,
+  createTileOnLoad,
+};

@@ -422,8 +422,6 @@ class CurrentCityInformation {
   }
 }
 
-global.updateDataOnCityname();
-
 // middle section javascript
 
 /**

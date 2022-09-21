@@ -1,3 +1,8 @@
+import {
+  appendCitynameToDropdown,
+  updateDataOnCityname,
+} from "/JAVASCRIPT/utility.js";
+
 function fetchweatherData() {
   let response = new Promise(async (resolve, reject) => {
     let weatherData = await fetch(
@@ -69,37 +74,14 @@ async function getWeatherData() {
     nextFiveHrs = await response_of_nextFivehrs.json();
     city.nextFiveHrs = nextFiveHrs.temperature;
     weatherData = await updateKeyValue(liveDataOfCities, "cityName");
-    console.log(weatherData);
+    //console.log(weatherData);
   }
 }
 
-getWeatherData().then();
-
-// fetchweatherData()
-//   .then(
-//     async (response) => {
-//       weatherData = await response.json();
-//       console.log("weatherData: ", weatherData);
-//     },
-//     (error) => console.log(error)
-//   )
-//   .then(() => {
-//     for (let city of weatherData) {
-//       nameOfCity = city.cityName;
-//       fetchCityName(nameOfCity).then(
-//         async (response) => {
-//           cityName = await response.json();
-//           cityName.hours = 6;
-//           console.log("cityName: ", cityName);
-//         },
-//         (error) => console.log(error)
-//       );
-//     }
-//   })
-//   .then(() => {
-//     console.log("2", cityName);
-//     fetchNextFivehrs(cityName).then(async (response) => {
-//       nextFiveHrs = await response.json();
-//       console.log("nextFiveHrs: ", nextFiveHrs);
-//     });
-//   })
+getWeatherData().then(
+  () => {
+    appendCitynameToDropdown(weatherData);
+    updateDataOnCityname();
+  },
+  (error) => console.log(error)
+);
