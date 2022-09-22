@@ -801,6 +801,8 @@ class CardContainerDetails extends CurrentCityInformation {
     if (lengthOfList < noOfCitiesToDisplay) {
       noOfCitiesToDisplay = lengthOfList;
     }
+    if (noOfCitiesToDisplay < 3) noOfCitiesToDisplay = 3;
+    else if (noOfCitiesToDisplay > 10) noOfCitiesToDisplay = 10;
     if (lengthOfList <= 3) {
       spinner = 3;
       this.updateUIElementAttributeWithTheGivenValue(
