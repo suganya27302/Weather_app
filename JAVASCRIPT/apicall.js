@@ -57,18 +57,24 @@ async function getWeatherData() {
   let cityName;
   let nextFiveHrs;
   let weatherDetails;
-  let response = await fetchweatherData();
-  liveDataOfCities = await response.json();
 
-  for (let city of liveDataOfCities) {
-    nameOfCity = city.cityName;
-    let response_of_city = await fetchCityName(nameOfCity);
-    cityName = await response_of_city.json();
-    cityName.hours = 6;
-    let response_of_nextFivehrs = await fetchNextFivehrs(cityName);
-    nextFiveHrs = await response_of_nextFivehrs.json();
-    city.nextFiveHrs = nextFiveHrs.temperature;
-    weatherDetails = await updateKeyValue(liveDataOfCities, "cityName");
+  let response = await fetchweatherData();
+  try {
+    if (response.ok) {
+      liveDataOfCities = await response.json();
+      for (let city of liveDataOfCities) {
+        nameOfCity = city.cityName;
+        let response_of_city = await fetchCityName(nameOfCity);
+        cityName = await response_of_city.json();
+        cityName.hours = 6;
+        let response_of_nextFivehrs = await fetchNextFivehrs(cityName);
+        nextFiveHrs = await response_of_nextFivehrs.json();
+        city.nextFiveHrs = nextFiveHrs.temperature;
+        weatherDetails = await updateKeyValue(liveDataOfCities, "cityName");
+      }
+    } else throw new Error("Something went wrong...");
+  } catch (error) {
+    console.log(error);
   }
   return weatherDetails;
 }
