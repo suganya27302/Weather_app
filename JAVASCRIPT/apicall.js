@@ -1,8 +1,3 @@
-import {
-  appendCitynameToDropdown,
-  updateDataOnCityname,
-} from "/JAVASCRIPT/utility.js";
-
 function fetchweatherData() {
   let response = new Promise(async (resolve, reject) => {
     let weatherData = await fetch(
@@ -49,19 +44,19 @@ function fetchNextFivehrs(nameOfCity) {
   return response;
 }
 
-let weatherData;
-let liveDataOfCities;
-let nameOfCity;
-let cityName;
-let nextFiveHrs;
-
 function updateKeyValue(array, key) {
   return array.reduce((object, item) => {
     object[item[key].toLowerCase()] = item;
     return object;
   }, {});
 }
+
 async function getWeatherData() {
+  let liveDataOfCities;
+  let nameOfCity;
+  let cityName;
+  let nextFiveHrs;
+  let weatherDetails;
   let response = await fetchweatherData();
   liveDataOfCities = await response.json();
 
@@ -73,15 +68,9 @@ async function getWeatherData() {
     let response_of_nextFivehrs = await fetchNextFivehrs(cityName);
     nextFiveHrs = await response_of_nextFivehrs.json();
     city.nextFiveHrs = nextFiveHrs.temperature;
-    weatherData = await updateKeyValue(liveDataOfCities, "cityName");
-    //console.log(weatherData);
+    weatherDetails = await updateKeyValue(liveDataOfCities, "cityName");
   }
+  return weatherDetails;
 }
 
-getWeatherData().then(
-  () => {
-    appendCitynameToDropdown(weatherData);
-    updateDataOnCityname();
-  },
-  (error) => console.log(error)
-);
+export { getWeatherData };

@@ -1,7 +1,28 @@
 //Top section Javscript functions
 //import files
-import { weatherData } from "/DATA/data.js";
+//import { weatherData } from "/DATA/data.js";
 import * as global from "/JAVASCRIPT/utility.js";
+import { getWeatherData } from "/JAVASCRIPT/apicall.js";
+let weatherData;
+let body_division = document.getElementsByClassName("body-container");
+if (weatherData == undefined) {
+  body_division[0].style.display = "none";
+  document.body.style.backgroundColor = "rgb(25,31,38)";
+  document.body.style.backgroundImage = "url('../ASSETS/load.gif')";
+  document.body.style.backgroundSize = "40%";
+  document.body.style.backgroundRepeat = "no-repeat";
+  document.body.style.backgroundPosition = "top";
+}
+weatherData = await getWeatherData();
+if (weatherData != undefined) {
+  body_division[0].style.display = "flex";
+  document.body.style.backgroundImage = "url('../ASSETS/background.png')";
+  document.body.style.backgroundSize = "cover";
+  (function () {
+    global.appendCitynameToDropdown(weatherData);
+  })();
+}
+
 /** @type {string,reference} */
 const emptyValue = "NIL";
 let timeout;
@@ -421,7 +442,7 @@ class CurrentCityInformation {
     }
   }
 }
-
+global.updateDataOnCityname();
 // middle section javascript
 
 /**
