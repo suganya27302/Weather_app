@@ -197,7 +197,7 @@ class CurrentCityInformation {
       obj.UpdateAmpmForNextfivehrs(hour, partOfTime);
     }
     clearInterval(timeout);
-    timeout = setInterval(displayLiveTime, 1000, this);
+    timeout = setInterval(displayLiveTime, 0, this);
   }
   /**
    *
@@ -564,12 +564,7 @@ class CardContainerDetails extends CurrentCityInformation {
     date.setAttribute("class", "card-date-time");
     date.innerHTML = liveDateOfCity;
     time.setAttribute("class", "card-date-time");
-    setInterval(
-      this.displayLiveTimeToTheCity,
-      10,
-      cityname.toLowerCase(),
-      time
-    );
+    setInterval(this.displayLiveTimeToTheCity, 0, cityname.toLowerCase(), time);
     cardDivision.appendChild(time);
     cardDivision.appendChild(date);
   }
@@ -1106,7 +1101,7 @@ class TileContainerDetails extends CardContainerDetails {
     stateName.innerHTML = cityname + ",";
     setInterval(
       this.displayLiveTimeToTheCity,
-      10,
+      0,
       cityname.toLowerCase(),
       liveTime
     );
