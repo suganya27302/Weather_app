@@ -86,8 +86,11 @@ async function getWeatherData() {
   let cityName;
   let nextFiveHrs;
   let weatherDetails;
-
-  let response = await fetchweatherData();
+  let response;
+  response = await fetchweatherData();
+  setInterval(async () => {
+    response = await fetchweatherData();
+  }, 14400000);
   try {
     if (response.ok) {
       liveDataOfCities = await response.json();
@@ -96,7 +99,11 @@ async function getWeatherData() {
         let response_of_city = await fetchCityName(nameOfCity);
         cityName = await response_of_city.json();
         cityName.hours = 6;
-        let response_of_nextFivehrs = await fetchNextFivehrs(cityName);
+        let response_of_nextFivehrs;
+        response_of_nextFivehrs = await fetchNextFivehrs(cityName);
+        setInterval(async () => {
+          response_of_nextFivehrs = await fetchNextFivehrs(cityName);
+        }, 3600000);
         nextFiveHrs = await response_of_nextFivehrs.json();
         city.nextFiveHrs = nextFiveHrs.temperature;
         weatherDetails = await updateKeyValue(liveDataOfCities, "cityName");
