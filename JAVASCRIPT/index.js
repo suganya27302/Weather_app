@@ -3,6 +3,8 @@
 //import { weatherData } from "/DATA/data.js";
 import * as global from "/JAVASCRIPT/utility.js";
 import { getWeatherData } from "/JAVASCRIPT/apicall.js";
+
+//fetch data
 let weatherData;
 let body_division = document.getElementsByClassName("body-container");
 if (weatherData == undefined) {
@@ -18,6 +20,11 @@ if (weatherData != undefined) {
   body_division[0].style.display = "flex";
   document.body.style.backgroundImage = "url('../ASSETS/background.png')";
   document.body.style.backgroundSize = "cover";
+  /*
+   * The function is used to call the initial function which is to execute.
+   * @params {}
+   * @return {void}
+   */
   (function () {
     global.appendCitynameToDropdown(weatherData);
   })();
