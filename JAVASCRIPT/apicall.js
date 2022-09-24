@@ -95,6 +95,17 @@ async function appendNextFivehrs(nameOfCity, weatherData) {
   }, 3600000);
   weatherData[nameOfCity.toLowerCase()].nextFiveHrs = nextFiveHrs.temperature;
 }
+async function fetchweatherDataAndUpdateKeyValue() {
+  let liveDataOfCities;
+  let weatherDetails;
+  try {
+    liveDataOfCities = await fetchweatherData();
+    weatherDetails = updateKeyValue(liveDataOfCities, "cityName");
+  } catch (error) {
+    console.log(error);
+  }
+  return weatherDetails;
+}
 
 /**
  * the function, which is used to call the functions, which are responsible for
@@ -103,17 +114,10 @@ async function appendNextFivehrs(nameOfCity, weatherData) {
  * @return {object} weatherDetails
  */
 async function getWeatherData() {
-  let liveDataOfCities;
-  let weatherDetails;
-  try {
-    liveDataOfCities = await fetchweatherData();
-    setInterval(async () => {
-      response = await fetchweatherData();
-    }, 14400000);
-    weatherDetails = updateKeyValue(liveDataOfCities, "cityName");
-  } catch (error) {
-    console.log(error);
-  }
+  let weatherDetails = fetchweatherDataAndUpdateKeyValue();
+  setInterval(async () => {
+    weatherDetails = fetchweatherDataAndUpdateKeyValue();
+  }, 14400000);
   return weatherDetails;
 }
 

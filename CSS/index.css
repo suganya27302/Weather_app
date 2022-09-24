@@ -8,8 +8,7 @@
   vertical-align: bottom;
   width: 3.5em;
 }
-.arrow-icon
-{
+.arrow-icon {
   background-color: black;
 }
 body {
@@ -45,9 +44,9 @@ body {
   color: white;
   display: flex;
   flex-direction: column;
-  gap:7px;
+  gap: 7px;
   height: 240px;
-  margin:0px 20px;
+  margin: 0px 20px;
   min-width: 14.7rem;
   padding-left: 8px;
   overflow-x: hidden;
@@ -90,27 +89,22 @@ body {
   font-weight: normal;
   vertical-align: top;
 }
-.carousel-arrow-image
-{
-  height:1.8rem;
+.carousel-arrow-image {
+  height: 1.8rem;
 }
-.carousel-div
-{
-    background-color: rgb(208, 208,208);
-    border-radius: 50%;
-    height: 2.1rem;
-    opacity: 0.8;
-    padding: 0.5em;
-    width: 2.5em;
+.carousel-div {
+  background-color: rgb(208, 208, 208);
+  border-radius: 50%;
+  height: 2.1rem;
+  opacity: 0.8;
+  padding: 0.5em;
+  width: 2.5em;
 }
-.carousel-div:hover{
- height: 2em;
- opacity: 1;
- width: 2.2em;
+.carousel-div:hover {
+  opacity: 1;
 }
-.city-details-based-onWeather
-{
-  display:flex;
+.city-details-based-onWeather {
+  display: flex;
   align-items: center;
 }
 .city-info {
@@ -209,8 +203,7 @@ body {
   font-weight: normal;
   vertical-align: top;
 }
-.humidity-representation
-{
+.humidity-representation {
   text-align: end;
 }
 #icon {
@@ -364,7 +357,7 @@ body {
 
 .top-icon {
   background-color: black;
-  width:3em;
+  width: 3em;
 }
 /* Scrollbar Styling */
 ::-webkit-scrollbar {
@@ -476,7 +469,7 @@ body {
   .card {
     height: 230px;
     gap: 3%;
-    min-width:14em;
+    min-width: 14em;
   }
   .card:hover {
     transform: scale(1.05);
@@ -490,10 +483,9 @@ body {
     font-size: 1.1em;
     width: 55%;
   }
-  .scroll-image
-  {
-  height:3rem;
-  width:2.4rem;
+  .scroll-image {
+    height: 3rem;
+    width: 2.4rem;
   }
 }
 
