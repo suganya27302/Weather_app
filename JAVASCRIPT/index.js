@@ -2,7 +2,7 @@
 //import files
 //import { weatherData } from "/DATA/data.js";
 import * as global from "/JAVASCRIPT/utility.js";
-import { getWeatherData } from "/JAVASCRIPT/apicall.js";
+import { getWeatherData, appendNextFivehrs } from "/JAVASCRIPT/apicall.js";
 
 //fetch data
 let weatherData;
@@ -16,26 +16,38 @@ if (weatherData == undefined) {
   document.body.style.backgroundPosition = "top";
 }
 weatherData = await getWeatherData();
+
+document.getElementById("city_list").addEventListener("change", async () => {
+  await appendNextFivehrs(
+    document.getElementById("city_list").value,
+    weatherData
+  );
+  global.updateDataOnCityname();
+});
+
 if (weatherData != undefined) {
   body_division[0].style.display = "flex";
   document.body.style.backgroundImage = "url('../ASSETS/background.png')";
   document.body.style.backgroundSize = "cover";
+
   /*
    * The function is used to call the initial function which is to execute.
    * @params {}
    * @return {void}
    */
-  (function () {
+  (async function () {
     global.appendCitynameToDropdown(weatherData);
+    await appendNextFivehrs(
+      document.getElementById("city_list").value,
+      weatherData
+    );
+    global.updateDataOnCityname();
   })();
 }
 
 /** @type {string,reference} */
 const emptyValue = "NIL";
 let timeout;
-document
-  .getElementById("city_list")
-  .addEventListener("change", global.updateDataOnCityname);
 
 /**
  * A Class which contains constructor and methods to populate the current city details
@@ -449,7 +461,7 @@ class CurrentCityInformation {
     }
   }
 }
-global.updateDataOnCityname();
+
 // middle section javascript
 
 /**

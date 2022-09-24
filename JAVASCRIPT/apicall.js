@@ -14,7 +14,8 @@ function fetchweatherData() {
         },
       }
     );
-    resolve(weatherData);
+    if (weatherData.ok) resolve(weatherData.json());
+    else reject("Something went wrong..");
   });
   return response;
 }
@@ -35,7 +36,8 @@ function fetchCityName(selectedCity) {
         },
       }
     );
-    resolve(cityName);
+    if (cityName.ok) resolve(cityName.json());
+    else reject("Something went wrong..");
   });
   return response;
 }
@@ -48,14 +50,15 @@ function fetchCityName(selectedCity) {
  */
 function fetchNextFivehrs(nameOfCity) {
   let response = new Promise(async (resolve, reject) => {
-    let weatherData = await fetch(`https://soliton.glitch.me/hourly-forecast`, {
+    let nextFiveHrs = await fetch(`https://soliton.glitch.me/hourly-forecast`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(nameOfCity),
     });
-    resolve(weatherData);
+    if (nextFiveHrs.ok) resolve(nextFiveHrs.json());
+    else reject("Something went wrong..");
   });
   return response;
 }
@@ -75,6 +78,25 @@ function updateKeyValue(array, key) {
 }
 
 /**
+ *
+ * The function will fetch next five hours temperature value and append to the object.
+ * @param {string} nameOfCity Selected city name
+ * @param {object} weatherData Object
+ */
+async function appendNextFivehrs(nameOfCity, weatherData) {
+  let nextFiveHrs;
+  let cityName;
+  cityName = await fetchCityName(nameOfCity);
+  cityName.hours = 6;
+
+  nextFiveHrs = await fetchNextFivehrs(cityName);
+  setInterval(async () => {
+    nextFiveHrs = await fetchNextFivehrs(cityName);
+  }, 3600000);
+  weatherData[nameOfCity.toLowerCase()].nextFiveHrs = nextFiveHrs.temperature;
+}
+
+/**
  * the function, which is used to call the functions, which are responsible for
  * fetch the live weather data.
  * @params {} nothing
@@ -82,37 +104,17 @@ function updateKeyValue(array, key) {
  */
 async function getWeatherData() {
   let liveDataOfCities;
-  let nameOfCity;
-  let cityName;
-  let nextFiveHrs;
   let weatherDetails;
-  let response;
-  response = await fetchweatherData();
-  setInterval(async () => {
-    response = await fetchweatherData();
-  }, 14400000);
   try {
-    if (response.ok) {
-      liveDataOfCities = await response.json();
-      for (let city of liveDataOfCities) {
-        nameOfCity = city.cityName;
-        let response_of_city = await fetchCityName(nameOfCity);
-        cityName = await response_of_city.json();
-        cityName.hours = 6;
-        let response_of_nextFivehrs;
-        response_of_nextFivehrs = await fetchNextFivehrs(cityName);
-        setInterval(async () => {
-          response_of_nextFivehrs = await fetchNextFivehrs(cityName);
-        }, 3600000);
-        nextFiveHrs = await response_of_nextFivehrs.json();
-        city.nextFiveHrs = nextFiveHrs.temperature;
-        weatherDetails = await updateKeyValue(liveDataOfCities, "cityName");
-      }
-    } else throw new Error("Something went wrong...");
+    liveDataOfCities = await fetchweatherData();
+    setInterval(async () => {
+      response = await fetchweatherData();
+    }, 14400000);
+    weatherDetails = updateKeyValue(liveDataOfCities, "cityName");
   } catch (error) {
     console.log(error);
   }
   return weatherDetails;
 }
 
-export { getWeatherData };
+export { getWeatherData, appendNextFivehrs };
