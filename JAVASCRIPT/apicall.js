@@ -1,9 +1,10 @@
 /**
- * The function, which is used to fetch the live weather data through api.
+ * fetch the live weather data by sending a
+ * get request to the server.
  * @params {} nothing
  * @return {Promise} response
  */
-function fetchweatherData() {
+function sendHttpRequestTofetchweatherData() {
   let response = new Promise(async (resolve, reject) => {
     let weatherData = await fetch(
       `https://soliton.glitch.me/all-timezone-cities`,
@@ -21,11 +22,12 @@ function fetchweatherData() {
 }
 
 /**
- * The function, which is used to fetch the city information through api.
- * @params {} nothing
+ * fetch the current city information by sending a
+ * get request and taking the current city as input.
+ * @params {selectedCity} Current city
  * @return {Promise} response
  */
-function fetchCityName(selectedCity) {
+function sendHttpRequestTofetchCityInformation(selectedCity) {
   let response = new Promise(async (resolve, reject) => {
     let cityName = await fetch(
       `https://soliton.glitch.me?city=${selectedCity}`,
@@ -43,12 +45,12 @@ function fetchCityName(selectedCity) {
 }
 
 /**
- * The function, which is used to fetch the live temperature value for next five hours
- * through api.
+ * fetch the live temperature value for next five hours
+ * by sending a current city information through the post request.
  * @params {string} nameOfCity
  * @return {Promise} response
  */
-function fetchNextFivehrs(nameOfCity) {
+function sendHttpRequestTofetchNextFivehrsTemperature(nameOfCity) {
   let response = new Promise(async (resolve, reject) => {
     let nextFiveHrs = await fetch(`https://soliton.glitch.me/hourly-forecast`, {
       method: "POST",
@@ -65,7 +67,7 @@ function fetchNextFivehrs(nameOfCity) {
 
 /**
  *
- * The function, which will replace the key value with the cityname.
+ * Replace the key value with the cityname.
  * @param {array} array
  * @param {string} key
  * @return {array} object weatherData
@@ -79,27 +81,46 @@ function updateKeyValue(array, key) {
 
 /**
  *
- * The function will fetch next five hours temperature value and append to the object.
+ * fetch the city information and Temperature value for next five hours.
+ * @param {string} nameOfCity current city
+ * @param {object} weatherData Weather details
+ * @returns {void} nothing
+ */
+async function fetchNextFivehrsForTheCity(nameOfCity, weatherData) {
+  let nextFiveHrs;
+  let cityInfo;
+  cityInfo = await sendHttpRequestTofetchCityInformation(nameOfCity);
+  cityInfo.hours = 6;
+  nextFiveHrs = await sendHttpRequestTofetchNextFivehrsTemperature(cityInfo);
+  weatherData[nameOfCity.toLowerCase()].nextFiveHrs = nextFiveHrs.temperature;
+}
+/**
+ *
+ *  fetch next five hours temperature value and append to the object.
  * @param {string} nameOfCity Selected city name
  * @param {object} weatherData Object
  */
-async function appendNextFivehrs(nameOfCity, weatherData) {
-  let nextFiveHrs;
-  let cityName;
-  cityName = await fetchCityName(nameOfCity);
-  cityName.hours = 6;
-
-  nextFiveHrs = await fetchNextFivehrs(cityName);
-  setInterval(async () => {
-    nextFiveHrs = await fetchNextFivehrs(cityName);
+function appendNextFivehrs(nameOfCity, weatherData) {
+  let interval;
+  weatherData = fetchNextFivehrsForTheCity(nameOfCity, weatherData);
+  clearInterval(interval);
+  interval = setInterval(async () => {
+    weatherData = fetchNextFivehrsForTheCity(nameOfCity, weatherData);
+    return weatherData;
   }, 3600000);
-  weatherData[nameOfCity.toLowerCase()].nextFiveHrs = nextFiveHrs.temperature;
+  return weatherData;
 }
+
+/**
+ * Fetch the weather data and replace the key value.
+ * @params {} nothing
+ * @return {object} weatherDetails
+ */
 async function fetchweatherDataAndUpdateKeyValue() {
   let liveDataOfCities;
   let weatherDetails;
   try {
-    liveDataOfCities = await fetchweatherData();
+    liveDataOfCities = await sendHttpRequestTofetchweatherData();
     weatherDetails = updateKeyValue(liveDataOfCities, "cityName");
   } catch (error) {
     console.log(error);
@@ -113,10 +134,11 @@ async function fetchweatherDataAndUpdateKeyValue() {
  * @params {} nothing
  * @return {object} weatherDetails
  */
-async function getWeatherData() {
+function getWeatherData() {
   let weatherDetails = fetchweatherDataAndUpdateKeyValue();
   setInterval(async () => {
     weatherDetails = fetchweatherDataAndUpdateKeyValue();
+    return weatherDetails;
   }, 14400000);
   return weatherDetails;
 }
