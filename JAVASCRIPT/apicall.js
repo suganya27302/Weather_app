@@ -101,13 +101,7 @@ async function fetchNextFivehrsForTheCity(nameOfCity, weatherData) {
  * @param {object} weatherData Object
  */
 function appendNextFivehrs(nameOfCity, weatherData) {
-  let interval;
   weatherData = fetchNextFivehrsForTheCity(nameOfCity, weatherData);
-  clearInterval(interval);
-  interval = setInterval(async () => {
-    weatherData = fetchNextFivehrsForTheCity(nameOfCity, weatherData);
-    return weatherData;
-  }, 3600000);
   return weatherData;
 }
 

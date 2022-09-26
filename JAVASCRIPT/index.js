@@ -15,19 +15,15 @@ if (weatherData == undefined) {
   document.body.style.backgroundPosition = "top";
 }
 weatherData = await getWeatherData();
+
 setInterval(() => {
   getWeatherData();
-  // console.log(weatherData);
   global.updateDataOnCityname();
 }, 14400000);
-
-let cityName = document.getElementById("city_list").value;
-
+let cityInterval;
 function getNextFiveHrsTemperature() {
-  let timeout;
-  clearInterval(timeout);
-  timeout = setInterval(async () => {
-    await appendNextFivehrs(cityName, weatherData);
+  clearInterval(cityInterval);
+  cityInterval = setInterval(async () => {
     global.updateDataOnCityname();
   }, 3600000);
 }
@@ -427,7 +423,9 @@ class CurrentCityInformation {
         "./ASSETS/warning.svg"
       );
     }
-    alert("Invalid Cityname!, Please enter a valid cityname.");
+    document.getElementById("city_list").style.border = "2px solid red";
+    document.getElementById("warning").style.display = "block";
+    //alert("Invalid Cityname!, Please enter a valid cityname.");
   }
   /**
    *
@@ -1271,6 +1269,6 @@ document.getElementById("sort-by-continent").addEventListener("click", () => {
 document.getElementById("sort-by-temperature").addEventListener("click", () => {
   tileObj.updateTheArrowImageAndtemperatureOrder();
 });
-export { tileObj };
+export { tileObj, cityInterval };
 export { CurrentCityInformation };
 export { getNextFiveHrsTemperature };

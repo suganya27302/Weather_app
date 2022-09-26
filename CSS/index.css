@@ -359,6 +359,11 @@ body {
   background-color: black;
   width: 3em;
 }
+#warning {
+  text-align: right;
+  color: red;
+  display: none;
+}
 /* Scrollbar Styling */
 ::-webkit-scrollbar {
   height: 7px;

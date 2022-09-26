@@ -3,6 +3,7 @@ import {
   CurrentCityInformation,
   tileObj,
   getNextFiveHrsTemperature,
+  cityInterval,
 } from "/JAVASCRIPT/index.js";
 /* Import cityname from json to the datalist,
    Create a array of citynames.
@@ -78,7 +79,10 @@ function updateDataOnCityname() {
       );
       cityData.updateLiveTimeBasedOnTimezone();
       cityData.fetchAndUpdateTemperatureForNextfivehrs(selectedCity);
+      document.getElementById("city_list").style.border = "none";
+      document.getElementById("warning").style.display = "none";
     } else {
+      clearInterval(cityInterval);
       cityData.updateUIWithNil(dateOfaCity);
     }
   })();
