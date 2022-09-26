@@ -79,7 +79,7 @@ function updateDataOnCityname() {
       );
       cityData.updateLiveTimeBasedOnTimezone();
       cityData.fetchAndUpdateTemperatureForNextfivehrs(selectedCity);
-      document.getElementById("city_list").style.border = "none";
+      document.getElementById("city_list").style.border = "0.5px solid black";
       document.getElementById("warning").style.display = "none";
     } else {
       clearInterval(cityInterval);

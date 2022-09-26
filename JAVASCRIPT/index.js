@@ -5,6 +5,7 @@ import * as global from "/JAVASCRIPT/utility.js";
 
 //fetch data
 let weatherData;
+let cityInterval;
 let body_division = document.getElementsByClassName("body-container");
 if (weatherData == undefined) {
   body_division[0].style.display = "none";
@@ -20,7 +21,12 @@ setInterval(() => {
   getWeatherData();
   global.updateDataOnCityname();
 }, 14400000);
-let cityInterval;
+
+/**
+ * It will update the temperature value of next five hours for every hour.
+ *@params {} nothing
+ *@return {void}
+ */
 function getNextFiveHrsTemperature() {
   clearInterval(cityInterval);
   cityInterval = setInterval(async () => {

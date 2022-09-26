@@ -2,7 +2,7 @@
  * fetch the live weather data by sending a
  * get request to the server.
  * @params {} nothing
- * @return {Promise} response
+ * @return {object} All cities weather data
  */
 function sendHttpRequestTofetchweatherData() {
   let response = new Promise(async (resolve, reject) => {
@@ -25,7 +25,7 @@ function sendHttpRequestTofetchweatherData() {
  * fetch the current city information by sending a
  * get request and taking the current city as input.
  * @params {selectedCity} Current city
- * @return {Promise} response
+ * @return {object} city information
  */
 function sendHttpRequestTofetchCityInformation(selectedCity) {
   let response = new Promise(async (resolve, reject) => {
@@ -48,7 +48,7 @@ function sendHttpRequestTofetchCityInformation(selectedCity) {
  * fetch the live temperature value for next five hours
  * by sending a current city information through the post request.
  * @params {string} nameOfCity
- * @return {Promise} response
+ * @return {object} weather data with next five hours temperature value
  */
 function sendHttpRequestTofetchNextFivehrsTemperature(nameOfCity) {
   let response = new Promise(async (resolve, reject) => {
@@ -65,6 +65,7 @@ function sendHttpRequestTofetchNextFivehrsTemperature(nameOfCity) {
   return response;
 }
 var weatherData;
+
 /**
  *
  * Replace the key value with the cityname.
@@ -94,6 +95,7 @@ async function fetchNextFivehrsForTheCity(nameOfCity, weatherData) {
   nextFiveHrs = await sendHttpRequestTofetchNextFivehrsTemperature(cityInfo);
   weatherData[nameOfCity.toLowerCase()].nextFiveHrs = nextFiveHrs.temperature;
 }
+
 /**
  *
  *  fetch next five hours temperature value and append to the object.
@@ -108,7 +110,7 @@ function appendNextFivehrs(nameOfCity, weatherData) {
 /**
  * Fetch the weather data and replace the key value.
  * @params {} nothing
- * @return {object} weatherDetails
+ * @return {object} weatherData all cities weather data
  */
 async function fetchweatherDataAndUpdateKeyValue() {
   let liveDataOfCities;
