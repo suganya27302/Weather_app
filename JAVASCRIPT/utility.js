@@ -1,5 +1,9 @@
 //import { weatherData } from "/DATA/data.js";
-import { CurrentCityInformation, tileObj } from "/JAVASCRIPT/index.js";
+import {
+  CurrentCityInformation,
+  tileObj,
+  getNextFiveHrsTemperature,
+} from "/JAVASCRIPT/index.js";
 /* Import cityname from json to the datalist,
    Create a array of citynames.
    This is a self invoking function.
@@ -43,11 +47,13 @@ let checkCitynameIsValid = (cityName) => {
 function updateDataOnCityname() {
   let selectedCity = document.getElementById("city_list").value.toLowerCase();
   const dateOfaCity = document.getElementsByClassName("date-style");
-  return (function () {
+  return (async function () {
     if (checkCitynameIsValid(selectedCity)) {
+      let cityName = document.getElementById("city_list").value;
+      await appendNextFivehrs(cityName, weatherData);
+      getNextFiveHrsTemperature();
       cityData = new CurrentCityInformation();
       cityData.setCityDetails(selectedCity);
-      //console.log("cityData: ", cityData);
 
       let temperatureCelsius = cityData.gettemperature();
       temperatureCelsius = temperatureCelsius.split("°");
@@ -70,8 +76,8 @@ function updateDataOnCityname() {
         temperatureCelsius[0],
         "icon_based_present_temp"
       );
-      cityData.fetchAndUpdateTemperatureForNextfivehrs(selectedCity);
       cityData.updateLiveTimeBasedOnTimezone();
+      cityData.fetchAndUpdateTemperatureForNextfivehrs(selectedCity);
     } else {
       cityData.updateUIWithNil(dateOfaCity);
     }

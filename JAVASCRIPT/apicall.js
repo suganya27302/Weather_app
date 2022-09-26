@@ -64,7 +64,7 @@ function sendHttpRequestTofetchNextFivehrsTemperature(nameOfCity) {
   });
   return response;
 }
-
+var weatherData;
 /**
  *
  * Replace the key value with the cityname.
@@ -118,14 +118,13 @@ function appendNextFivehrs(nameOfCity, weatherData) {
  */
 async function fetchweatherDataAndUpdateKeyValue() {
   let liveDataOfCities;
-  let weatherDetails;
   try {
     liveDataOfCities = await sendHttpRequestTofetchweatherData();
-    weatherDetails = updateKeyValue(liveDataOfCities, "cityName");
+    weatherData = updateKeyValue(liveDataOfCities, "cityName");
   } catch (error) {
     console.log(error);
   }
-  return weatherDetails;
+  return weatherData;
 }
 
 /**
@@ -135,12 +134,6 @@ async function fetchweatherDataAndUpdateKeyValue() {
  * @return {object} weatherDetails
  */
 function getWeatherData() {
-  let weatherDetails = fetchweatherDataAndUpdateKeyValue();
-  setInterval(async () => {
-    weatherDetails = fetchweatherDataAndUpdateKeyValue();
-    return weatherDetails;
-  }, 14400000);
-  return weatherDetails;
+  let weatherData = fetchweatherDataAndUpdateKeyValue();
+  return weatherData;
 }
-
-export { getWeatherData, appendNextFivehrs };

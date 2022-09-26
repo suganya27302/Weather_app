@@ -2,7 +2,6 @@
 //import files
 //import { weatherData } from "/DATA/data.js";
 import * as global from "/JAVASCRIPT/utility.js";
-import { getWeatherData, appendNextFivehrs } from "/JAVASCRIPT/apicall.js";
 
 //fetch data
 let weatherData;
@@ -16,33 +15,33 @@ if (weatherData == undefined) {
   document.body.style.backgroundPosition = "top";
 }
 weatherData = await getWeatherData();
-
-document.getElementById("city_list").addEventListener("change", async () => {
-  await appendNextFivehrs(
-    document.getElementById("city_list").value,
-    weatherData
-  );
+setInterval(() => {
+  getWeatherData();
+  // console.log(weatherData);
   global.updateDataOnCityname();
-});
+}, 14400000);
+
+let cityName = document.getElementById("city_list").value;
+
+function getNextFiveHrsTemperature() {
+  let timeout;
+  clearInterval(timeout);
+  timeout = setInterval(async () => {
+    await appendNextFivehrs(cityName, weatherData);
+    global.updateDataOnCityname();
+  }, 3600000);
+}
+
+document
+  .getElementById("city_list")
+  .addEventListener("change", global.updateDataOnCityname);
 
 if (weatherData != undefined) {
   body_division[0].style.display = "flex";
   document.body.style.backgroundImage = "url('../ASSETS/background.png')";
   document.body.style.backgroundSize = "cover";
-
-  /*
-   * The function is used to call the initial function which is to execute.
-   * @params {}
-   * @return {void}
-   */
-  (async function () {
-    global.appendCitynameToDropdown(weatherData);
-    await appendNextFivehrs(
-      document.getElementById("city_list").value,
-      weatherData
-    );
-    global.updateDataOnCityname();
-  })();
+  global.appendCitynameToDropdown(weatherData);
+  global.updateDataOnCityname();
 }
 
 /** @type {string,reference} */
@@ -1274,3 +1273,4 @@ document.getElementById("sort-by-temperature").addEventListener("click", () => {
 });
 export { tileObj };
 export { CurrentCityInformation };
+export { getNextFiveHrsTemperature };
