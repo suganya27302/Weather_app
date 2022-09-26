@@ -1,25 +1,27 @@
 //Top section Javscript functions
 //import files
 //import { weatherData } from "/DATA/data.js";
-import * as global from "/JAVASCRIPT/utility.js";
+import * as utility from "/JAVASCRIPT/utility.js";
 
-//fetch data
+//loading page
 let weatherData;
 let cityInterval;
 let body_division = document.getElementsByClassName("body-container");
 if (weatherData == undefined) {
   body_division[0].style.display = "none";
-  document.body.style.backgroundColor = "rgb(25,31,38)";
+  document.body.style.backgroundColor = "rgb(51,73,95)";
   document.body.style.backgroundImage = "url('../ASSETS/load.gif')";
-  document.body.style.backgroundSize = "40%";
+  document.body.style.backgroundSize = "60%";
   document.body.style.backgroundRepeat = "no-repeat";
   document.body.style.backgroundPosition = "top";
 }
+//Function call to fetch the weather data of all cities
 weatherData = await getWeatherData();
 
+// update the city data for every four hours
 setInterval(() => {
   getWeatherData();
-  global.updateDataOnCityname();
+  utility.updateDataOnCityname();
 }, 14400000);
 
 /**
@@ -30,20 +32,22 @@ setInterval(() => {
 function getNextFiveHrsTemperature() {
   clearInterval(cityInterval);
   cityInterval = setInterval(async () => {
-    global.updateDataOnCityname();
+    utility.updateDataOnCityname();
   }, 3600000);
 }
 
+// A listner to update the UI data whenever the city is selected
 document
   .getElementById("city_list")
-  .addEventListener("change", global.updateDataOnCityname);
+  .addEventListener("change", utility.updateDataOnCityname);
 
+// condition to check whether the data is fetched and display UI with data
 if (weatherData != undefined) {
   body_division[0].style.display = "flex";
   document.body.style.backgroundImage = "url('../ASSETS/background.png')";
   document.body.style.backgroundSize = "cover";
-  global.appendCitynameToDropdown(weatherData);
-  global.updateDataOnCityname();
+  utility.appendCitynameToDropdown(weatherData);
+  utility.updateDataOnCityname();
 }
 
 /** @type {string,reference} */
@@ -1264,7 +1268,7 @@ let temperatureArrow = document.getElementById("sort-by-temperature");
  * createTileOnLoad function to create tiles with continent details.
  */
 document.getElementById("continent-wise-list").onload =
-  global.createTileOnLoad();
+  utility.createTileOnLoad();
 
 /**
  * Whenever the arrow is clicked, the dom event triggers and calls the function.

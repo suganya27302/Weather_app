@@ -2,7 +2,7 @@
  * fetch the live weather data by sending a
  * get request to the server.
  * @params {} nothing
- * @return {object} All cities weather data
+ * @return {object} All cities weather data {cityname :{all details of city}}
  */
 function sendHttpRequestTofetchweatherData() {
   let response = new Promise(async (resolve, reject) => {
@@ -25,7 +25,7 @@ function sendHttpRequestTofetchweatherData() {
  * fetch the current city information by sending a
  * get request and taking the current city as input.
  * @params {selectedCity} Current city
- * @return {object} city information
+ * @return {object} city information {cityname :{time,date of the city}}
  */
 function sendHttpRequestTofetchCityInformation(selectedCity) {
   let response = new Promise(async (resolve, reject) => {
@@ -48,7 +48,7 @@ function sendHttpRequestTofetchCityInformation(selectedCity) {
  * fetch the live temperature value for next five hours
  * by sending a current city information through the post request.
  * @params {string} nameOfCity
- * @return {object} weather data with next five hours temperature value
+ * @return {object} weather data with next five hours temperature value {cityname :{[+1,+2,+3,+4,+5],temperature:[1,2,3,5,6]}}
  */
 function sendHttpRequestTofetchNextFivehrsTemperature(nameOfCity) {
   let response = new Promise(async (resolve, reject) => {
@@ -71,7 +71,7 @@ var weatherData;
  * Replace the key value with the cityname.
  * @param {array} array
  * @param {string} key
- * @return {array} object weatherData
+ * @return {array} object weatherData {cityname:{city info}}
  */
 function updateKeyValue(array, key) {
   return array.reduce((object, item) => {
@@ -82,9 +82,11 @@ function updateKeyValue(array, key) {
 
 /**
  *
- * fetch the city information and Temperature value for next five hours.
+ * fetch the city information taking cityname as parameter and the return object is
+ * given as parameter to fetch Temperature value for next five hours.
+ * update the weather data with the temperature array.
  * @param {string} nameOfCity current city
- * @param {object} weatherData Weather details
+ * @param {object} weatherData Weather details {cityname:{city details}}
  * @returns {void} nothing
  */
 async function fetchNextFivehrsForTheCity(nameOfCity, weatherData) {
@@ -100,7 +102,7 @@ async function fetchNextFivehrsForTheCity(nameOfCity, weatherData) {
  *
  *  fetch next five hours temperature value and append to the object.
  * @param {string} nameOfCity Selected city name
- * @param {object} weatherData Object
+ * @param {object} weatherData Object {cityname:{city details}}
  */
 function appendNextFivehrs(nameOfCity, weatherData) {
   weatherData = fetchNextFivehrsForTheCity(nameOfCity, weatherData);
@@ -127,7 +129,7 @@ async function fetchweatherDataAndUpdateKeyValue() {
  * the function, which is used to call the functions, which are responsible for
  * fetch the live weather data.
  * @params {} nothing
- * @return {object} weatherDetails
+ * @return {object} weatherData all cities weather data {cityname :{ city details}}
  */
 function getWeatherData() {
   let weatherData = fetchweatherDataAndUpdateKeyValue();

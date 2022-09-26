@@ -360,9 +360,11 @@ body {
   width: 3em;
 }
 #warning {
-  text-align: right;
   color: red;
   display: none;
+  font-size: 0.8em;
+  margin: 0;
+  text-align: right;
 }
 /* Scrollbar Styling */
 ::-webkit-scrollbar {
