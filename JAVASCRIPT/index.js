@@ -1,13 +1,58 @@
 //Top section Javscript functions
 //import files
-import { weatherData } from "/DATA/data.js";
-import * as global from "/JAVASCRIPT/utility.js";
+//import { weatherData } from "/DATA/data.js";
+import * as utility from "/JAVASCRIPT/utility.js";
+
+//loading page
+let weatherData;
+let cityInterval;
+let body_division = document.getElementsByClassName("body-container");
+if (weatherData == undefined) {
+  body_division[0].style.display = "none";
+  document.body.style.backgroundColor = "rgb(51,73,95)";
+  document.body.style.backgroundImage = "url('../ASSETS/load.gif')";
+  document.body.style.backgroundSize = "60%";
+  document.body.style.backgroundRepeat = "no-repeat";
+  document.body.style.backgroundPosition = "top";
+}
+//Function call to fetch the weather data of all cities
+weatherData = await getWeatherData();
+
+// update the city data for every four hours
+setInterval(() => {
+  getWeatherData();
+  utility.updateDataOnCityname();
+}, 14400000);
+
+/**
+ * It will update the temperature value of next five hours for every hour.
+ *@params {} nothing
+ *@return {void}
+ */
+function getNextFiveHrsTemperature() {
+  clearInterval(cityInterval);
+  cityInterval = setInterval(async () => {
+    utility.updateDataOnCityname();
+  }, 3600000);
+}
+
+// A listner to update the UI data whenever the city is selected
+document
+  .getElementById("city_list")
+  .addEventListener("change", utility.updateDataOnCityname);
+
+// condition to check whether the data is fetched and display UI with data
+if (weatherData != undefined) {
+  body_division[0].style.display = "flex";
+  document.body.style.backgroundImage = "url('../ASSETS/background.png')";
+  document.body.style.backgroundSize = "cover";
+  utility.appendCitynameToDropdown(weatherData);
+  utility.updateDataOnCityname();
+}
+
 /** @type {string,reference} */
 const emptyValue = "NIL";
 let timeout;
-document
-  .getElementById("city_list")
-  .addEventListener("change", global.updateDataOnCityname);
 
 /**
  * A Class which contains constructor and methods to populate the current city details
@@ -176,7 +221,7 @@ class CurrentCityInformation {
       obj.UpdateAmpmForNextfivehrs(hour, partOfTime);
     }
     clearInterval(timeout);
-    timeout = setInterval(displayLiveTime, 1000, this);
+    timeout = setInterval(displayLiveTime, 0, this);
   }
   /**
    *
@@ -388,7 +433,9 @@ class CurrentCityInformation {
         "./ASSETS/warning.svg"
       );
     }
-    alert("Invalid Cityname!, Please enter a valid cityname.");
+    document.getElementById("city_list").style.border = "2px solid red";
+    document.getElementById("warning").style.display = "block";
+    //alert("Invalid Cityname!, Please enter a valid cityname.");
   }
   /**
    *
@@ -421,8 +468,6 @@ class CurrentCityInformation {
     }
   }
 }
-
-global.updateDataOnCityname();
 
 // middle section javascript
 
@@ -545,12 +590,7 @@ class CardContainerDetails extends CurrentCityInformation {
     date.setAttribute("class", "card-date-time");
     date.innerHTML = liveDateOfCity;
     time.setAttribute("class", "card-date-time");
-    setInterval(
-      this.displayLiveTimeToTheCity,
-      10,
-      cityname.toLowerCase(),
-      time
-    );
+    setInterval(this.displayLiveTimeToTheCity, 0, cityname.toLowerCase(), time);
     cardDivision.appendChild(time);
     cardDivision.appendChild(date);
   }
@@ -782,6 +822,8 @@ class CardContainerDetails extends CurrentCityInformation {
     if (lengthOfList < noOfCitiesToDisplay) {
       noOfCitiesToDisplay = lengthOfList;
     }
+    if (noOfCitiesToDisplay < 3) noOfCitiesToDisplay = 3;
+    else if (noOfCitiesToDisplay > 10) noOfCitiesToDisplay = 10;
     if (lengthOfList <= 3) {
       spinner = 3;
       this.updateUIElementAttributeWithTheGivenValue(
@@ -1085,7 +1127,7 @@ class TileContainerDetails extends CardContainerDetails {
     stateName.innerHTML = cityname + ",";
     setInterval(
       this.displayLiveTimeToTheCity,
-      10,
+      0,
       cityname.toLowerCase(),
       liveTime
     );
@@ -1226,7 +1268,7 @@ let temperatureArrow = document.getElementById("sort-by-temperature");
  * createTileOnLoad function to create tiles with continent details.
  */
 document.getElementById("continent-wise-list").onload =
-  global.createTileOnLoad();
+  utility.createTileOnLoad();
 
 /**
  * Whenever the arrow is clicked, the dom event triggers and calls the function.
@@ -1237,5 +1279,6 @@ document.getElementById("sort-by-continent").addEventListener("click", () => {
 document.getElementById("sort-by-temperature").addEventListener("click", () => {
   tileObj.updateTheArrowImageAndtemperatureOrder();
 });
-export { tileObj };
+export { tileObj, cityInterval };
 export { CurrentCityInformation };
+export { getNextFiveHrsTemperature };

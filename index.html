@@ -15,15 +15,18 @@
           <div class="city-info">
             <div class="city-info-top">
               <img src="./ASSETS/london.svg" id="icon" />
-              <input
-                list="city_lists"
-                name="city"
-                id="city_list"
-                value="London"
-                class="dropdown"
-                autocomplete="off"
-              />
-              <datalist id="city_lists"> </datalist>
+              <div>
+                <input
+                  list="city_lists"
+                  name="city"
+                  id="city_list"
+                  value="London"
+                  class="dropdown"
+                  autocomplete="off"
+                />
+                <datalist id="city_lists"> </datalist>
+                <p id="warning">Cityname is not Valid!.</p>
+              </div>
             </div>
             <div class="city-info-bottom">
               <div>
@@ -275,7 +278,7 @@
               </div>
             </div>
           </div>
-          <div class='carousel-div'>
+          <div class="carousel-div">
             <img
               src="ASSETS\forwardArrow.svg"
               class="carousel-arrow-image"
@@ -453,5 +456,6 @@
       </section>
     </div>
   </body>
-  <script type="module" src="JAVASCRIPT\index.js"></script>
+  <script src="/JAVASCRIPT/apicall.js"></script>
+  <script type="module" src="/JAVASCRIPT/index.js"></script>
 </html>
