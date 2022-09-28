@@ -42,6 +42,49 @@ http
         response.end(content, "utf-8");
       }
     });
+    let currentTime = new Date();
+    if (currentTime - startTime > dayCheck) {
+      startTime = new Date();
+      if (request.url == "/all-timezone-cities") {
+        weatherData = timeZone.allTimeZones();
+        response.write(JSON.stringify(weatherData));
+        response.end();
+      }
+    } else {
+      if (weatherData === "undefined") {
+        if (request.url == "/all-timezone-cities") {
+          weatherData = timeZone.allTimeZones();
+          response.write(JSON.stringify(weatherData));
+          response.end();
+        }
+      }
+    }
+
+    let query = request.url.split("=")[0];
+    let cityInfo = url.parse(request.url).query;
+    const SearchParams = new URLSearchParams(cityInfo);
+    let nameOfTheCity = SearchParams.get("city");
+    if (query == "/?city") {
+      cityName = timeZone.timeForOneCity(nameOfTheCity);
+      response.write(JSON.stringify(cityName));
+      response.end();
+    }
+    if (request.url == "/hourly-forecast" && request.method == "POST") {
+      let cityData = "";
+      request.on("data", (chunk) => {
+        cityData += chunk.toString();
+      });
+      request.on("end", () => {
+        cityData = JSON.parse(cityData);
+        nextFiveHrsTemp = timeZone.nextNhoursWeather(
+          cityData.city_Date_Time_Name,
+          cityData.hours,
+          weatherData
+        );
+        response.write(JSON.stringify(nextFiveHrsTemp));
+        response.end();
+      });
+    }
   })
   .listen(8125);
 console.log("Server running at http://127.0.0.1:8125/");
