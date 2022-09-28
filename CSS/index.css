@@ -120,7 +120,7 @@ body {
   align-items: flex-end;
   display: flex;
   flex-direction: column;
-  flex-basis: 8em;
+  flex-basis: 6em;
   justify-content: center;
 }
 .city-name {
