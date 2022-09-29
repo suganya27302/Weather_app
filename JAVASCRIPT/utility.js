@@ -1,7 +1,6 @@
 //import { weatherData } from "/DATA/data.js";
 import {
   CurrentCityInformation,
-  tileObj,
   getNextFiveHrsTemperature,
   cityInterval,
 } from "/JAVASCRIPT/index.js";
@@ -88,20 +87,5 @@ function updateDataOnCityname() {
   })();
 }
 
-/**
- * The function is called whenever the page loads.
- * @params{}
- * @return{void} nothing
- */
-function createTileOnLoad() {
-  tileObj.sortTheArrayBasedOnTheGivenPreference();
-  tileObj.createTile(tileObj.weatherDetails);
-}
-
 export { cityData, atPresent, cityNameList };
-export {
-  appendCitynameToDropdown,
-  checkCitynameIsValid,
-  updateDataOnCityname,
-  createTileOnLoad,
-};
+export { appendCitynameToDropdown, checkCitynameIsValid, updateDataOnCityname };
