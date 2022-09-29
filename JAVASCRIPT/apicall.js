@@ -6,15 +6,12 @@
  */
 function sendHttpRequestTofetchweatherData() {
   let response = new Promise(async (resolve, reject) => {
-    let weatherData = await fetch(
-      `https://soliton.glitch.me/all-timezone-cities`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    let weatherData = await fetch(`http://127.0.0.1:8125/all-timezone-cities`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     if (weatherData.ok) resolve(weatherData.json());
     else reject("Something went wrong..");
   });
@@ -29,15 +26,12 @@ function sendHttpRequestTofetchweatherData() {
  */
 function sendHttpRequestTofetchCityInformation(selectedCity) {
   let response = new Promise(async (resolve, reject) => {
-    let cityName = await fetch(
-      `https://soliton.glitch.me?city=${selectedCity}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    let cityName = await fetch(`http://127.0.0.1:8125/?city=${selectedCity}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     if (cityName.ok) resolve(cityName.json());
     else reject("Something went wrong..");
   });
@@ -52,15 +46,16 @@ function sendHttpRequestTofetchCityInformation(selectedCity) {
  */
 function sendHttpRequestTofetchNextFivehrsTemperature(nameOfCity) {
   let response = new Promise(async (resolve, reject) => {
-    let nextFiveHrs = await fetch(`https://soliton.glitch.me/hourly-forecast`, {
+    let nextFiveHrs = await fetch(`http://127.0.0.1:8125/hourly-forecast`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(nameOfCity),
     });
-    if (nextFiveHrs.ok) resolve(nextFiveHrs.json());
-    else reject("Something went wrong..");
+    if (nextFiveHrs.ok) {
+      resolve(nextFiveHrs.json());
+    } else reject("Something went wrong..");
   });
   return response;
 }
