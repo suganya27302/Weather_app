@@ -32,6 +32,7 @@ function sendHttpRequestTofetchCityInformation(selectedCity) {
         "Content-Type": "application/json",
       },
     });
+    //console.log(cityName.json());
     if (cityName.ok) resolve(cityName.json());
     else reject("Something went wrong..");
   });
