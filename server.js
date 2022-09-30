@@ -20,9 +20,7 @@ app.use(bodyParser.json());
 /**
  * Render the Webpage using the middleware.
  */
-app.use("/index.html", express.static("./"));
-app.use("/JAVASCRIPT", express.static(path.join(__dirname, "/JAVASCRIPT")));
-app.use("/ASSETS", express.static(path.join(__dirname, "/ASSETS")));
+app.use("/", express.static("./"));
 
 /**
  * Respond to the request to fetch all cities data.
@@ -49,7 +47,7 @@ app.get("/all-timezone-cities", function (request, response) {
  * and respond back to the client.
  * If it unable to call the function it displays error message to page.
  * */
-app.get("/", function (request, response) {
+app.get("/city", function (request, response) {
   let city = request.query.city;
   if (city) {
     cityName = timezone.timeForOneCity(city);
