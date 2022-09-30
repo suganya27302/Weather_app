@@ -10,11 +10,13 @@ let startTime = new Date();
 let weatherData = [];
 let dayCheck = 14400000;
 let cityName;
+
 /**
  * body-parser, which is used to fetch input data from body.
  */
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
 /**
  * Render the Webpage using the middleware.
  */
@@ -76,15 +78,16 @@ app.post("/hourly-forecast", function (request, response) {
       .json("Error: Not a valid Endpoint. Please check API Doc.");
   }
 });
+
 // if the request is invalid it display a error message
 app.get("*", (request, response) => {
   response.send("404! This is an invalid URL.");
 });
+
 /**
  *  Local server to handle request and response back to the client.
  *  if the request is invalid it display a error message
  *  orelse it fetch the data and return response.
  */
-
 app.listen(8125);
 console.log("Server listening at http://127.0.0.1:8125/");
