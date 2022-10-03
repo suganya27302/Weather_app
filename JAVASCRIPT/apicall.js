@@ -21,6 +21,7 @@ function sendHttpRequestTofetchweatherData() {
 /**
  * fetch the current city information by sending a
  * get request and taking the current city as input.
+ * Add '/city' endpoint to the url, to fetch the city data from server.
  * @params {selectedCity} Current city
  * @return {object} city information {cityname :{time,date of the city}}
  */

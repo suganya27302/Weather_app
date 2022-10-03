@@ -15,7 +15,7 @@ let cityName;
  * body-parser, which is used to fetch input data from body.
  * extended is set to false, it returns objects.
  * Note: If extended is set to true it returns object of objects
- * and qslibrary is used parse object
+ * and qslibrary is used to parse object
  */
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -47,6 +47,7 @@ app.get("/all-timezone-cities", function (request, response) {
 
 /**
  * Respond to the request to fetch the city information
+ * To avoid conflict, the route path is taken as '/city'.
  * When the url is with a city query, it fetch the selected city information
  * and respond back to the client.
  * If it unable to call the function it displays error message to page.
