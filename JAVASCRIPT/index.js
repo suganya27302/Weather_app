@@ -264,11 +264,11 @@ class CurrentCityInformation {
 
     let humidityValue = this.gethumidity();
     document.getElementById("humidity_percentage").innerHTML =
-      humidityValue.slice(0, humidityValue.length - 1) + " %";
+      humidityValue.slice(0, humidityValue.length - 1);
 
     let precipitationValue = this.getprecipitation();
     document.getElementById("precipitation_percentage").innerHTML =
-      precipitationValue.slice(0, precipitationValue.length - 1) + " %";
+      precipitationValue.slice(0, precipitationValue.length - 1);
   }
   /**
    *
