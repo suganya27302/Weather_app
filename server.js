@@ -13,6 +13,9 @@ let cityName;
 
 /**
  * body-parser, which is used to fetch input data from body.
+ * extended is set to false, it returns objects.
+ * Note: If extended is set to true it returns object of objects
+ * and qslibrary is used parse object
  */
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -24,7 +27,8 @@ app.use("/", express.static("./"));
 
 /**
  * Respond to the request to fetch all cities data.
- * Every four hours once, it will update the all cities data and
+ * Every four hours once, the request is raised from index.js
+ * it will update the all cities data and
  * respond to the client.
  */
 app.get("/all-timezone-cities", function (request, response) {
@@ -61,7 +65,7 @@ app.get("/city", function (request, response) {
 
 /**
  * When the url with hourly-forecast and post request
- * it capture the chunk data and used as a parameter to fetch the next five hours temperature
+ * captured data from body is used as a parameter to fetch the next five hours temperature
  * and respond back to the client.
  * If it unable to call the function it displays error message to page.
  * */
