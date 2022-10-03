@@ -67,7 +67,6 @@ body {
 .card-date-time {
   font-size: 1em;
   font-weight: bold;
-  letter-spacing: 1px;
 }
 .card:hover {
   transform: scale(1.05);
@@ -231,7 +230,9 @@ body {
   min-width: 80%;
 }
 .rainy-temp {
+  color: rgb(185, 183, 183);
   font-size: 0.8em;
+  padding-left: 4px;
   vertical-align: top;
 }
 #side-text {
