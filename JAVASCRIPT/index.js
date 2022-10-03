@@ -899,7 +899,7 @@ function updateDataToTheCardAndTileContainer() {
         ? (partOfTime = "PM")
         : ((partOfTime = "PM"), (hour = hour - 12));
 
-      hour < 10 ? (hour = "0" + hour + ": ") : (hour = hour + ": ");
+      hour < 10 ? (hour = "0" + hour + ":") : (hour = hour + ":");
       minute < 10 ? (minute = "0" + minute) : (minute = minute);
 
       dateTime = hour + minute + " " + partOfTime;
@@ -1151,7 +1151,7 @@ function updateDataToTheCardAndTileContainer() {
       let stateName = document.createElement("p");
       let liveTime = document.createElement("span");
       stateName.setAttribute("class", "state-name");
-      stateName.innerHTML = cityname + ",";
+      stateName.innerHTML = cityname + ", ";
       setInterval(
         this.displayLiveTimeToTheCity,
         0,
