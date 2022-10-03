@@ -187,6 +187,10 @@ body {
   min-width: 680px;
   width: 100%;
 }
+.future-forecast {
+  font-size: 1.3em;
+  margin: 0.5em;
+}
 .heading-sort-content {
   color: rgb(201, 193, 193);
   display: flex;
@@ -297,7 +301,7 @@ body {
 #time-based-line {
   color: white;
   font-size: 0.7em;
-  height: 82px;
+  margin-bottom: 2.5em;
 }
 .time-color {
   color: yellow;
@@ -309,7 +313,8 @@ body {
 .time-wise-info {
   align-items: center;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-around;
+  margin-top: 25px;
   width: inherit;
 }
 .time-wise-info-container {
@@ -395,6 +400,9 @@ body {
   .top-container {
     height: 200px;
   }
+  .future-forecast {
+    font-size: 1.2em;
+  }
 }
 @media all and (max-width: 900px) {
   #amimg {
@@ -427,13 +435,11 @@ body {
   .time-wise-info {
     font-size: 0.8em;
   }
-  #time-based-line {
-    color: white;
-    font-size: 0.7em;
-    height: 64px;
-  }
   .top-container {
     height: 170px;
+  }
+  .future-forecast {
+    font-size: 1.1em;
   }
 }
 @media all and (max-width: 770px) {
@@ -458,18 +464,22 @@ body {
   #temp-text {
     font-size: 0.9rem;
   }
-  #time-based-line {
-    color: white;
-    font-size: 0.7em;
-    height: 68px;
-  }
   .time-color {
     font-size: 0.9rem;
+  }
+  .time-wise-info {
+    margin-top: 12px;
+  }
+  .future-forecast {
+    font-size: 1.1em;
+    margin: 0.5em;
   }
 }
 @media all and (max-width: 680px) {
   .top-container {
     overflow-x: auto;
+    overflow-y: hidden;
+    margin-top: 15px;
   }
 }
 
