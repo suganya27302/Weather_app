@@ -17,6 +17,7 @@ if (weatherData == undefined) {
 }
 //Function call to fetch the weather data of all cities
 weatherData = await getWeatherData();
+// console.log("weatherData: ", weatherData);
 
 /**
  * It will fetch data from server through api call and

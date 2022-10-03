@@ -26,12 +26,16 @@ function sendHttpRequestTofetchweatherData() {
  */
 function sendHttpRequestTofetchCityInformation(selectedCity) {
   let response = new Promise(async (resolve, reject) => {
-    let cityName = await fetch(`http://127.0.0.1:8125/?city=${selectedCity}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    let cityName = await fetch(
+      `http://127.0.0.1:8125/city?city=${selectedCity}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    //console.log(cityName.json());
     if (cityName.ok) resolve(cityName.json());
     else reject("Something went wrong..");
   });
