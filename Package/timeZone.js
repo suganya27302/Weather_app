@@ -1,23 +1,3 @@
-let Data;
-/* The listener will receive a message from server.js(parent) and based on that
- *  message a particular function is called and the resulted data is returned to server.js.
- */
-process.on("message", (message) => {
-  if (message.Sendmessage == "GetTemperature") {
-    Data = nextNhoursWeather(
-      message.cityDTN,
-      message.hours,
-      message.weatherData
-    );
-  } else if (message.Sendmessage == "GetcityInfo") {
-    Data = timeForOneCity(message.cityname);
-  } else if (message == "GetData") {
-    Data = allTimeZones();
-  }
-  process.send(Data);
-  process.exit();
-});
-
 // Maintain All methods and data inside WeatherForTimeZone class
 class WeatherForTimeZones {
   constructor() {

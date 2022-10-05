@@ -33,7 +33,7 @@ app.use("/", express.static("./"));
  * respond to the client.
  */
 app.get("/all-timezone-cities", function (request, response) {
-  let allTimezon = fork(__dirname + "/JAVASCRIPT/timeZone.js");
+  let allTimezon = fork(__dirname + "/JAVASCRIPT/child.js");
   allTimezon.on("message", (weatherinfo) => {
     weatherData = weatherinfo;
     response.json(weatherinfo);
@@ -61,7 +61,7 @@ app.get("/all-timezone-cities", function (request, response) {
 app.get("/city", function (request, response) {
   let city = request.query.city;
 
-  let cityInfo = fork(__dirname + "/JAVASCRIPT/timeZone.js");
+  let cityInfo = fork(__dirname + "/JAVASCRIPT/child.js");
   cityInfo.on("message", (cityData) => {
     response.json(cityData);
   });
@@ -85,7 +85,7 @@ app.get("/city", function (request, response) {
 app.post("/hourly-forecast", function (request, response) {
   let cityDTN = request.body.city_Date_Time_Name;
   let hours = request.body.hours;
-  let temperature = fork(__dirname + "/JAVASCRIPT/timeZone.js");
+  let temperature = fork(__dirname + "/JAVASCRIPT/child.js");
   let cityData = {
     Sendmessage: "GetTemperature",
     cityDTN: cityDTN,
