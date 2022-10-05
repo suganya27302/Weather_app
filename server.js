@@ -58,9 +58,13 @@ app.get("/all-timezone-cities", function (request, response) {
  * */
 app.get("/city", function (request, response) {
   let city = request.query.city;
+
+  let cityInfo = fork(__dirname + "/JAVASCRIPT/timeZone.js");
+  cityInfo.on("message", (cityData) => {
+    response.json(cityData);
+  });
   if (city) {
-    cityName = timezone.timeForOneCity(city);
-    response.json(cityName);
+    cityInfo.send({ Sendmessage: "GetcityInfo", cityname: `${city}` });
   } else {
     response
       .status(404)
@@ -77,8 +81,19 @@ app.get("/city", function (request, response) {
 app.post("/hourly-forecast", function (request, response) {
   let cityDTN = request.body.city_Date_Time_Name;
   let hours = request.body.hours;
+  let temperature = fork(__dirname + "/JAVASCRIPT/timeZone.js");
+  let cityData = {
+    Sendmessage: "GetTemperature",
+    cityDTN: cityDTN,
+    hours: hours,
+    weatherData: weatherData,
+  };
+  temperature.on("message", (nextFiveHrs) => {
+    response.json(nextFiveHrs);
+  });
+
   if (cityDTN && hours) {
-    response.json(timezone.nextNhoursWeather(cityDTN, hours, weatherData));
+    temperature.send(cityData);
   } else {
     response
       .status(404)
