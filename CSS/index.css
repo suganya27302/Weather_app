@@ -194,9 +194,9 @@ body {
 .heading-sort-content {
   color: rgb(201, 193, 193);
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   margin-right: 3.5em;
-  width: 28%;
+  width: 30%;
 }
 #humidity-img {
   height: 1.4em;
@@ -513,17 +513,35 @@ body {
 }
 
 /* bottom section */
+@media all and (max-width: 1140px) {
+  .bottom-main-heading {
+    margin-left: 1em;
+    font-size: 1.7em;
+  }
+  .heading-sort-content {
+    width: 33%;
+    margin-right: 2em;
+  }
+  .sort-continent-temperature {
+    font-size: 1.3em;
+    font-weight: bold;
+  }
+}
 @media all and (max-width: 945px) {
   #arrow-img {
-    height: 1.2em;
+    height: 1.1em;
     width: 2em;
   }
   .bottom-main-heading {
     font-size: 1.6em;
     margin-left: 2.5em;
   }
+  .heading-sort-content {
+    width: 40%;
+    margin-right: 2em;
+  }
   .sort-continent-temperature {
-    font-size: 1.4em;
+    font-size: 1.2em;
   }
 }
 @media all and (max-width: 905px) {
@@ -539,7 +557,7 @@ body {
     margin-right: 1.7em;
   }
   .sort-continent-temperature {
-    font-size: 1.3em;
+    font-size: 1.2em;
   }
 }
 @media all and (max-width: 815px) {
@@ -549,7 +567,7 @@ body {
   }
   .bottom-main-heading {
     font-size: 1.3em;
-    margin-left: 0.5em;
+    margin-left: 2em;
   }
   .continent-name {
     font-size: 1.1em;
