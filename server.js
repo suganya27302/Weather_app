@@ -6,6 +6,7 @@ const path = require("path");
 const app = express();
 const timezone = require("./JAVASCRIPT/timeZone.js");
 const bodyParser = require("body-parser");
+const { fork } = require("child_process");
 let startTime = new Date();
 let weatherData = [];
 let dayCheck = 14400000;
@@ -32,16 +33,19 @@ app.use("/", express.static("./"));
  * respond to the client.
  */
 app.get("/all-timezone-cities", function (request, response) {
+  let allTimezon = fork(__dirname + "/JAVASCRIPT/timeZone.js");
+  allTimezon.on("message", (weatherinfo) => {
+    weatherData = weatherinfo;
+    response.json(weatherinfo);
+  });
   let currentTime = new Date();
   if (currentTime - startTime > dayCheck) {
     startTime = new Date();
-    weatherData = timezone.allTimeZones();
-    response.json(weatherData);
+    allTimezon.send("GetData");
   } else {
     if (weatherData.length === 0) {
-      weatherData = timezone.allTimeZones();
+      allTimezon.send("GetData");
     }
-    response.json(weatherData);
   }
 });
 

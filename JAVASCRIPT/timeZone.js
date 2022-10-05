@@ -1,3 +1,12 @@
+let Data;
+process.on("message", (message) => {
+  if (message == "GetData") {
+    Data = allTimeZones();
+  }
+  process.send(Data);
+  process.exit();
+});
+
 // Maintain All methods and data inside WeatherForTimeZone class
 class WeatherForTimeZones {
   constructor() {
