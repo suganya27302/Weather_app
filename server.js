@@ -45,6 +45,8 @@ app.get("/all-timezone-cities", function (request, response) {
   } else {
     if (weatherData.length === 0) {
       allTimezon.send("GetData");
+    } else {
+      response.json(weatherData);
     }
   }
 });
