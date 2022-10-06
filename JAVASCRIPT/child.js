@@ -6,15 +6,15 @@ const timezone = require("@suganya27/weather_data");
  */
 process.on("message", (message) => {
   let Data;
-  if (message.Sendmessage == "GetTemperature") {
+  if (message.messagename == "GetTemperature") {
     Data = timezone.nextNhoursWeather(
-      message.cityDTN,
-      message.hours,
-      message.weatherData
+      message.messagebody.cityDTN,
+      message.messagebody.hours,
+      message.messagebody.weatherData
     );
-  } else if (message.Sendmessage == "GetcityInfo") {
-    Data = timezone.timeForOneCity(message.cityname);
-  } else if (message == "GetData") {
+  } else if (message.messagename == "GetcityInfo") {
+    Data = timezone.timeForOneCity(message.messagebody.cityname);
+  } else if (message.messagename == "GetData") {
     Data = timezone.allTimeZones();
   }
   process.send(Data);

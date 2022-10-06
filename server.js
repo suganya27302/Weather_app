@@ -41,10 +41,10 @@ app.get("/all-timezone-cities", function (request, response) {
   let currentTime = new Date();
   if (currentTime - startTime > dayCheck) {
     startTime = new Date();
-    allTimezon.send("GetData");
+    allTimezon.send({ messagename: "GetData", messagebody: {} });
   } else {
     if (weatherData.length === 0) {
-      allTimezon.send("GetData");
+      allTimezon.send({ messagename: "GetData", messagebody: {} });
     } else {
       response.json(weatherData);
     }
@@ -62,13 +62,16 @@ app.get("/all-timezone-cities", function (request, response) {
  * */
 app.get("/city", function (request, response) {
   let city = request.query.city;
-
   let cityInfo = fork(__dirname + "/JAVASCRIPT/child.js");
   cityInfo.on("message", (cityData) => {
     response.json(cityData);
   });
-  if (city) {
-    cityInfo.send({ Sendmessage: "GetcityInfo", cityname: `${city}` });
+  let message = {
+    messagename: "GetcityInfo",
+    messagebody: { cityname: `${city}` },
+  };
+  if (message.messagebody && message.messagebody.cityname) {
+    cityInfo.send(message);
   } else {
     response
       .status(404)
@@ -88,18 +91,21 @@ app.post("/hourly-forecast", function (request, response) {
   let cityDTN = request.body.city_Date_Time_Name;
   let hours = request.body.hours;
   let temperature = fork(__dirname + "/JAVASCRIPT/child.js");
-  let cityData = {
-    Sendmessage: "GetTemperature",
-    cityDTN: cityDTN,
-    hours: hours,
-    weatherData: weatherData,
+  let message = {
+    messagename: "GetTemperature",
+    messagebody: { cityDTN: cityDTN, hours: hours, weatherData: weatherData },
   };
   temperature.on("message", (nextFiveHrs) => {
     response.json(nextFiveHrs);
   });
 
-  if (cityDTN && hours) {
-    temperature.send(cityData);
+  if (
+    message.messagebody &&
+    message.messagebody.cityDTN &&
+    message.messagebody.hours &&
+    message.messagebody.weatherData
+  ) {
+    temperature.send(message);
   } else {
     response
       .status(404)

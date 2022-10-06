@@ -13,7 +13,9 @@ function sendHttpRequestTofetchweatherData() {
       },
     });
     if (weatherData.ok) resolve(weatherData.json());
-    else reject("Something went wrong..");
+    else {
+      reject("Something went wrong..");
+    }
   });
   return response;
 }
@@ -36,9 +38,11 @@ function sendHttpRequestTofetchCityInformation(selectedCity) {
         },
       }
     );
-    //console.log(cityName.json());
     if (cityName.ok) resolve(cityName.json());
-    else reject("Something went wrong..");
+    else {
+      alert("Message body is empty or message body argument values is null.");
+      reject("Something went wrong..");
+    }
   });
   return response;
 }
@@ -60,7 +64,10 @@ function sendHttpRequestTofetchNextFivehrsTemperature(nameOfCity) {
     });
     if (nextFiveHrs.ok) {
       resolve(nextFiveHrs.json());
-    } else reject("Something went wrong..");
+    } else {
+      alert("Message body is empty or message body argument values is null.");
+      reject("Something went wrong..");
+    }
   });
   return response;
 }
