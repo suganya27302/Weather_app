@@ -33,6 +33,7 @@ app.use("/", express.static("./"));
  * respond to the client.
  */
 app.get("/all-timezone-cities", function (request, response) {
+  // create a Child process using fork
   let allTimezon = fork(__dirname + "/JAVASCRIPT/child.js");
   allTimezon.on("message", (weatherinfo) => {
     weatherData = weatherinfo;
@@ -62,6 +63,7 @@ app.get("/all-timezone-cities", function (request, response) {
  * */
 app.get("/city", function (request, response) {
   let city = request.query.city;
+  // create a Child process using fork
   let cityInfo = fork(__dirname + "/JAVASCRIPT/child.js");
   cityInfo.on("message", (cityData) => {
     response.json(cityData);
@@ -90,6 +92,7 @@ app.get("/city", function (request, response) {
 app.post("/hourly-forecast", function (request, response) {
   let cityDTN = request.body.city_Date_Time_Name;
   let hours = request.body.hours;
+  // create a Child process using fork
   let temperature = fork(__dirname + "/JAVASCRIPT/child.js");
   let message = {
     messagename: "GetTemperature",
