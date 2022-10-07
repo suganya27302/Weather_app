@@ -3,9 +3,11 @@
  */
 const express = require("express");
 const path = require("path");
+const fs = require("fs");
 const app = express();
 const bodyParser = require("body-parser");
 const { fork } = require("child_process");
+const logger = require("morgan");
 let startTime = new Date();
 let weatherData = [];
 let dayCheck = 14400000;
@@ -24,6 +26,12 @@ app.use(bodyParser.json());
  */
 app.use("/", express.static("./"));
 
+// create a write stream (in append mode)
+var accessLogStream = fs.createWriteStream(path.join(__dirname, "access.log"));
+
+// setup the logger
+app.use(logger("tiny", { stream: accessLogStream }));
+
 /**
  * Respond to the request to fetch all cities data.
  * create child process and send message to timezone.js and
@@ -35,10 +43,12 @@ app.use("/", express.static("./"));
 app.get("/all-timezone-cities", function (request, response) {
   // create a Child process using fork
   let allTimezon = fork(__dirname + "/JAVASCRIPT/child.js");
+
   allTimezon.on("message", (weatherinfo) => {
     weatherData = weatherinfo;
     response.json(weatherinfo);
   });
+
   let currentTime = new Date();
   if (currentTime - startTime > dayCheck) {
     startTime = new Date();
@@ -62,22 +72,43 @@ app.get("/all-timezone-cities", function (request, response) {
  * If it unable to call the function it displays error message to page.
  * */
 app.get("/city", function (request, response) {
-  let city = request.query.city;
-  // create a Child process using fork
-  let cityInfo = fork(__dirname + "/JAVASCRIPT/child.js");
-  cityInfo.on("message", (cityData) => {
-    response.json(cityData);
-  });
-  let message = {
-    messagename: "GetcityInfo",
-    messagebody: { cityname: `${city}` },
-  };
-  if (message.messagebody && message.messagebody.cityname) {
-    cityInfo.send(message);
-  } else {
+  try {
+    let city = request.query.city;
+    // create a Child process using fork
+    let cityInfo = fork(__dirname + "/JAVASCRIPT/child.js");
+
+    cityInfo.on("message", (cityData) => {
+      response.json(cityData);
+    });
+
+    if (!city) throw new Error("cityname value is null");
+    else {
+      let message = {
+        messagename: "GetcityInfo",
+        messagebody: { cityname: city },
+      };
+      cityInfo.send(message);
+    }
+  } catch (error) {
+    let date = new Date();
+    let errorMessage =
+      "\n" +
+      date.toDateString() +
+      " " +
+      date.toLocaleTimeString() +
+      " " +
+      error.message +
+      " in http://127.0.0.1" +
+      request.url;
+
+    // create a logger file and append the error message
+    fs.appendFile("logger.txt", errorMessage, function (err) {
+      console.log(errorMessage);
+    });
+
     response
       .status(404)
-      .json("Error: Not a valid Endpoint. Please check API Doc.");
+      .json("Error: Not a valid Endpoint.Please check with it.");
   }
 });
 
@@ -90,29 +121,52 @@ app.get("/city", function (request, response) {
  * If it unable to call the function it displays error message to page.
  * */
 app.post("/hourly-forecast", function (request, response) {
-  let cityDTN = request.body.city_Date_Time_Name;
-  let hours = request.body.hours;
-  // create a Child process using fork
-  let temperature = fork(__dirname + "/JAVASCRIPT/child.js");
-  let message = {
-    messagename: "GetTemperature",
-    messagebody: { cityDTN: cityDTN, hours: hours, weatherData: weatherData },
-  };
-  temperature.on("message", (nextFiveHrs) => {
-    response.json(nextFiveHrs);
-  });
+  try {
+    // create a Child process using fork
+    let temperature = fork(__dirname + "/JAVASCRIPT/child.js");
 
-  if (
-    message.messagebody &&
-    message.messagebody.cityDTN &&
-    message.messagebody.hours &&
-    message.messagebody.weatherData
-  ) {
-    temperature.send(message);
-  } else {
+    temperature.on("message", (nextFiveHrs) => {
+      response.json(nextFiveHrs);
+    });
+
+    if (!request.body)
+      throw new Error("Request body argument values are null ");
+    else {
+      if (
+        !(request.body.city_Date_Time_Name && request.body.hours && weatherData)
+      )
+        throw new Error("Request body is null ");
+      else {
+        let message = {
+          messagename: "GetTemperature",
+          messagebody: {
+            cityDTN: request.body.city_Date_Time_Name,
+            hours: request.body.hours,
+            weatherData: weatherData,
+          },
+        };
+        temperature.send(message);
+      }
+    }
+  } catch (error) {
+    let date = new Date();
+    let errorMessage =
+      "\n" +
+      date.toDateString() +
+      " " +
+      date.toLocaleTimeString() +
+      " " +
+      error.message +
+      " in http://127.0.0.1" +
+      request.url;
+    // create a logger file and append the error message
+    fs.appendFile("logger.txt", errorMessage, function (err) {
+      console.log(errorMessage);
+    });
+
     response
       .status(404)
-      .json("Error: Not a valid Endpoint. Please check API Doc.");
+      .json("Error: Not a valid Endpoint.Please check with it.");
   }
 });
 
