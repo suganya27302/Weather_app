@@ -13,7 +13,9 @@ function sendHttpRequestTofetchweatherData() {
       },
     });
     if (weatherData.ok) resolve(weatherData.json());
-    else reject("Something went wrong..");
+    else {
+      reject("Something went wrong..");
+    }
   });
   return response;
 }
@@ -21,6 +23,7 @@ function sendHttpRequestTofetchweatherData() {
 /**
  * fetch the current city information by sending a
  * get request and taking the current city as input.
+ * Add '/city' endpoint to the url, to fetch the city data from server.
  * @params {selectedCity} Current city
  * @return {object} city information {cityname :{time,date of the city}}
  */
@@ -35,9 +38,11 @@ function sendHttpRequestTofetchCityInformation(selectedCity) {
         },
       }
     );
-    //console.log(cityName.json());
     if (cityName.ok) resolve(cityName.json());
-    else reject("Something went wrong..");
+    else {
+      alert("Message body is empty or message body argument values is null.");
+      reject("Something went wrong..");
+    }
   });
   return response;
 }
@@ -59,7 +64,10 @@ function sendHttpRequestTofetchNextFivehrsTemperature(nameOfCity) {
     });
     if (nextFiveHrs.ok) {
       resolve(nextFiveHrs.json());
-    } else reject("Something went wrong..");
+    } else {
+      alert("Message body is empty or message body argument values is null.");
+      reject("Something went wrong..");
+    }
   });
   return response;
 }

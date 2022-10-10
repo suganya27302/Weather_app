@@ -264,11 +264,11 @@ class CurrentCityInformation {
 
     let humidityValue = this.gethumidity();
     document.getElementById("humidity_percentage").innerHTML =
-      humidityValue.slice(0, humidityValue.length - 1) + " %";
+      humidityValue.slice(0, humidityValue.length - 1);
 
     let precipitationValue = this.getprecipitation();
     document.getElementById("precipitation_percentage").innerHTML =
-      precipitationValue.slice(0, precipitationValue.length - 1) + " %";
+      precipitationValue.slice(0, precipitationValue.length - 1);
   }
   /**
    *
@@ -899,7 +899,7 @@ function updateDataToTheCardAndTileContainer() {
         ? (partOfTime = "PM")
         : ((partOfTime = "PM"), (hour = hour - 12));
 
-      hour < 10 ? (hour = "0" + hour + ": ") : (hour = hour + ": ");
+      hour < 10 ? (hour = "0" + hour + ":") : (hour = hour + ":");
       minute < 10 ? (minute = "0" + minute) : (minute = minute);
 
       dateTime = hour + minute + " " + partOfTime;
@@ -1151,7 +1151,7 @@ function updateDataToTheCardAndTileContainer() {
       let stateName = document.createElement("p");
       let liveTime = document.createElement("span");
       stateName.setAttribute("class", "state-name");
-      stateName.innerHTML = cityname + ",";
+      stateName.innerHTML = cityname + ", ";
       setInterval(
         this.displayLiveTimeToTheCity,
         0,

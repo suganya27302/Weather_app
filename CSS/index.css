@@ -6,10 +6,10 @@
 .arrow-img {
   height: 1.7em;
   vertical-align: bottom;
-  width: 3.5em;
 }
 .arrow-icon {
   background-color: black;
+  padding: 0;
 }
 body {
   background-image: url("../ASSETS/background.png");
@@ -67,7 +67,6 @@ body {
 .card-date-time {
   font-size: 1em;
   font-weight: bold;
-  letter-spacing: 1px;
 }
 .card:hover {
   transform: scale(1.05);
@@ -80,7 +79,8 @@ body {
   background-size: 65%;
 }
 .card > p {
-  margin: 2%;
+  font-weight: 500;
+  margin: 1.5%;
   margin-left: 0;
 }
 .card-temp {
@@ -183,13 +183,20 @@ body {
 .flex-ratio {
   display: flex;
   justify-content: space-between;
+  padding-bottom: 30px;
   min-width: 680px;
   width: 100%;
+}
+.future-forecast {
+  font-size: 1.3em;
+  margin: 0.5em;
 }
 .heading-sort-content {
   color: rgb(201, 193, 193);
   display: flex;
-  margin-right: 2.5em;
+  justify-content: space-around;
+  margin-right: 3.5em;
+  width: 30%;
 }
 #humidity-img {
   height: 1.4em;
@@ -213,12 +220,10 @@ body {
 .line {
   border-left: 2px dotted white;
   height: 3.3em;
-  margin-bottom: 1.3em;
+  margin-top: 1.3em;
   width: 2%;
 }
-.line-styling {
-  margin-top: 1.4rem;
-}
+
 .middle-container {
   background-color: black;
   background-size: cover;
@@ -228,7 +233,9 @@ body {
   min-width: 80%;
 }
 .rainy-temp {
+  color: rgb(185, 183, 183);
   font-size: 0.8em;
+  padding-left: 4px;
   vertical-align: top;
 }
 #side-text {
@@ -247,7 +254,6 @@ body {
   color: rgb(190, 186, 186);
   font-size: 1.2em;
   font-weight: lighter;
-  letter-spacing: 2px;
 }
 
 #sun-image {
@@ -265,7 +271,11 @@ body {
 .temp-color {
   color: rgb(218, 212, 212);
 }
+.temp-percentage {
+  font-weight: lighter;
+}
 .temp-text {
+  display: inline;
   font-weight: bold;
   font-size: 1.2em;
   margin-top: 0;
@@ -295,7 +305,7 @@ body {
 #time-based-line {
   color: white;
   font-size: 0.7em;
-  height: 82px;
+  margin-bottom: 2.5em;
 }
 .time-color {
   color: yellow;
@@ -307,7 +317,8 @@ body {
 .time-wise-info {
   align-items: center;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-around;
+  margin-top: 25px;
   width: inherit;
 }
 .time-wise-info-container {
@@ -393,6 +404,9 @@ body {
   .top-container {
     height: 200px;
   }
+  .future-forecast {
+    font-size: 1.2em;
+  }
 }
 @media all and (max-width: 900px) {
   #amimg {
@@ -425,13 +439,11 @@ body {
   .time-wise-info {
     font-size: 0.8em;
   }
-  #time-based-line {
-    color: white;
-    font-size: 0.7em;
-    height: 64px;
-  }
   .top-container {
     height: 170px;
+  }
+  .future-forecast {
+    font-size: 1.1em;
   }
 }
 @media all and (max-width: 770px) {
@@ -456,18 +468,22 @@ body {
   #temp-text {
     font-size: 0.9rem;
   }
-  #time-based-line {
-    color: white;
-    font-size: 0.7em;
-    height: 68px;
-  }
   .time-color {
     font-size: 0.9rem;
+  }
+  .time-wise-info {
+    margin-top: 12px;
+  }
+  .future-forecast {
+    font-size: 1.1em;
+    margin: 0.5em;
   }
 }
 @media all and (max-width: 680px) {
   .top-container {
     overflow-x: auto;
+    overflow-y: hidden;
+    margin-top: 15px;
   }
 }
 
@@ -497,17 +513,35 @@ body {
 }
 
 /* bottom section */
+@media all and (max-width: 1140px) {
+  .bottom-main-heading {
+    margin-left: 1em;
+    font-size: 1.7em;
+  }
+  .heading-sort-content {
+    width: 33%;
+    margin-right: 2em;
+  }
+  .sort-continent-temperature {
+    font-size: 1.3em;
+    font-weight: bold;
+  }
+}
 @media all and (max-width: 945px) {
   #arrow-img {
-    height: 1.2em;
+    height: 1.1em;
     width: 2em;
   }
   .bottom-main-heading {
     font-size: 1.6em;
     margin-left: 2.5em;
   }
+  .heading-sort-content {
+    width: 40%;
+    margin-right: 2em;
+  }
   .sort-continent-temperature {
-    font-size: 1.4em;
+    font-size: 1.2em;
   }
 }
 @media all and (max-width: 905px) {
@@ -523,7 +557,7 @@ body {
     margin-right: 1.7em;
   }
   .sort-continent-temperature {
-    font-size: 1.3em;
+    font-size: 1.2em;
   }
 }
 @media all and (max-width: 815px) {
@@ -533,7 +567,7 @@ body {
   }
   .bottom-main-heading {
     font-size: 1.3em;
-    margin-left: 0.5em;
+    margin-left: 2em;
   }
   .continent-name {
     font-size: 1.1em;
